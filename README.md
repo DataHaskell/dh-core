@@ -1,0 +1,2 @@
+# core
+DataHaskell monorepo
