@@ -1,12 +1,12 @@
-name:                core
+name:                core-accelerate
 version:             0.1.0.0
-synopsis:            DataHaskell project
-description:         DataHaskell project
-homepage:            https://github.com/DataHaskell/core
+-- synopsis:
+-- description:
+homepage:            https://github.com/DataHaskell/core-accelerate
 license:             BSD3
 license-file:        LICENSE
 author:              DataHaskell
-maintainer:          data-haskell@haskell.org
+maintainer:          Data-Haskell@haskell.org
 copyright:           2018 DataHaskell
 category:            Data Science
 build-type:          Simple
@@ -19,19 +19,16 @@ library
   ghc-options:         -Wall
   hs-source-dirs:      src
   exposed-modules:     Lib
-                       Core.Numeric.BLAS
   build-depends:       base >= 4.7 && < 5
-                     , exceptions
-                     , vector
-                     , vector-algorithms
+                     , accelerate
 
--- executable core
+-- executable core-accelerate
 --   default-language:    Haskell2010
 --   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
 --   hs-source-dirs:      app
 --   main-is:             Main.hs
 --   build-depends:       base
---                      , core
+--                      , core-accelerate
 
 test-suite spec
   default-language:    Haskell2010
@@ -40,10 +37,10 @@ test-suite spec
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base
-                     , core
+                     , core-accelerate
                      , hspec
                      , QuickCheck
 
 source-repository head
   type:     git
-  location: https://github.com/DataHaskell/core
+  location: https://github.com/DataHaskell/core-accelerate
