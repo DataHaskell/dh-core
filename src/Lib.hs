@@ -1,11 +1,2 @@
--- | A library to do stuff.
-module Lib
-    (
-      ourAdd
-    ) where
+module Lib where
 
--- | Add two 'Int' values.
-ourAdd :: Int  -- ^ left
-       -> Int  -- ^ right
-       -> Int  -- ^ sum
-ourAdd x y = x + y
