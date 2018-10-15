@@ -6,7 +6,7 @@ homepage:            https://github.com/DataHaskell/core
 license:             BSD3
 license-file:        LICENSE
 author:              DataHaskell
-maintainer:          example@example.com
+maintainer:          data-haskell@haskell.org
 copyright:           2018 DataHaskell
 category:            Data Science
 build-type:          Simple
