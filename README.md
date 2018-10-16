@@ -5,6 +5,12 @@
 DataHaskell core project monorepo
 
 
+
+## Sub-projects
+
+Packages that are listed on Hackage already must be added here as distinct sub-directories.
+
+
 ## Contributing
 
 1. Open an issue with a description of what you want to work on (if it's not already open)
