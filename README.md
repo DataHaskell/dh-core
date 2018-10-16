@@ -47,7 +47,7 @@ Packages that are listed on Hackage already must be added here as distinct sub-d
 | Package | Original author(s) | First version after merge |
 | --- | --- | --- |
 | `analyze` | [Eric Conlon](https://github.com/ejconlon) | 0.2.0 | 
-| `datasets` | [Tom Nielsen](https://github.com/ejconlon) | 0.2.6 | 
+| `datasets` | [Tom Nielsen](https://github.com/glutamate) | 0.2.6 | 
 
 
 NB: Remember to bump version numbers and change web links accordingly when moving in contributed packages.
