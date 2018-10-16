@@ -19,7 +19,7 @@ A number of authors and maintainers agreed to move ownership of their repositori
 
 For this reason, contributed packages will appear as subdirectories to the main `dh-core` project, and will need to retain their original .cabal file.  
 
-The `stack` build tool can take care of multi-package projects; its `packages` stanza has only its directory as a default, but can contain a list of paths to other Cabal projects; e.g. in our case it could look like:
+We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool, and this can take care of multi-package projects; its `packages` stanza has only its directory as a default, but can contain a list of paths to other Cabal projects; e.g. in our case it could look like:
 
     packages:
     - .
