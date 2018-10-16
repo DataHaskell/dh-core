@@ -1,8 +1,8 @@
 name:                core
 version:             0.1.0.0
-synopsis:            DataHaskell project
-description:         DataHaskell project
-homepage:            https://github.com/DataHaskell/core
+synopsis:            DataHaskell core project
+description:         DataHaskell core project
+homepage:            https://github.com/DataHaskell/dh-core
 license:             BSD3
 license-file:        LICENSE
 author:              DataHaskell
@@ -46,4 +46,4 @@ test-suite spec
 
 source-repository head
   type:     git
-  location: https://github.com/DataHaskell/core
+  location: https://github.com/DataHaskell/dh-core
