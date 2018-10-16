@@ -1,0 +1,98 @@
+Name:                datasets
+Version:             0.2.6
+Synopsis:            Classical data sets for statistics and machine learning
+Description:         Classical machine learning and statistics datasets from
+                     the UCI Machine Learning Repository and other sources.
+                     .
+                     The datasets package defines two different kinds of datasets:
+                     .
+                     * small data sets which are directly (or indirectly with `file-embed`)
+                       embedded in the package as pure values and do not require network or IO to download
+                       the data set. This includes Iris, Anscombe and OldFaithful.
+                     .
+                     * other data sets which need to be fetched over the network with
+                       `Numeric.Datasets.getDataset` and are cached in a local temporary directory.
+                     .
+                     > import Numeric.Datasets (getDataset)
+                     > import Numeric.Datasets.Iris (iris)
+                     > import Numeric.Datasets.Abalone (abalone)
+                     >
+                     > main = do
+                     >   -- The Iris data set is embedded
+                     >   print (length iris)
+                     >   print (head iris)
+                     >   -- The Abalone dataset is fetched
+                     >   abas <- getDataset abalone
+                     >   print (length abas)
+                     >   print (head abas)
+
+License:             MIT
+License-file:        LICENSE
+Author:              Tom Nielsen <tanielsen@gmail.com>
+Maintainer:          Tom Nielsen <tanielsen@gmail.com>
+build-type:          Simple
+Cabal-Version: 	     >= 1.10
+homepage:            https://github.com/diffusionkinetics/open/tree/master/datasets
+bug-reports:         https://github.com/diffusionkinetics/open/issues
+category:            Statistics, Machine Learning, Data Mining, Data
+Tested-With:         GHC == 7.10.2, GHC == 7.10.3, GHC == 8.0.1
+extra-source-files:
+                   changelog.md
+                   datafiles/iris.data
+                   datafiles/michelson.json
+                   datafiles/nightingale.json
+                   datafiles/netflix/training/mv_0000001.txt
+                   datafiles/netflix/test/qualifying.txt
+                   datafiles/netflix/movies/movie_titles.txt
+
+source-repository head
+  type:     git
+  location: https://github.com/diffusionkinetics/open
+
+Library
+   ghc-options:       -Wall -fno-warn-unused-imports
+   hs-source-dirs:    src
+   other-extensions: TemplateHaskell
+   default-language:  Haskell2010
+
+   Exposed-modules:
+                   Numeric.Datasets
+                 , Numeric.Datasets.Anscombe
+                 , Numeric.Datasets.BostonHousing
+                 , Numeric.Datasets.OldFaithful
+                 , Numeric.Datasets.Abalone
+                 , Numeric.Datasets.Adult
+                 , Numeric.Datasets.BreastCancerWisconsin
+                 , Numeric.Datasets.Car
+                 , Numeric.Datasets.Coal
+                 , Numeric.Datasets.CO2
+                 , Numeric.Datasets.Gapminder
+                 , Numeric.Datasets.Iris
+                 , Numeric.Datasets.Michelson
+                 , Numeric.Datasets.Mushroom                 
+                 , Numeric.Datasets.Nightingale
+                 , Numeric.Datasets.Quakes
+                 , Numeric.Datasets.States
+                 , Numeric.Datasets.Sunspots
+                 , Numeric.Datasets.Titanic                 
+                 , Numeric.Datasets.UN
+                 , Numeric.Datasets.Vocabulary
+                 , Numeric.Datasets.Wine
+                 , Numeric.Datasets.WineQuality
+                 , Numeric.Datasets.Netflix
+   Build-depends:
+                   base                    >= 4.6 && < 5
+                 , aeson
+                 , attoparsec >= 0.13
+                 , bytestring
+                 , cassava
+                 , directory
+                 , file-embed
+                 , filepath
+                 , hashable
+                 , microlens
+                 , stringsearch
+                 , text
+                 , time
+                 , vector
+                 , wreq
