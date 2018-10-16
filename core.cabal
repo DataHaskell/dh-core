@@ -6,7 +6,7 @@ homepage:            https://github.com/DataHaskell/dh-core
 license:             BSD3
 license-file:        LICENSE
 author:              DataHaskell
-maintainer:          data-haskell@haskell.org
+maintainer:          Marco Zocca (ocramz fripost org), data-haskell@haskell.org
 copyright:           2018 DataHaskell
 category:            Data Science
 build-type:          Simple
