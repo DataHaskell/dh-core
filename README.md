@@ -6,9 +6,7 @@ DataHaskell core project monorepo
 
 
 
-## Sub-projects
 
-Packages that are listed on Hackage already must be added here as distinct sub-directories.
 
 
 ## Contributing
@@ -23,4 +21,8 @@ Packages that are listed on Hackage already must be added here as distinct sub-d
 
 
 
+### Sub-projects
 
+Packages that are listed on Hackage already must be added here as distinct sub-directories. Once the migration is complete (PRs merged etc.), add the project to this list:
+
+* `datasets`
