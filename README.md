@@ -23,8 +23,9 @@ The `stack` build tool can take care of multi-package projects; its `packages` s
 
     packages:
     - .
+    - analyze/
     - datasets/
-
+    
 
 ## Contributing
 
@@ -40,8 +41,13 @@ The `stack` build tool can take care of multi-package projects; its `packages` s
 
 ### Contributed packages
 
-Packages that are listed on Hackage already must be added here as distinct sub-directories. Once the migration is complete (PRs merged etc.), add the project to this list:
+Packages that are listed on Hackage already must be added here as distinct sub-directories. Once the migration is complete (PRs merged etc.), add the project to this table :
 
-* `datasets`
+
+| Package | Original author(s) | First version after merge |
+| --- | --- | --- |
+| `analyze` | Eric Conlon (@ejconlon) | 0.2.0 | 
+| `datasets` | Tom Nielsen (@glutamate) | 0.2.6 | 
+
 
 NB: Remember to bump version numbers and change web links accordingly when moving in contributed packages.
