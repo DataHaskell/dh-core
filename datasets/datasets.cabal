@@ -1,5 +1,5 @@
 Name:                datasets
-Version:             0.2.6
+Version:             0.3.0
 Synopsis:            Classical data sets for statistics and machine learning
 Description:         Classical machine learning and statistics datasets from
                      the UCI Machine Learning Repository and other sources.
@@ -32,8 +32,8 @@ Author:              Tom Nielsen <tanielsen@gmail.com>
 Maintainer:          Tom Nielsen <tanielsen@gmail.com>
 build-type:          Simple
 Cabal-Version: 	     >= 1.10
-homepage:            https://github.com/diffusionkinetics/open/tree/master/datasets
-bug-reports:         https://github.com/diffusionkinetics/open/issues
+homepage:            https://github.com/DataHaskell/dh-core
+bug-reports:         https://github.com/DataHaskell/dh-core/issues
 category:            Statistics, Machine Learning, Data Mining, Data
 Tested-With:         GHC == 7.10.2, GHC == 7.10.3, GHC == 8.0.1
 extra-source-files:
@@ -47,7 +47,7 @@ extra-source-files:
 
 source-repository head
   type:     git
-  location: https://github.com/diffusionkinetics/open
+  location: https://github.com/DataHaskell/dh-core/datasets
 
 Library
    ghc-options:       -Wall -fno-warn-unused-imports

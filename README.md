@@ -5,10 +5,6 @@
 DataHaskell core project monorepo
 
 
-
-
-
-
 ## Contributing
 
 1. Open an issue (https://github.com/DataHaskell/dh-core/issues) with a description of what you want to work on (if it's not already open)
