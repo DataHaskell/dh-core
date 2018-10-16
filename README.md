@@ -1,5 +1,5 @@
-# DataHaskell/core
+# DataHaskell/dh-core
 
-[![Build Status](https://travis-ci.org/DataHaskell/core.png)](https://travis-ci.org/DataHaskell/core)
+[![Build Status](https://travis-ci.org/DataHaskell/dh-core.png)](https://travis-ci.org/DataHaskell/dh-core)
 
 DataHaskell monorepo
