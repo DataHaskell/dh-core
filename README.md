@@ -48,8 +48,8 @@ Packages that are listed on Hackage already must be added here as distinct sub-d
 | --- | --- | --- |
 | `analyze` | [Eric Conlon](https://github.com/ejconlon) | 0.2.0 | 
 | `datasets` | [Tom Nielsen](https://github.com/glutamate) | 0.2.6 | 
-| `dense-linear-algebra` | [Brian O'Sullivan](https://github.com/bos) | 0.1.0 * | 
+| `dense-linear-algebra` | [Brian O'Sullivan](https://github.com/bos) | 0.1.0 (a) | 
 
-* : To be updated
+(a) : To be updated
 
 NB: Remember to bump version numbers and change web links accordingly when moving in contributed packages.
