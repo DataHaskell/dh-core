@@ -35,6 +35,14 @@ Developers can use this `stack` command, which will trigger a re-build and run t
 
     $ stack build --test --ghc-options -Wall --file-watch
 
+### GHC and Stackage compatibility
+
+
+Tested with :
+
+- Stackage LTS-11.22 (GHC 8.2.2)
+- Stackage LTS-12.13 (GHC 8.4.3)
+
 
 ## Contributing
 
@@ -76,9 +84,3 @@ NB: Remember to bump version numbers and change web links accordingly when movin
 
 
 
-# GHC and Stackage compatibility
-
-Tested with :
-
-- Stackage LTS-11.22 (GHC 8.2.2)
-- Stackage LTS-12.13 (GHC 8.4.3)
