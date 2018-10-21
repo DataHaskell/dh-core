@@ -6,16 +6,16 @@ module Analyze.RFrame where
 
 import           Analyze.Common
 import           Analyze.Decoding    (Decoder (..), decoderKeys, runDecoder)
-import qualified Control.Foldl       as F
+-- import qualified Control.Foldl       as F
 import           Control.Monad       (join)
 import           Control.Monad.Catch (MonadThrow (..))
-import qualified Data.Aeson          as A
+-- import qualified Data.Aeson          as A
 import           Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as HM
-import           Data.HashSet        (HashSet)
+-- import           Data.HashSet        (HashSet)
 import qualified Data.HashSet        as HS
-import           Data.Text           (Text)
-import qualified Data.Text           as T
+-- import           Data.Text           (Text)
+-- import qualified Data.Text           as T
 import           Data.Vector         (Vector)
 import qualified Data.Vector         as V
 
@@ -79,7 +79,7 @@ col k (RFrame _ look vs) = V.mapM (\v -> runLookup look v k) vs
 -- | Decode by row. Each element of the returned vector may fail on decoding error
 --   so flatten manually or use 'flatDecode'.
 decode :: (Data k, MonadThrow m) => Decoder m k v a -> RFrame k v -> m (Vector (m a))
-decode decoder rframe@(RFrame ks look vs) = checkSubset required keySet >> pure decoded
+decode decoder (RFrame ks look vs) = checkSubset required keySet >> pure decoded
   where
     keySet = HS.fromList (V.toList ks)
     required = decoderKeys decoder
@@ -99,7 +99,7 @@ filter p (RFrame ks look vs) = RFrame ks look vs'
 --   Retains the existing column order, appending new columns.
 --   Throws on row length mismatch or duplicate columns in the update.
 update :: (Data k, MonadThrow m) => RFrameUpdate k v -> RFrame k v -> m (RFrame k v)
-update (RFrameUpdate uks uvs) (RFrame fks look fvs) = do
+update (RFrameUpdate uks uvs) (RFrame fks _ fvs) = do
   let fSize = V.length fvs
       uSize = V.length uvs
   if fSize /= uSize
