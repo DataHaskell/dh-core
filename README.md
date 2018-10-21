@@ -1,6 +1,7 @@
 # DataHaskell/dh-core
 
 [![Build Status](https://travis-ci.org/DataHaskell/dh-core.png)](https://travis-ci.org/DataHaskell/dh-core)
+[![Join the chat at https://gitter.im/DataHaskell/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/DataHaskell/Lobby)
 
 DataHaskell core project monorepo
 
