@@ -28,6 +28,9 @@ library
                      , text
                      , vector
                      , vector-algorithms
+                     -- DEBUG
+                     , hspec
+                     , QuickCheck
 
 -- executable core
 --   default-language:    Haskell2010
