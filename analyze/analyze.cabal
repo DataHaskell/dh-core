@@ -2,7 +2,7 @@ cabal-version:  1.12
 name:           analyze
 version:        0.2.0
 synopsis:       Haskell data analysis and manipulation library
-description:    Please see README.md
+description:    Haskell data analysis and manipulation library, please see README.md
 category:       Data Science
 homepage:       https://github.com/DataHaskell/dh-core/analyze
 author:         Eric Conlon <ejconlon@gmail.com>, Nikita Tchayka <nikitatchayka@gmail.com>
@@ -32,7 +32,7 @@ library
   default-extensions: OverloadedStrings
   build-depends:
         aeson ,
-        base ,
+        base >= 4.9 && < 5,
         binary ,
         bytestring ,
         cassava ,
