@@ -72,11 +72,11 @@ The `stack` tool can take care of multi-package projects; its `packages` stanza 
 Packages that are listed on Hackage already must be added here as distinct sub-directories. Once the migration is complete (PRs merged etc.), add the project to this table :
 
 
-| Package | Original author(s) | First version after merge |
-| --- | --- | --- |
-| `analyze` | [Eric Conlon](https://github.com/ejconlon) | 0.2.0 | 
-| `datasets` | [Tom Nielsen](https://github.com/glutamate) | 0.2.6 | 
-| `dense-linear-algebra` | [Brian O'Sullivan](https://github.com/bos), [Alexey Khudyakov](https://github.com/Shimuuar) | 0.1.0 (a) | 
+| Package | Description | Original author(s) | First version after merge |
+| --- | --- | --- | --- | 
+| `analyze` | Data analysis and manipulation library | [Eric Conlon](https://github.com/ejconlon) | 0.2.0 | 
+| `datasets` | A collection of ready-to-use datasets | [Tom Nielsen](https://github.com/glutamate) | 0.2.6 | 
+| `dense-linear-algebra` | Fast, native dense linear algebra primitives | [Brian O'Sullivan](https://github.com/bos), [Alexey Khudyakov](https://github.com/Shimuuar) | 0.1.0 (a) | 
 
 (a) : To be updated
 
