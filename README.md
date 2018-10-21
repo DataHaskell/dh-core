@@ -15,17 +15,16 @@ All contributions, big or small, are very welcome and will be acknowledged.
 
 One single repository allows us to experiment with interfaces and move code around much more freely than many single-purpose repositories. Also, it makes it more convenient to track and visualize progress.
 
-A number of authors and maintainers agreed to move ownership of their repositories under the `dh-core` umbrella. In some cases, these packages were already published on Hackage and cannot simply disappear from there, nor can this new line of development break downstream packages.
 
-For this reason, contributed packages will appear as subdirectories to the main `dh-core` project, and will need to retain their original .cabal file.  
+## Building
 
-We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool, and this can take care of multi-package projects; its `packages` stanza has only its directory as a default, but can contain a list of paths to other Cabal projects; e.g. in our case it could look like:
 
-    packages:
-    - .
-    - analyze/
-    - datasets/
-    
+We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool; in the `dh-core` subdirectory, run 
+
+    stack build
+
+and this will re-build the main project and with the contributed packages.
+
 
 ## Contributing
 
@@ -40,6 +39,17 @@ We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool
 
 
 ### Contributed packages
+
+A number of authors and maintainers agreed to move ownership of their repositories under the `dh-core` umbrella. In some cases, these packages were already published on Hackage and cannot simply disappear from there, nor can this new line of development break downstream packages.
+
+For this reason, contributed packages will appear as subdirectories to the main `dh-core` project, and will need to retain their original .cabal file.  
+
+The `stack` tool can take care of multi-package projects; its `packages` stanza in the `stack.yaml` file has only its directory as a default, but can contain a list of paths to other Cabal projects; e.g. in our case it could look like:
+
+    packages:
+    - .
+    - analyze/
+    - datasets/
 
 Packages that are listed on Hackage already must be added here as distinct sub-directories. Once the migration is complete (PRs merged etc.), add the project to this table :
 
