@@ -15,15 +15,20 @@ All contributions, big or small, are very welcome and will be acknowledged.
 
 One single repository allows us to experiment with interfaces and move code around much more freely than many single-purpose repositories. Also, it makes it more convenient to track and visualize progress.
 
+This is the directory structure of the project; the main project lives in the `dh-core` subdirectory:
+
+    dh-core/
+      dh-core/              
+      dh-core-accelerate/
+      ....
 
 ## Building
-
 
 We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool; in the `dh-core` subdirectory, run 
 
     stack build
 
-and this will re-build the main project and with the contributed packages.
+and this will re-build the main project and the contributed packages.
 
 
 ## Contributing
