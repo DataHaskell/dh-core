@@ -21,7 +21,10 @@ library
   exposed-modules:     Lib
                        Core.Numeric.BLAS
   build-depends:       base >= 4.7 && < 5
+                     , bytestring
+                     , containers
                      , exceptions
+                     , text
                      , vector
                      , vector-algorithms
 
