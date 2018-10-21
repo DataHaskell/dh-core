@@ -28,7 +28,7 @@ propertyIO action = ioProperty tester
   where
     tester :: IO P.Result
     tester = catch (action >> return P.succeeded) handler
-    handler (HUnitFailure err) = return P.failed { P.reason = err }
+    handler (HUnitFailure _ err) = return P.failed { P.reason = err }
 
 testPropertyIO :: TestName -> Gen a -> (a -> Assertion) -> TestTree
 testPropertyIO name g t = testProperty name (propertyIO . t <$> g)
