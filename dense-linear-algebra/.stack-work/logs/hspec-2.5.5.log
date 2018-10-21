@@ -1,0 +1,13 @@
+Configuring hspec-2.5.5...
+Preprocessing library for hspec-2.5.5..
+Building library for hspec-2.5.5..
+[1 of 7] Compiling Paths_hspec      ( .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/autogen/Paths_hspec.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Paths_hspec.o )
+[2 of 7] Compiling Test.Hspec.Core  ( src/Test/Hspec/Core.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec/Core.o )
+[3 of 7] Compiling Test.Hspec.Formatters ( src/Test/Hspec/Formatters.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec/Formatters.o )
+[4 of 7] Compiling Test.Hspec.Discover ( src/Test/Hspec/Discover.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec/Discover.o )
+[5 of 7] Compiling Test.Hspec.Runner ( src/Test/Hspec/Runner.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec/Runner.o )
+[6 of 7] Compiling Test.Hspec       ( src/Test/Hspec.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec.o )
+[7 of 7] Compiling Test.Hspec.QuickCheck ( src/Test/Hspec/QuickCheck.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec/QuickCheck.o )
+ignoring (possibly broken) abi-depends field for packages
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/hspec-2.5.5-FuOC97NUjg47UG2A5AEwkM
+Registering library for hspec-2.5.5..
