@@ -20,6 +20,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Lib
                        Core.Numeric.BLAS
+                       Core.Numeric.BLAS.Class
   build-depends:       base >= 4.7 && < 5
                      , bytestring
                      , containers
