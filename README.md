@@ -27,9 +27,13 @@ This is the directory structure of the project; the main project lives in the `d
 
 We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool; in the `dh-core` subdirectory, run 
 
-    stack build
+    $ stack build
 
 and this will re-build the main project and the contributed packages.
+
+Developers can use this `stack` command, which will trigger a re-build and run the tests every time a file in the project is modified:
+
+    $ stack build --test --ghc-options -Wall --file-watch
 
 
 ## Contributing
@@ -64,8 +68,17 @@ Packages that are listed on Hackage already must be added here as distinct sub-d
 | --- | --- | --- |
 | `analyze` | [Eric Conlon](https://github.com/ejconlon) | 0.2.0 | 
 | `datasets` | [Tom Nielsen](https://github.com/glutamate) | 0.2.6 | 
-| `dense-linear-algebra` | [Brian O'Sullivan](https://github.com/bos) | 0.1.0 (a) | 
+| `dense-linear-algebra` | [Brian O'Sullivan](https://github.com/bos), [Alexey Khudyakov](https://github.com/Shimuuar) | 0.1.0 (a) | 
 
 (a) : To be updated
 
 NB: Remember to bump version numbers and change web links accordingly when moving in contributed packages.
+
+
+
+# GHC and Stackage compatibility
+
+Tested with :
+
+- Stackage LTS-11.22 (GHC 8.2.2)
+- Stackage LTS-12.13 (GHC 8.4.3)

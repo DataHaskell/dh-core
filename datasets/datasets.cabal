@@ -29,13 +29,13 @@ Description:         Classical machine learning and statistics datasets from
 License:             MIT
 License-file:        LICENSE
 Author:              Tom Nielsen <tanielsen@gmail.com>
-Maintainer:          Tom Nielsen <tanielsen@gmail.com>
+Maintainer:          Marco Zocca <ocramz fripost org>
 build-type:          Simple
 Cabal-Version: 	     >= 1.10
 homepage:            https://github.com/DataHaskell/dh-core
 bug-reports:         https://github.com/DataHaskell/dh-core/issues
 category:            Statistics, Machine Learning, Data Mining, Data
-Tested-With:         GHC == 7.10.2, GHC == 7.10.3, GHC == 8.0.1
+Tested-With:         GHC == 7.10.2, GHC == 7.10.3, GHC == 8.0.1, GHC == 8.4.3
 extra-source-files:
                    changelog.md
                    datafiles/iris.data
