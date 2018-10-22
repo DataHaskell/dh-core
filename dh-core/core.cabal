@@ -22,11 +22,20 @@ library
   exposed-modules:     Lib
                        Core.Numeric.BLAS
                        Core.Numeric.BLAS.Class
+                       Core.Numeric.Statistics.Classification.DecisionTrees
+                       Core.Numeric.Statistics.Classification.Utils
+                       Core.Numeric.Statistics.Classification.Exceptions 
+                       Core.Numeric.Statistics.InformationTheory
+                       Core.Data.Dataset
+                       Core.Data.Datum.Vector
+                       
   build-depends:
                 base >=4.10 && <5,
                 bytestring >=0.10.8.1,
                 containers >=0.5.7.1,
                 exceptions >=0.8.3,
+                mwc-random,
+                primitive,
                 text >=1.2.2.2,
                 vector >=0.12.0.1,
                 vector-algorithms >=0.7.0.1,
