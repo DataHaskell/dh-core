@@ -1,0 +1,9 @@
+Configuring call-stack-0.1.0...
+Preprocessing library for call-stack-0.1.0..
+Building library for call-stack-0.1.0..
+[1 of 3] Compiling Data.SrcLoc      ( src/Data/SrcLoc.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Data/SrcLoc.o )
+[2 of 3] Compiling Data.CallStack   ( src/Data/CallStack.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Data/CallStack.o )
+[3 of 3] Compiling Paths_call_stack ( .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/autogen/Paths_call_stack.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Paths_call_stack.o )
+ignoring (possibly broken) abi-depends field for packages
+Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/call-stack-0.1.0-Eiz5FM8yQXpI3vyQ1Rt4Jq
+Registering library for call-stack-0.1.0..

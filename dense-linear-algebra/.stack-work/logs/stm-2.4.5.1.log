@@ -1,0 +1,16 @@
+Configuring stm-2.4.5.1...
+Preprocessing library for stm-2.4.5.1..
+Building library for stm-2.4.5.1..
+[ 1 of 10] Compiling Control.Concurrent.STM.TBQueue ( Control/Concurrent/STM/TBQueue.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Concurrent/STM/TBQueue.o )
+[ 2 of 10] Compiling Control.Concurrent.STM.TChan ( Control/Concurrent/STM/TChan.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Concurrent/STM/TChan.o )
+[ 3 of 10] Compiling Control.Concurrent.STM.TMVar ( Control/Concurrent/STM/TMVar.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Concurrent/STM/TMVar.o )
+[ 4 of 10] Compiling Control.Concurrent.STM.TQueue ( Control/Concurrent/STM/TQueue.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Concurrent/STM/TQueue.o )
+[ 5 of 10] Compiling Control.Concurrent.STM.TVar ( Control/Concurrent/STM/TVar.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Concurrent/STM/TVar.o )
+[ 6 of 10] Compiling Control.Concurrent.STM.TArray ( Control/Concurrent/STM/TArray.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Concurrent/STM/TArray.o )
+[ 7 of 10] Compiling Control.Monad.STM ( Control/Monad/STM.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Monad/STM.o )
+[ 8 of 10] Compiling Control.Concurrent.STM ( Control/Concurrent/STM.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Concurrent/STM.o )
+[ 9 of 10] Compiling Control.Concurrent.STM.TSem ( Control/Concurrent/STM/TSem.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Concurrent/STM/TSem.o )
+[10 of 10] Compiling Control.Sequential.STM ( Control/Sequential/STM.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Sequential/STM.o )
+ignoring (possibly broken) abi-depends field for packages
+Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/stm-2.4.5.1-1n1oRyz2WxkGi5pMiXlR3y
+Registering library for stm-2.4.5.1..

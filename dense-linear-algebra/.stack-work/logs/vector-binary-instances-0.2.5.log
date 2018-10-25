@@ -3,5 +3,5 @@ Preprocessing library for vector-binary-instances-0.2.5..
 Building library for vector-binary-instances-0.2.5..
 [1 of 1] Compiling Data.Vector.Binary ( Data/Vector/Binary.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Data/Vector/Binary.o )
 ignoring (possibly broken) abi-depends field for packages
-Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/vector-binary-instances-0.2.5-Ecj7NBUGVDf6qwOuPXybiw
+Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/vector-binary-instances-0.2.5-Ecj7NBUGVDf6qwOuPXybiw
 Registering library for vector-binary-instances-0.2.5..

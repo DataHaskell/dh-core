@@ -1,0 +1,129 @@
+
+==================== FINAL INTERFACE ====================
+2018-10-24 19:31:46.477091924 UTC
+
+interface main:Fixtures 8043
+  interface hash: c60ea8de744edeacbdc2c31bf96b4112
+  ABI hash: 27532b042b5548eaca086da6be2fa07d
+  export-list hash: 426275669ea91adcde947e5e8b728086
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 4ecc30468067355f352d1024888170ec
+  opt_hash: 14e536840aca4e889cad654e6f9b79c1
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Fixtures.f
+  Fixtures.g
+  Fixtures.matA
+  Fixtures.matB
+module dependencies:
+package dependencies: array-0.5.2.0 base-4.11.1.0 deepseq-1.4.3.0
+                      dense-linear-algebra-0.1.0.0 ghc-boot-th-8.4.3 ghc-prim-0.5.2.0
+                      integer-gmp-1.0.2.0 math-functions-0.2.1.0 pretty-1.1.3.6
+                      primitive-0.6.3.0 template-haskell-2.13.0.0 transformers-0.5.5.0
+                      vector-0.12.0.1 vector-th-unbox-0.2.1.6
+orphans: vector-0.12.0.1:Data.Vector.Unboxed
+         vector-0.12.0.1:Data.Vector.Fusion.Bundle
+         transformers-0.5.5.0:Control.Monad.Trans.Error
+         base-4.11.1.0:GHC.Float base-4.11.1.0:GHC.Base
+family instance modules: base-4.11.1.0:Control.Applicative
+                         base-4.11.1.0:Data.Complex base-4.11.1.0:Data.Functor.Compose
+                         base-4.11.1.0:Data.Functor.Const
+                         base-4.11.1.0:Data.Functor.Identity
+                         base-4.11.1.0:Data.Functor.Product base-4.11.1.0:Data.Functor.Sum
+                         base-4.11.1.0:Data.Monoid base-4.11.1.0:Data.Semigroup
+                         base-4.11.1.0:Data.Semigroup.Internal base-4.11.1.0:Data.Version
+                         base-4.11.1.0:Data.Void base-4.11.1.0:GHC.Exts
+                         base-4.11.1.0:GHC.Generics base-4.11.1.0:GHC.IO.Exception
+                         ghc-boot-th-8.4.3:GHC.ForeignSrcLang.Type
+                         ghc-boot-th-8.4.3:GHC.LanguageExtensions.Type
+                         math-functions-0.2.1.0:Numeric.Sum
+                         pretty-1.1.3.6:Text.PrettyPrint.Annotated.HughesPJ
+                         pretty-1.1.3.6:Text.PrettyPrint.HughesPJ
+                         primitive-0.6.3.0:Control.Monad.Primitive
+                         primitive-0.6.3.0:Data.Primitive.Array
+                         primitive-0.6.3.0:Data.Primitive.ByteArray
+                         template-haskell-2.13.0.0:Language.Haskell.TH.Syntax
+                         vector-0.12.0.1:Data.Vector vector-0.12.0.1:Data.Vector.Primitive
+                         vector-0.12.0.1:Data.Vector.Unboxed
+                         vector-0.12.0.1:Data.Vector.Unboxed.Base
+import  -/  base-4.11.1.0:GHC.Num 8e54b26dce4495382dc4b50cf36ab754
+import  -/  base-4.11.1.0:GHC.Real b4beb0389ba1ad5d9640aae67848c5d3
+import  -/  base-4.11.1.0:Prelude 0750c25585e2b797cd78291d423d39dd
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix 3a63c101721b545e487a706099b03953
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Types 29068aaa03b39c75ee604070f2429116
+47f3e06ba30edf04e8d51f961a300d19
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   Fixtures.$trModule3
+                   Fixtures.$trModule1) -}
+fcd77c87fc2518bde2456075895ed335
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS Fixtures.$trModule2) -}
+18e643da65e84beac94b3b1e24f0be3b
+  $trModule2 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("Fixtures"#) -}
+c6fb0c3b721628e3c553102441b8aeb7
+  $trModule3 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS Fixtures.$trModule4) -}
+5781834011ae92fe96ba0ffbb0f9e30c
+  $trModule4 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("main"#) -}
+38a6040db28b0c879fd3821b1053b15c
+  f :: GHC.Types.Int -> GHC.Types.Int -> GHC.Types.Double
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>m,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: GHC.Types.Int) (b :: GHC.Types.Int) ->
+                 case a of wild { GHC.Types.I# i ->
+                 case b of wild1 { GHC.Types.I# i1 ->
+                 let {
+                   y :: GHC.Prim.Double# = GHC.Prim.int2Double# i1
+                 } in
+                 case GHC.Prim./##
+                        (GHC.Prim.+## (GHC.Prim.int2Double# i) y)
+                        (GHC.Prim.+## y 1.0##) of wild2 { DEFAULT ->
+                 GHC.Types.D# wild2 } } }) -}
+5f65317328ec23b5321983766ecdfe55
+  g :: GHC.Types.Int -> GHC.Types.Int -> GHC.Types.Double
+  {- Arity: 2, HasNoCafRefs, Strictness: <S(S),1*U(U)><S(S),1*U(U)>m,
+     Unfolding: InlineRule (2, True, False)
+                (\ (a :: GHC.Types.Int) (b :: GHC.Types.Int) ->
+                 case a of wild { GHC.Types.I# i ->
+                 case b of wild1 { GHC.Types.I# i1 ->
+                 let {
+                   y :: GHC.Prim.Double# = GHC.Prim.int2Double# i1
+                 } in
+                 let {
+                   x :: GHC.Prim.Double# = GHC.Prim.int2Double# i
+                 } in
+                 case GHC.Prim./##
+                        (GHC.Prim.+## x y)
+                        (GHC.Prim.+## (GHC.Prim.*## x y) 1.0##) of wild2 { DEFAULT ->
+                 GHC.Types.D# wild2 } } }) -}
+903b01e23f5685b75095d69b5fe5f391
+  matA :: Statistics.Matrix.Types.Matrix
+  {- Unfolding: (case Statistics.Matrix.$wgenerate
+                        3#
+                        3#
+                        Fixtures.f of ww4 { (#,,#) ww5 ww6 ww7 ->
+                 Statistics.Matrix.Types.Matrix ww5 ww6 ww7 }) -}
+f27f12bafc8c6245f78ab99d0db8537c
+  matB :: Statistics.Matrix.Types.Matrix
+  {- Unfolding: (case Statistics.Matrix.$wgenerate
+                        3#
+                        3#
+                        Fixtures.g of ww4 { (#,,#) ww5 ww6 ww7 ->
+                 Statistics.Matrix.Types.Matrix ww5 ww6 ww7 }) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

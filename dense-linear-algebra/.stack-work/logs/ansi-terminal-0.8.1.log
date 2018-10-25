@@ -1,0 +1,10 @@
+Configuring ansi-terminal-0.8.1...
+Preprocessing library for ansi-terminal-0.8.1..
+Building library for ansi-terminal-0.8.1..
+[1 of 4] Compiling System.Console.ANSI.Types ( src/System/Console/ANSI/Types.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/System/Console/ANSI/Types.o )
+[2 of 4] Compiling System.Console.ANSI.Codes ( src/System/Console/ANSI/Codes.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/System/Console/ANSI/Codes.o )
+[3 of 4] Compiling System.Console.ANSI.Unix ( src/System/Console/ANSI/Unix.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/System/Console/ANSI/Unix.o )
+[4 of 4] Compiling System.Console.ANSI ( src/System/Console/ANSI.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/System/Console/ANSI.o )
+ignoring (possibly broken) abi-depends field for packages
+Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/ansi-terminal-0.8.1-DTnXTZHQH9cDx7RXC7iISb
+Registering library for ansi-terminal-0.8.1..
