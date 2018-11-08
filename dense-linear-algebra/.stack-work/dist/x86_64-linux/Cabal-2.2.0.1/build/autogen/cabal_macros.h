@@ -99,15 +99,15 @@
   (major1) == 0 && (major2) == 2 && (minor) <= 5)
 #endif /* MIN_VERSION_vector_binary_instances */
 
-/* tool alex-3.2.1 */
+/* tool alex-3.2.3 */
 #ifndef TOOL_VERSION_alex
-#define TOOL_VERSION_alex "3.2.1"
+#define TOOL_VERSION_alex "3.2.3"
 #endif /* TOOL_VERSION_alex */
 #ifndef MIN_TOOL_VERSION_alex
 #define MIN_TOOL_VERSION_alex(major1,major2,minor) (\
   (major1) <  3 || \
   (major1) == 3 && (major2) <  2 || \
-  (major1) == 3 && (major2) == 2 && (minor) <= 1)
+  (major1) == 3 && (major2) == 2 && (minor) <= 3)
 #endif /* MIN_TOOL_VERSION_alex */
 
 /* tool gcc-7 */
@@ -154,15 +154,15 @@
   (major1) == 2 && (major2) == 20 && (minor) <= 0)
 #endif /* MIN_TOOL_VERSION_haddock */
 
-/* tool happy-1.19.5 */
+/* tool happy-1.19.8 */
 #ifndef TOOL_VERSION_happy
-#define TOOL_VERSION_happy "1.19.5"
+#define TOOL_VERSION_happy "1.19.8"
 #endif /* TOOL_VERSION_happy */
 #ifndef MIN_TOOL_VERSION_happy
 #define MIN_TOOL_VERSION_happy(major1,major2,minor) (\
   (major1) <  1 || \
   (major1) == 1 && (major2) <  19 || \
-  (major1) == 1 && (major2) == 19 && (minor) <= 5)
+  (major1) == 1 && (major2) == 19 && (minor) <= 8)
 #endif /* MIN_TOOL_VERSION_happy */
 
 /* tool hpc-0.67 */
@@ -209,15 +209,15 @@
   (major1) == 8 && (major2) == 4 && (minor) <= 3)
 #endif /* MIN_TOOL_VERSION_runghc */
 
-/* tool strip-2.29 */
+/* tool strip-2.30 */
 #ifndef TOOL_VERSION_strip
-#define TOOL_VERSION_strip "2.29"
+#define TOOL_VERSION_strip "2.30"
 #endif /* TOOL_VERSION_strip */
 #ifndef MIN_TOOL_VERSION_strip
 #define MIN_TOOL_VERSION_strip(major1,major2,minor) (\
   (major1) <  2 || \
-  (major1) == 2 && (major2) <  29 || \
-  (major1) == 2 && (major2) == 29 && (minor) <= 0)
+  (major1) == 2 && (major2) <  30 || \
+  (major1) == 2 && (major2) == 30 && (minor) <= 0)
 #endif /* MIN_TOOL_VERSION_strip */
 
 #ifndef CURRENT_PACKAGE_KEY

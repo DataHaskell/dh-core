@@ -1,0 +1,203 @@
+
+==================== FINAL INTERFACE ====================
+2018-11-07 19:54:00.197533698 UTC
+
+interface main:AlgorithmsSpec 8043
+  interface hash: 1fbcaf98b5309be911b2f88393d22b07
+  ABI hash: 4a2c9a61bf9c70517460c06011f85457
+  export-list hash: c079d1bcc37078a3a25b570592064ff1
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 4ecc30468067355f352d1024888170ec
+  opt_hash: 14e536840aca4e889cad654e6f9b79c1
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  AlgorithmsSpec.qrDecompositionInvariant
+  AlgorithmsSpec.qrFirstOrthoInvariant
+  AlgorithmsSpec.qrSecondTriInvariant
+module dependencies: Fixtures Utils
+package dependencies: array-0.5.2.0 base-4.11.1.0 deepseq-1.4.3.0
+                      dense-linear-algebra-0.1.0.0 ghc-boot-th-8.4.3 ghc-prim-0.5.2.0
+                      integer-gmp-1.0.2.0 math-functions-0.2.1.0 pretty-1.1.3.6
+                      primitive-0.6.3.0 template-haskell-2.13.0.0 transformers-0.5.5.0
+                      vector-0.12.0.1 vector-th-unbox-0.2.1.6
+orphans: vector-0.12.0.1:Data.Vector.Unboxed
+         vector-0.12.0.1:Data.Vector.Fusion.Bundle
+         transformers-0.5.5.0:Control.Monad.Trans.Error
+         base-4.11.1.0:GHC.Float base-4.11.1.0:GHC.Base
+family instance modules: base-4.11.1.0:Control.Applicative
+                         base-4.11.1.0:Data.Complex base-4.11.1.0:Data.Functor.Compose
+                         base-4.11.1.0:Data.Functor.Const
+                         base-4.11.1.0:Data.Functor.Identity
+                         base-4.11.1.0:Data.Functor.Product base-4.11.1.0:Data.Functor.Sum
+                         base-4.11.1.0:Data.Monoid base-4.11.1.0:Data.Semigroup
+                         base-4.11.1.0:Data.Semigroup.Internal base-4.11.1.0:Data.Version
+                         base-4.11.1.0:Data.Void base-4.11.1.0:GHC.Exts
+                         base-4.11.1.0:GHC.Generics base-4.11.1.0:GHC.IO.Exception
+                         ghc-boot-th-8.4.3:GHC.ForeignSrcLang.Type
+                         ghc-boot-th-8.4.3:GHC.LanguageExtensions.Type
+                         math-functions-0.2.1.0:Numeric.Sum
+                         pretty-1.1.3.6:Text.PrettyPrint.Annotated.HughesPJ
+                         pretty-1.1.3.6:Text.PrettyPrint.HughesPJ
+                         primitive-0.6.3.0:Control.Monad.Primitive
+                         primitive-0.6.3.0:Data.Primitive.Array
+                         primitive-0.6.3.0:Data.Primitive.ByteArray
+                         template-haskell-2.13.0.0:Language.Haskell.TH.Syntax
+                         vector-0.12.0.1:Data.Vector vector-0.12.0.1:Data.Vector.Primitive
+                         vector-0.12.0.1:Data.Vector.Unboxed
+                         vector-0.12.0.1:Data.Vector.Unboxed.Base
+import  -/  base-4.11.1.0:Data.Tuple 3af66f3ac61ed95ba8a3a3f68ebc5003
+import  -/  base-4.11.1.0:Prelude 0750c25585e2b797cd78291d423d39dd
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix 3a63c101721b545e487a706099b03953
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Algorithms a0674d9380dad39e62d9417390a85001
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Function 381881e47389a9af84d8f32b55e971e1
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Mutable a3afb366d571ff7d0f708aad29618100
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Types 29068aaa03b39c75ee604070f2429116
+import  -/  ghc-prim-0.5.2.0:GHC.Classes 122abfcd7450c6c11602933c9ca5f80d
+import  -/  Fixtures 61802c9f2d13e53e061a6a00a7886719
+  exports: 8d7915c75d409a3001a492ef6c70e1f8
+  matA 903b01e23f5685b75095d69b5fe5f391
+import  -/  Utils 3302e8b0b8a236e726b64d9c3b75a26d
+  exports: f6cf51a4c3c51be1a7d8197faa7d14c3
+  isOrtho 490e40d80e3d3dc149118bf7ac20ded3
+  isUpperTri b4432af9c70b701b9fa7f559735d8fc0
+d63a8c95dbf20be1bf11781319a1180f
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   AlgorithmsSpec.$trModule3
+                   AlgorithmsSpec.$trModule1) -}
+cad100bf40385e4678959f5e381c17aa
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS AlgorithmsSpec.$trModule2) -}
+58ab3215175291984ab279a7eeb7c140
+  $trModule2 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("AlgorithmsSpec"#) -}
+c77a23a0a099a06c21778fadccd743a7
+  $trModule3 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS AlgorithmsSpec.$trModule4) -}
+e918246f15ca50c017708774b1533980
+  $trModule4 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("main"#) -}
+7aaf484823ac92f88cdfeb3546ecb902
+  qrDecompositionInvariant :: GHC.Types.Bool
+  {- Unfolding: (case Fixtures.matA of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
+                 case ww3
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
+                 case Statistics.Matrix.Algorithms.$wqr
+                        ww1
+                        ww2
+                        ww5
+                        ww6
+                        ww7 of wild { (,) x ds1 ->
+                 case x of ww11 { Statistics.Matrix.Types.Matrix ww12 ww13 ww14 ->
+                 case ww14
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww15 { Data.Vector.Primitive.Vector ww16 ww17 ww18 ->
+                 case ds1 of ww8 { Statistics.Matrix.Types.Matrix ww9 ww10 ww19 ->
+                 case ww19
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww20 { Data.Vector.Primitive.Vector ww21 ww22 ww23 ->
+                 case Statistics.Matrix.$wmultiply
+                        ww12
+                        ww13
+                        ww16
+                        ww17
+                        ww18
+                        ww9
+                        ww10
+                        ww21
+                        ww22
+                        ww23 of ww24 { (#,,#) ww25 ww26 ww27 ->
+                 case ww27
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww28 { Data.Vector.Primitive.Vector ww29 ww30 ww31 ->
+                 case GHC.Prim.==# ww25 ww1 of lwild {
+                   DEFAULT -> GHC.Types.False
+                   1#
+                   -> case GHC.Prim.==# ww26 ww2 of lwild1 {
+                        DEFAULT -> GHC.Types.False
+                        1#
+                        -> let {
+                             exit :: GHC.Prim.Int# -> GHC.Types.Bool
+                               <join 1> {- Arity: 1, Strictness: <S,U> -}
+                             = \ (ww32 :: GHC.Prim.Int#)[OneShot] ->
+                               case GHC.Prim.>=# ww32 ww6 of lwild2 {
+                                 DEFAULT -> GHC.Types.False 1# -> GHC.Types.True }
+                           } in
+                           letrec {
+                             $weq_loop0 :: GHC.Types.SPEC
+                                           -> GHC.Prim.Int# -> GHC.Prim.Int# -> GHC.Types.Bool
+                               <join 3> {- Arity: 3, Strictness: <S,1*U><S,U><S,U>, Inline: [0] -}
+                             = \ (w :: GHC.Types.SPEC)
+                                 (ww32 :: GHC.Prim.Int#)
+                                 (ww33 :: GHC.Prim.Int#) ->
+                               case w of ds9 { DEFAULT ->
+                               case GHC.Prim.>=# ww32 ww30 of lwild2 {
+                                 DEFAULT
+                                 -> case GHC.Prim.indexDoubleArray#
+                                           ww31
+                                           (GHC.Prim.+# ww29 ww32) of wild2 { DEFAULT ->
+                                    case GHC.Prim.>=# ww33 ww6 of lwild3 {
+                                      DEFAULT
+                                      -> case GHC.Prim.indexDoubleArray#
+                                                ww7
+                                                (GHC.Prim.+# ww5 ww33) of wild1 { DEFAULT ->
+                                         case GHC.Prim.==## wild2 wild1 of lwild4 {
+                                           DEFAULT -> GHC.Types.False
+                                           1#
+                                           -> $weq_loop0
+                                                GHC.Types.SPEC
+                                                (GHC.Prim.+# ww32 1#)
+                                                (GHC.Prim.+# ww33 1#) } }
+                                      1# -> GHC.Types.False } }
+                                 1# -> exit ww33 } }
+                           } in
+                           $weq_loop0 GHC.Types.SPEC 0# 0# } } } } } } } } } } }) -}
+6121f3a32e10803fa3a49a4e2ecf8234
+  qrFirstOrthoInvariant :: GHC.Types.Bool
+  {- Unfolding: (case Fixtures.matA of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
+                 case ww3
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
+                 case Statistics.Matrix.Algorithms.$wqr
+                        ww1
+                        ww2
+                        ww5
+                        ww6
+                        ww7 of wild { (,) x ds1 ->
+                 case x of ww11 { Statistics.Matrix.Types.Matrix ww12 ww13 ww14 ->
+                 case ww14
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww15 { Data.Vector.Primitive.Vector ww16 ww17 ww18 ->
+                 Utils.$wisOrtho ww12 ww13 ww16 ww17 ww18 } } } } }) -}
+cccf8ef6a7c2b4bd491fc6316ef42f29
+  qrSecondTriInvariant :: GHC.Types.Bool
+  {- Unfolding: (case Fixtures.matA of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
+                 case ww3
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
+                 case Statistics.Matrix.Algorithms.$wqr
+                        ww1
+                        ww2
+                        ww5
+                        ww6
+                        ww7 of wild { (,) ds1 y ->
+                 case y of ww11 { Statistics.Matrix.Types.Matrix ww12 ww13 ww14 ->
+                 case ww14
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww15 { Data.Vector.Primitive.Vector ww16 ww17 ww18 ->
+                 Utils.$wisUpperTri ww12 ww13 ww16 ww17 ww18 } } } } }) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: none
+require own pkg trusted: False
+

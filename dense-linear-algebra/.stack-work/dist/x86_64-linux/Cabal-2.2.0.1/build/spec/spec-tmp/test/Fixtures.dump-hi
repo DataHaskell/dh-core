@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2018-10-24 19:31:46.477091924 UTC
+2018-11-07 19:54:00.111115046 UTC
 
 interface main:Fixtures 8043
-  interface hash: c60ea8de744edeacbdc2c31bf96b4112
-  ABI hash: 27532b042b5548eaca086da6be2fa07d
-  export-list hash: 426275669ea91adcde947e5e8b728086
+  interface hash: 5d0995c5d2b2becba0daa3660a9b7e81
+  ABI hash: 61802c9f2d13e53e061a6a00a7886719
+  export-list hash: 8d7915c75d409a3001a492ef6c70e1f8
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 4ecc30468067355f352d1024888170ec
   opt_hash: 14e536840aca4e889cad654e6f9b79c1
@@ -16,8 +16,11 @@ interface main:Fixtures 8043
 exports:
   Fixtures.f
   Fixtures.g
+  Fixtures.largeMatA
+  Fixtures.largeMatB
   Fixtures.matA
   Fixtures.matB
+  Fixtures.matId
 module dependencies:
 package dependencies: array-0.5.2.0 base-4.11.1.0 deepseq-1.4.3.0
                       dense-linear-algebra-0.1.0.0 ghc-boot-th-8.4.3 ghc-prim-0.5.2.0
@@ -105,6 +108,20 @@ c6fb0c3b721628e3c553102441b8aeb7
                         (GHC.Prim.+## x y)
                         (GHC.Prim.+## (GHC.Prim.*## x y) 1.0##) of wild2 { DEFAULT ->
                  GHC.Types.D# wild2 } } }) -}
+3a55ebe1f4a393d082bef0c077d6ed1c
+  largeMatA :: Statistics.Matrix.Types.Matrix
+  {- Unfolding: (case Statistics.Matrix.$wgenerate
+                        1000#
+                        1000#
+                        Fixtures.f of ww4 { (#,,#) ww5 ww6 ww7 ->
+                 Statistics.Matrix.Types.Matrix ww5 ww6 ww7 }) -}
+68a83c18c6b5995ca0f201594d277770
+  largeMatB :: Statistics.Matrix.Types.Matrix
+  {- Unfolding: (case Statistics.Matrix.$wgenerate
+                        1000#
+                        1000#
+                        Fixtures.g of ww4 { (#,,#) ww5 ww6 ww7 ->
+                 Statistics.Matrix.Types.Matrix ww5 ww6 ww7 }) -}
 903b01e23f5685b75095d69b5fe5f391
   matA :: Statistics.Matrix.Types.Matrix
   {- Unfolding: (case Statistics.Matrix.$wgenerate
@@ -119,6 +136,11 @@ f27f12bafc8c6245f78ab99d0db8537c
                         3#
                         Fixtures.g of ww4 { (#,,#) ww5 ww6 ww7 ->
                  Statistics.Matrix.Types.Matrix ww5 ww6 ww7 }) -}
+e1655bd1d474efede135837b6e5bc9ff
+  matId :: Statistics.Matrix.Types.Matrix
+  {- Unfolding: (case Statistics.Matrix.$wident
+                        3# of ww2 { (#,,#) ww3 ww4 ww5 ->
+                 Statistics.Matrix.Types.Matrix ww3 ww4 ww5 }) -}
 vectorised variables:
 vectorised tycons:
 vectorised reused tycons:

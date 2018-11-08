@@ -39,12 +39,15 @@ test-suite spec
   ghc-options:         -Wall
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
-  other-modules:     Fixtures
+  other-modules:       Fixtures,
+		       Utils,
+                       AlgorithmsSpec
   main-is:             LibSpec.hs
   build-depends:       base
                      , dense-linear-algebra
                      , hspec
-                     , QuickCheck
+                     , QuickCheck,
+                       vector
 
 source-repository head
   type:     git

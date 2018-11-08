@@ -23,4 +23,10 @@ matB = M.generate 3 3 g
 matId :: T.Matrix
 matId = M.ident 3
 
+largeMatA :: T.Matrix
+largeMatA = M.generate 1000 1000 f
+
+largeMatB :: T.Matrix
+largeMatB = M.generate 1000 1000 g
+
 
