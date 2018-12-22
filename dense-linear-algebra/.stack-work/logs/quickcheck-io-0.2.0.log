@@ -4,5 +4,5 @@ Building library for quickcheck-io-0.2.0..
 [1 of 2] Compiling Paths_quickcheck_io ( .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/autogen/Paths_quickcheck_io.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Paths_quickcheck_io.o )
 [2 of 2] Compiling Test.QuickCheck.IO ( src/Test/QuickCheck/IO.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/QuickCheck/IO.o )
 ignoring (possibly broken) abi-depends field for packages
-Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/quickcheck-io-0.2.0-EkaMZi89NOa4JiMdRU98Zc
+Installing library in /home/ciel/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/quickcheck-io-0.2.0-EkaMZi89NOa4JiMdRU98Zc
 Registering library for quickcheck-io-0.2.0..

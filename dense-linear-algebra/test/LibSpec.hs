@@ -14,8 +14,8 @@ spec :: Spec
 spec = describe "Q-R Decomposition" $ do
         it "Q x R returns the original matrix" $ do
           qrDecompositionInvariant `shouldBe` True
-      --  it "Matrix Q is orthogonal" $ do
-      --    qrFirstOrthoInvariant `shouldBe` True
+        it "Matrix Q is orthogonal" $ do
+          qrFirstOrthoInvariant `shouldBe` True
         it "Matrix R is triangular" $ do
           qrSecondTriInvariant `shouldBe` True
 
@@ -24,7 +24,7 @@ main :: IO ()
 main = do
   hspec spec
   let r = snd $ Alg.qr F.matA
-  putStrLn $ show r
+  putStrLn $ show $ M.row r 2
 
 
 

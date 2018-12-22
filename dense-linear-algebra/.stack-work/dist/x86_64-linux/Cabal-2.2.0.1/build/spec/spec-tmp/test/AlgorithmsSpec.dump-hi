@@ -1,10 +1,10 @@
 
 ==================== FINAL INTERFACE ====================
-2018-11-07 19:54:00.197533698 UTC
+2018-12-22 21:22:44.73603792 UTC
 
 interface main:AlgorithmsSpec 8043
-  interface hash: 1fbcaf98b5309be911b2f88393d22b07
-  ABI hash: 4a2c9a61bf9c70517460c06011f85457
+  interface hash: 4f9d09b54fe6022d0ea68a3008e8ca85
+  ABI hash: 3be8e02a5ee960978fc905a64e832a0e
   export-list hash: c079d1bcc37078a3a25b570592064ff1
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 4ecc30468067355f352d1024888170ec
@@ -59,10 +59,10 @@ import  -/  ghc-prim-0.5.2.0:GHC.Classes 122abfcd7450c6c11602933c9ca5f80d
 import  -/  Fixtures 61802c9f2d13e53e061a6a00a7886719
   exports: 8d7915c75d409a3001a492ef6c70e1f8
   matA 903b01e23f5685b75095d69b5fe5f391
-import  -/  Utils 3302e8b0b8a236e726b64d9c3b75a26d
-  exports: f6cf51a4c3c51be1a7d8197faa7d14c3
+import  -/  Utils 44b5b04a10d106a0d76b074a4b044029
+  exports: 8f35267836f837869d8c4e0669ef2c07
   isOrtho 490e40d80e3d3dc149118bf7ac20ded3
-  isUpperTri b4432af9c70b701b9fa7f559735d8fc0
+  isUpperTri 9fba339c7b800af0dcd04b02fb378699
 d63a8c95dbf20be1bf11781319a1180f
   $trModule :: GHC.Types.Module
   {- HasNoCafRefs, Strictness: m,
@@ -176,7 +176,7 @@ e918246f15ca50c017708774b1533980
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww15 { Data.Vector.Primitive.Vector ww16 ww17 ww18 ->
                  Utils.$wisOrtho ww12 ww13 ww16 ww17 ww18 } } } } }) -}
-cccf8ef6a7c2b4bd491fc6316ef42f29
+01833c6fa3f80544e44c20ac795b5559
   qrSecondTriInvariant :: GHC.Types.Bool
   {- Unfolding: (case Fixtures.matA of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
                  case ww3
@@ -188,11 +188,11 @@ cccf8ef6a7c2b4bd491fc6316ef42f29
                         ww5
                         ww6
                         ww7 of wild { (,) ds1 y ->
-                 case y of ww11 { Statistics.Matrix.Types.Matrix ww12 ww13 ww14 ->
-                 case ww14
-                        `cast`
-                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww15 { Data.Vector.Primitive.Vector ww16 ww17 ww18 ->
-                 Utils.$wisUpperTri ww12 ww13 ww16 ww17 ww18 } } } } }) -}
+                 case y of wild1 { Statistics.Matrix.Types.Matrix dt dt1 ds2 ->
+                 Utils.$wupperTriHelper
+                   wild1
+                   (GHC.Prim.-# dt 1#)
+                   GHC.Types.True } } } }) -}
 vectorised variables:
 vectorised tycons:
 vectorised reused tycons:

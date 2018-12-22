@@ -47,5 +47,5 @@ Building library for vector-0.12.0.1..
 [20 of 21] Compiling Data.Vector.Unboxed ( Data/Vector/Unboxed.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Data/Vector/Unboxed.o )
 [21 of 21] Compiling Data.Vector.Unboxed.Mutable ( Data/Vector/Unboxed/Mutable.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Data/Vector/Unboxed/Mutable.o )
 ignoring (possibly broken) abi-depends field for packages
-Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/vector-0.12.0.1-4awQG9XUvVEBfJgKGHBhOb
+Installing library in /home/ciel/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/vector-0.12.0.1-4awQG9XUvVEBfJgKGHBhOb
 Registering library for vector-0.12.0.1..

@@ -15,11 +15,18 @@ import qualified Fixtures as F
 
 -- | Operations on vectors
 
+-- | Temporary function
+isZero :: Double -> Bool
+isZero n = if n == 0
+  then True
+  else False
+
+
 -- | Checks that first n elements of a vector are zero
 -- by mapping an "isZero" function to the first N elements
 -- and then folding the resultant vector with AND
 firstNzero :: T.Vector -> Int -> Bool
-firstNzero vec n = U.foldl (&&) True $ U.map (== 0) $ U.take n vec
+firstNzero vec n = U.foldl (&&) True $ U.map isZero $ U.take n vec
 
 -- | Operations on matrices
 
@@ -32,15 +39,30 @@ isOrtho :: T.Matrix -> Bool
 isOrtho mat = M.multiply mat (M.transpose mat) == F.matId
 
 
+-- | temp function
+doesEnthZeros :: Int -> Bool -> T.Vector -> Bool
+doesEnthZeros 0 acc row = acc
+doesEnthZeros n acc row = let
+  current = U.head row
+  in
+  if (current == 0)
+  then doesEnthZeros (n-1) (acc && True) (U.tail row)
+  else doesEnthZeros (n-1) (acc && False) (U.tail row)
+
+-- | temp function
+upperTriHelper :: T.Matrix -> Int -> Bool -> Bool
+upperTriHelper mat 0 acc = acc
+upperTriHelper mat n acc = let
+  current = M.row mat n
+  in
+  if (doesEnthZeros n True current) == True
+  then upperTriHelper mat (n-1) (acc && True)
+  else upperTriHelper mat (n-1) (acc && False)
+
+
 -- | Check if given matrix is upper triangular
 isUpperTri :: T.Matrix -> Bool
-isUpperTri mat = P.foldl (&&) True $ P.map firstNinRow [1..m]
-  where
-    -- to check that the first n elements
-    -- of row n of the matrix are zero
-    firstNinRow n = firstNzero (M.row mat n) n
-    -- to get the dimensions of the matrix
-    m = fst $ M.dimension mat -- rows
+isUpperTri mat = upperTriHelper mat ((fst (M.dimension mat))-1) True 
 
 
 -- | Check if given matrix is lower triangular

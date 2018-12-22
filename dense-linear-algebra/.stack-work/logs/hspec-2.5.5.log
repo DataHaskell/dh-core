@@ -9,5 +9,5 @@ Building library for hspec-2.5.5..
 [6 of 7] Compiling Test.Hspec       ( src/Test/Hspec.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec.o )
 [7 of 7] Compiling Test.Hspec.QuickCheck ( src/Test/Hspec/QuickCheck.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec/QuickCheck.o )
 ignoring (possibly broken) abi-depends field for packages
-Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/hspec-2.5.5-FuOC97NUjg47UG2A5AEwkM
+Installing library in /home/ciel/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/hspec-2.5.5-FuOC97NUjg47UG2A5AEwkM
 Registering library for hspec-2.5.5..

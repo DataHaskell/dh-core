@@ -17,5 +17,5 @@ Building library for QuickCheck-2.11.3..
 [14 of 15] Compiling Test.QuickCheck.All ( Test/QuickCheck/All.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/QuickCheck/All.o )
 [15 of 15] Compiling Test.QuickCheck  ( Test/QuickCheck.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/QuickCheck.o )
 ignoring (possibly broken) abi-depends field for packages
-Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/QuickCheck-2.11.3-3XHQpBYb83U2mMvNz2AjQX
+Installing library in /home/ciel/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/QuickCheck-2.11.3-3XHQpBYb83U2mMvNz2AjQX
 Registering library for QuickCheck-2.11.3..

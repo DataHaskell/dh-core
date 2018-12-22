@@ -12,5 +12,5 @@ Building library for vector-algorithms-0.7.0.4..
 [ 9 of 10] Compiling Data.Vector.Algorithms.Search ( src/Data/Vector/Algorithms/Search.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Data/Vector/Algorithms/Search.o )
 [10 of 10] Compiling Data.Vector.Algorithms.Tim ( src/Data/Vector/Algorithms/Tim.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Data/Vector/Algorithms/Tim.o )
 ignoring (possibly broken) abi-depends field for packages
-Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/vector-algorithms-0.7.0.4-LTeQMW2mffA77UAhZhdPqK
+Installing library in /home/ciel/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/vector-algorithms-0.7.0.4-LTeQMW2mffA77UAhZhdPqK
 Registering library for vector-algorithms-0.7.0.4..

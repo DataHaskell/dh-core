@@ -12,5 +12,5 @@ Building library for stm-2.4.5.1..
 [ 9 of 10] Compiling Control.Concurrent.STM.TSem ( Control/Concurrent/STM/TSem.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Concurrent/STM/TSem.o )
 [10 of 10] Compiling Control.Sequential.STM ( Control/Sequential/STM.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Control/Sequential/STM.o )
 ignoring (possibly broken) abi-depends field for packages
-Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/stm-2.4.5.1-1n1oRyz2WxkGi5pMiXlR3y
+Installing library in /home/ciel/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/stm-2.4.5.1-1n1oRyz2WxkGi5pMiXlR3y
 Registering library for stm-2.4.5.1..

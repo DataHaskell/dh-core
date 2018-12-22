@@ -13,5 +13,5 @@ Building library for tf-random-0.5..
 [0m[0m[0m[3 of 4] Compiling System.Random.TF ( src/System/Random/TF.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/System/Random/TF.o )
 [4 of 4] Compiling System.Random.TF.Instances ( src/System/Random/TF/Instances.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/System/Random/TF/Instances.o )
 ignoring (possibly broken) abi-depends field for packages
-Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/tf-random-0.5-BZa4jMFCdGCK8yjkzN18lQ
+Installing library in /home/ciel/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/tf-random-0.5-BZa4jMFCdGCK8yjkzN18lQ
 Registering library for tf-random-0.5..

@@ -6,5 +6,5 @@ Building library for hspec-expectations-0.8.2..
 [3 of 4] Compiling Test.Hspec.Expectations.Matcher ( src/Test/Hspec/Expectations/Matcher.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec/Expectations/Matcher.o )
 [4 of 4] Compiling Test.Hspec.Expectations ( src/Test/Hspec/Expectations.hs, .stack-work/dist/x86_64-linux/Cabal-2.2.0.1/build/Test/Hspec/Expectations.o )
 ignoring (possibly broken) abi-depends field for packages
-Installing library in /home/atreyee/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/hspec-expectations-0.8.2-7lpBAWb1yuYLnEELJ6wtYs
+Installing library in /home/ciel/.stack/snapshots/x86_64-linux/lts-12.14/8.4.3/lib/x86_64-linux-ghc-8.4.3/hspec-expectations-0.8.2-7lpBAWb1yuYLnEELJ6wtYs
 Registering library for hspec-expectations-0.8.2..
