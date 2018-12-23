@@ -40,7 +40,7 @@ test-suite spec
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   other-modules:       Fixtures,
-		       Utils,
+                       Utils,
                        AlgorithmsSpec
   main-is:             LibSpec.hs
   build-depends:       base
