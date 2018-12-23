@@ -15,19 +15,6 @@ import qualified Fixtures as F
 
 -- | Operations on vectors
 
--- | Temporary function
-isZero :: Double -> Bool
-isZero n = if n == 0
-  then True
-  else False
-
-
--- | Checks that first n elements of a vector are zero
--- by mapping an "isZero" function to the first N elements
--- and then folding the resultant vector with AND
-firstNzero :: T.Vector -> Int -> Bool
-firstNzero vec n = U.foldl (&&) True $ U.map isZero $ U.take n vec
-
 -- | Operations on matrices
 
 -- | Check if given matrix is identity matrix
@@ -39,38 +26,18 @@ isOrtho :: T.Matrix -> Bool
 isOrtho mat = M.multiply mat (M.transpose mat) == F.matId
 
 
--- | temp function
-doesEnthZeros :: Int -> Bool -> T.Vector -> Bool
-doesEnthZeros 0 acc row = acc
-doesEnthZeros n acc row = let
-  current = U.head row
-  in
-  if (current == 0)
-  then doesEnthZeros (n-1) (acc && True) (U.tail row)
-  else doesEnthZeros (n-1) (acc && False) (U.tail row)
+-- | Checks if the n'th row of the matrix have 'n' leading zeros
+doesEnthZeros :: Int -> T.Vector -> Bool
+doesEnthZeros n row = U.foldl (&&) True (U.map (== 0) (U.take n row))
 
--- | temp function
-upperTriHelper :: T.Matrix -> Int -> Bool -> Bool
-upperTriHelper mat 0 acc = acc
-upperTriHelper mat n acc = let
-  current = M.row mat n
-  in
-  if (doesEnthZeros n True current) == True
-  then upperTriHelper mat (n-1) (acc && True)
-  else upperTriHelper mat (n-1) (acc && False)
+-- | pass the n'th row of the matrix to doesEnthZeros
+getNthRow :: T.Matrix -> Int -> Bool
+getNthRow mat n = doesEnthZeros n (M.row mat n)
 
+-- | Helper function to check if the given matrix is upper triangular
+upperTriHelper :: T.Matrix -> Int -> Bool
+upperTriHelper mat n = P.foldl (&&) True $ P.map (getNthRow mat) [0..(n-1)]
 
--- | Check if given matrix is upper triangular
+-- | to check if the given matrix is upper triangular
 isUpperTri :: T.Matrix -> Bool
-isUpperTri mat = upperTriHelper mat ((fst (M.dimension mat))-1) True 
-
-
--- | Check if given matrix is lower triangular
-isLowerTri :: T.Matrix -> Bool
-isLowerTri mat = P.foldl (&&) True $ P.map firstNinColumn [1..m]
-  where
-    -- to check that the first n elements
-    -- of column n of the matrix are zero
-    firstNinColumn n = firstNzero (M.column mat n) n
-    -- to get the dimensions of the matrix
-    m = snd $ M.dimension mat -- columns
+isUpperTri mat = upperTriHelper mat (fst (M.dimension mat))
