@@ -23,8 +23,8 @@ spec = describe "Q-R Decomposition" $ do
 main :: IO ()
 main = do
   hspec spec
-  let r = snd $ Alg.qr F.matA
-  putStrLn $ show $ M.row r 2
+--  let q = fst $ Alg.qr F.matA
+--  putStrLn $ show q
 
 
 
