@@ -27,16 +27,16 @@ isOrtho mat = M.multiply mat (M.transpose mat) == F.matId
 
 
 -- | Checks if the n'th row of the matrix have 'n' leading zeros
-doesEnthZeros :: Int -> T.Vector -> Bool
-doesEnthZeros n row = U.foldl (&&) True (U.map (== 0) (U.take n row))
+hasLeadingZeros :: Int -> T.Vector -> Bool
+hasLeadingZeros n row = U.foldl (&&) True (U.map (== 0) (U.take n row))
 
--- | pass the n'th row of the matrix to doesEnthZeros
-getNthRow :: T.Matrix -> Int -> Bool
-getNthRow mat n = doesEnthZeros n (M.row mat n)
+-- | pass the n'th row of the matrix to hasLeadingZeros
+isRowFromTriMatrix :: T.Matrix -> Int -> Bool
+isRowFromTriMatrix mat n = hasLeadingZeros n (M.row mat n)
 
 -- | Helper function to check if the given matrix is upper triangular
 upperTriHelper :: T.Matrix -> Int -> Bool
-upperTriHelper mat n = P.foldl (&&) True $ P.map (getNthRow mat) [0..(n-1)]
+upperTriHelper mat n = P.foldl (&&) True $ P.map (isRowFromTriMatrix mat) [0..(n-1)]
 
 -- | to check if the given matrix is upper triangular
 isUpperTri :: T.Matrix -> Bool
