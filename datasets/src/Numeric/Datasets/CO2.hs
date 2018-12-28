@@ -17,15 +17,16 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
-import Network.HTTP.Req ((/:), http, Scheme(..))
+import Network.HTTP.Req ((/:), https, Scheme(..))
 
 data CO2 = CO2
   { time :: Double
-  , co2 :: Double
+  , value :: Double
   } deriving (Show, Read, Generic)
 
 instance FromNamedRecord CO2
 
-maunaLoaCO2 :: Dataset 'Http CO2
+maunaLoaCO2 :: Dataset 'Https CO2
 maunaLoaCO2 = csvHdrDataset
-   $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "datasets" /: "co2.csv"
+   $ URL $ https "raw.githubusercontent.com" /: "vincentarelbundock" /: "Rdatasets" /: "master" /: "csv" /: "datasets" /: "CO2.csv"
+
