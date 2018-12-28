@@ -81,9 +81,9 @@ Library
                  , Numeric.Datasets.WineQuality
                  , Numeric.Datasets.Netflix
    Build-depends:
-                   base                    >= 4.6 && < 5
+                   base          >= 4.6 && < 5
                  , aeson
-                 , attoparsec >= 0.13
+                 , attoparsec    >= 0.13
                  , bytestring
                  , cassava
                  , directory

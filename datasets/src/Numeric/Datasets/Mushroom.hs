@@ -44,13 +44,14 @@ p,x,s,n,t,p,f,c,n,k,e,e,s,s,w,w,p,w,o,p,k,s,u
 e,x,s,y,t,a,f,c,b,k,e,c,s,s,w,w,p,w,o,p,n,n,g
 -}
 module Numeric.Datasets.Mushroom (
-    MushroomEntry(..)
+    mushroomDatabase
+  , MushroomEntry(..)
   , CapShape(..), CapSurface(..), CapColor(..), Odor(..)
   , GillAttachment(..), GillSpacing(..), GillSize(..), GillColor(..), StalkShape(..)
   , StalkRoot(..), StalkSurfaceAboveRing(..), StalkSurfaceBelowRing(..)
   , StalkColorAboveRing(..), StalkColorBelowRing(..), VeilType(..), VeilColor(..)
   , RingNumber(..), RingType(..), SporePrintColor(..), Population(..), Habitat(..) 
-  , mushroomDatabase) where
+  ) where
 
 import Numeric.Datasets
 

@@ -124,7 +124,7 @@ jsonDataset :: FromJSON a => Source -> Dataset a
 jsonDataset src = Dataset src Nothing Nothing JSON
 
 -- | Get a ByteString from the specified Source
-getFileFromSource :: FilePath -> Source -> IO (BL.ByteString)
+getFileFromSource :: FilePath -> Source -> IO BL.ByteString
 getFileFromSource cacheDir (URL url) = do
   createDirectoryIfMissing True cacheDir
   let fnm = cacheDir </> "ds" <> show (hash url)
