@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
 
 {-|
 
@@ -14,6 +14,7 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
+import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data Wine = Wine
   { wineClass :: Int
@@ -34,7 +35,7 @@ data Wine = Wine
 
 instance FromRecord Wine
 
-wine :: Dataset Wine
+wine :: Dataset 'Http Wine
 wine = csvDatasetPreprocess
             fixAmericanDecimals
-            $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/wine/wine.data"
+            $ URL $ umassMLDB /: "wine" /: "wine.data"

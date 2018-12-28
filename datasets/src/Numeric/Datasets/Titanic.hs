@@ -1,4 +1,4 @@
-{-# language DeriveGeneric, OverloadedStrings, LambdaCase #-}
+{-# language DeriveGeneric, OverloadedStrings, LambdaCase, DataKinds #-}
 {-|
 
 Titanic Data Set. For each person on board the fatal maiden voyage of the ocean liner SS Titanic, this dataset records Sex, Age (child/adult), Class (Crew, 1st, 2nd, 3rd Class) and whether or not the person survived.
@@ -23,6 +23,7 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
+import Network.HTTP.Req ((/:), https, Scheme(..))
 
 data TitanicEntry = TitanicEntry {
     tClass :: Class
@@ -71,5 +72,7 @@ parseBool = \case
   x -> error $ unwords ["Unexpected feature value :", show x]   
   
 
-titanic :: Dataset TitanicEntry
-titanic = csvHdrDatasetSep '\t' $ URL "http://www.public.iastate.edu/~hofmann/data/titanic.txt"
+titanic :: Dataset 'Https TitanicEntry
+titanic = csvHdrDatasetSep '\t' $ URL $ https "hofmann.public.iastate.edu" /: "data" /: "titanic.txt"
+
+-- "http://www.public.iastate.edu/~hofmann/data/titanic.txt"

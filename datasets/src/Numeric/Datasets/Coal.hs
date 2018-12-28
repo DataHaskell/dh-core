@@ -1,6 +1,6 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings                   #-}
-{-# LANGUAGE GADTs, QuasiQuotes, ViewPatterns, FlexibleContexts #-}
-{-# OPTIONS_GHC -fno-warn-unused-imports #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
+-- {-# LANGUAGE GADTs, QuasiQuotes, ViewPatterns, FlexibleContexts #-}
+-- {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 {-|
 
@@ -18,15 +18,16 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
-import Control.Applicative
+-- import Control.Applicative
+import Network.HTTP.Req ((/:), http, Scheme(..))
 
-data Coal = Coal
+newtype Coal = Coal
   { date :: Double
   } deriving (Show, Read, Generic)
 
 instance FromRecord Coal where
   parseRecord v = Coal <$> v .! 1
 
-coal :: Dataset Coal
-coal = let src = URL "http://vincentarelbundock.github.io/Rdatasets/csv/boot/coal.csv"
+coal :: Dataset 'Http Coal
+coal = let src = URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "boot" /: "coal.csv"
        in Dataset src Nothing Nothing $ CSVRecord HasHeader defaultDecodeOptions

@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 {-|
@@ -16,6 +16,7 @@ import Numeric.Datasets
 import Data.Csv
 import GHC.Generics
 import Control.Applicative
+import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data StateEdu = StateEdu
   { state :: String
@@ -39,6 +40,8 @@ instance FromNamedRecord StateEdu where
                          m .: "dollars"  <*>
                          m .: "pay"
 
-states :: Dataset StateEdu
+states :: Dataset 'Http StateEdu
 states = csvHdrDataset
-   $ URL "http://vincentarelbundock.github.io/Rdatasets/csv/car/States.csv"
+   $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "car" /: "States.csv"
+
+-- "http://vincentarelbundock.github.io/Rdatasets/csv/car/States.csv"

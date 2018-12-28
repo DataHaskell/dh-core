@@ -16,8 +16,8 @@ imported directly.
 
 -}
 
-{-# LANGUAGE OverloadedStrings, GADTs #-}
-{-# OPTIONS_GHC -fno-warn-unused-imports #-}
+{-# LANGUAGE OverloadedStrings, GADTs, DataKinds #-}
+-- {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 module Numeric.Datasets where
 
@@ -31,11 +31,12 @@ import qualified Data.Vector as V
 import Data.Aeson as JSON
 import Control.Applicative
 import Data.Time
-import Data.Char (ord)
-import qualified Network.Wreq as Wreq
-import Lens.Micro ((^.))
+-- import qualified Network.Wreq as Wreq
+import Data.Default.Class (Default(..))
+import Network.HTTP.Req (req, runReq, Url, (/:), http, https, Scheme(..), LbsResponse, lbsResponse, responseBody, GET(..), NoReqBody(..), HttpMethod(..))
+-- import Lens.Micro ((^.))
 
-import Data.Char (toUpper)
+import Data.Char (ord, toUpper)
 import Text.Read (readMaybe)
 import Data.Maybe (fromMaybe)
 import Data.ByteString.Char8 (unpack)
@@ -44,14 +45,14 @@ import Data.ByteString.Lazy.Search (replace)
 
 -- * Using datasets
 
--- |Load a dataset, using the system temporary directory as a cache
-getDataset :: Dataset a -> IO [a]
+-- | Load a dataset, using the system temporary directory as a cache
+getDataset :: Dataset h a -> IO [a]
 getDataset ds = do
   dir <- tempDirForDataset ds
   bs <- fmap (fromMaybe id $ preProcess ds) $ getFileFromSource dir $ source ds
   return $ readDataset (readAs ds) bs
 
--- |Read a ByteString into a Haskell value
+-- | Read a ByteString into a Haskell value
 readDataset :: ReadAs a -> BL.ByteString -> [a]
 readDataset JSON bs =
   case JSON.decode bs of
@@ -66,19 +67,19 @@ readDataset (CSVNamedRecord opts) bs =
     Right (_,theData) -> V.toList theData
     Left err -> error err
 
-tempDirForDataset :: Dataset a -> IO FilePath
+tempDirForDataset :: Dataset h a -> IO FilePath
 tempDirForDataset ds =
   case temporaryDirectory ds of
     Nothing -> getTemporaryDirectory
     Just tdir -> return tdir
 
-data Source = URL String
-            | File FilePath
+data Source h = URL (Url h)
+              | File FilePath
 
 -- | A dataset is a record telling us how to load the data
 
-data Dataset a = Dataset
-  { source :: Source
+data Dataset h a = Dataset
+  { source :: Source h
   , temporaryDirectory :: Maybe FilePath
   , preProcess :: Maybe (BL.ByteString -> BL.ByteString)
   , readAs :: ReadAs a
@@ -97,47 +98,46 @@ csvRecord = CSVRecord NoHeader defaultDecodeOptions
 -- * Defining datasets
 
 -- |Define a dataset from a pre-processing function and a source for a CSV file
-csvDatasetPreprocess :: FromRecord a => (BL.ByteString -> BL.ByteString) -> Source -> Dataset a
+csvDatasetPreprocess :: FromRecord a => (BL.ByteString -> BL.ByteString) -> Source h -> Dataset h a
 csvDatasetPreprocess preF src = (csvDataset src) { preProcess = Just preF }
 --  parseCSV preF <$> getFileFromSource cacheDir src
 
 -- |Define a dataset from a source for a CSV file
-csvDataset :: FromRecord a =>  Source -> Dataset a
+csvDataset :: FromRecord a =>  Source h -> Dataset h a
 csvDataset src = Dataset src Nothing Nothing $ CSVRecord NoHeader defaultDecodeOptions
 
-csvDatasetSkipHdr :: FromRecord a => Source -> Dataset a
+csvDatasetSkipHdr :: FromRecord a => Source h -> Dataset h a
 csvDatasetSkipHdr src = Dataset src Nothing Nothing $ CSVRecord HasHeader defaultDecodeOptions
 
 
 -- |Define a dataset from a source for a CSV file with a known header
-csvHdrDataset :: FromNamedRecord a => Source -> Dataset a
+csvHdrDataset :: FromNamedRecord a => Source h -> Dataset h a
 csvHdrDataset src = Dataset src Nothing Nothing $ CSVNamedRecord defaultDecodeOptions
 
 -- |Define a dataset from a source for a CSV file with a known header and separator
-csvHdrDatasetSep :: FromNamedRecord a => Char -> Source -> Dataset a
+csvHdrDatasetSep :: FromNamedRecord a => Char -> Source h -> Dataset h a
 csvHdrDatasetSep sepc src
    = Dataset src Nothing Nothing
        $ CSVNamedRecord defaultDecodeOptions { decDelimiter = fromIntegral (ord sepc)}
 
 -- |Define a dataset from a source for a JSON file -- data file must be accessible with HTTP, not HTTPS
-jsonDataset :: FromJSON a => Source -> Dataset a
+jsonDataset :: FromJSON a => Source h -> Dataset h a
 jsonDataset src = Dataset src Nothing Nothing JSON
 
 -- | Get a ByteString from the specified Source
-getFileFromSource :: FilePath -> Source -> IO BL.ByteString
+getFileFromSource :: FilePath -> Source h -> IO BL.ByteString
 getFileFromSource cacheDir (URL url) = do
   createDirectoryIfMissing True cacheDir
-  let fnm = cacheDir </> "ds" <> show (hash url)
-
+  let fnm = cacheDir </> "ds" <> show (hash $ show url)
   ex <- doesFileExist fnm
   if ex
      then BL.readFile fnm
      else do
-       rsp <- Wreq.get url
-       let bs = rsp ^. Wreq.responseBody
+       rsp <- runReq def $ req GET url NoReqBody lbsResponse mempty 
+       let bs = responseBody rsp
        BL.writeFile fnm bs
        return bs
-getFileFromSource _ (File fnm) = do
+getFileFromSource _ (File fnm) = 
   BL.readFile fnm
 
 -- * Helper functions for parsing
@@ -194,3 +194,13 @@ yearToUTCTime yearDbl =
       day = addDays dayn dayYearBegin
       dt = secondsToDiffTime $ round $ dayFrac * 86400
   in UTCTime day dt
+
+
+
+-- * URLs
+
+umassMLDB :: Url 'Http
+umassMLDB = http "mlr.cs.umass.edu" /: "ml" /: "machine-learning-databases"
+
+uciMLDB :: Url 'Https
+uciMLDB = https "archive.ics.uci.edu" /: "ml" /: "machine-learning-databases"

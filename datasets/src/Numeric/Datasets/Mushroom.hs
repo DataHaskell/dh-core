@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings, LambdaCase #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, LambdaCase, DataKinds #-}
 
 {- |
 Mushroom data set
@@ -44,7 +44,7 @@ p,x,s,n,t,p,f,c,n,k,e,e,s,s,w,w,p,w,o,p,k,s,u
 e,x,s,y,t,a,f,c,b,k,e,c,s,s,w,w,p,w,o,p,n,n,g
 -}
 module Numeric.Datasets.Mushroom (
-    mushroomDatabase
+    mushroom
   , MushroomEntry(..)
   , CapShape(..), CapSurface(..), CapColor(..), Odor(..)
   , GillAttachment(..), GillSpacing(..), GillSize(..), GillColor(..), StalkShape(..)
@@ -57,7 +57,8 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
-import Control.Applicative
+-- import Control.Applicative
+import Network.HTTP.Req ((/:), Scheme(..))
 
 data MushroomEntry = MushroomEntry {
     edible :: Bool -- ^ Is the mushroom edible?
@@ -356,6 +357,6 @@ charToHabitat = \case
   x -> error $ unwords ["Unexpected feature value :", show x]    
 
 
-mushroomDatabase :: Dataset MushroomEntry
-mushroomDatabase = csvDataset
-   $ URL "https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data"
+mushroom :: Dataset 'Https MushroomEntry
+mushroom = csvDataset
+   $ URL $ uciMLDB /: "mushroom" /: "agaricus-lepiota.data"

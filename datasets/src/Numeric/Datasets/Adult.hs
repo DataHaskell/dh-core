@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
 
 {-|
 
@@ -16,6 +16,7 @@ import Data.Csv
 import GHC.Generics
 import Control.Applicative
 import Data.Text (Text, strip)
+import Network.HTTP.Req ((/:), Scheme(..))
 
 data WorkClass = Private | SelfEmpNotInc | SelfEmpInc | FederalGov
                | LocalGov | StateGov | WithoutPay | NeverWorked
@@ -92,11 +93,13 @@ data Adult = Adult
 
 instance FromRecord Adult where
   parseRecord v = Adult <$> v .! 0 <*> (v.! 1 <|> return Nothing) <*> v.!2 <*> (strip <$> v.!3)
-                        <*> v.!4 <*> v.!5<*> (v.!6 <|> return Nothing) <*> v.!7 <*> v.!8
-                        <*> v.!9 <*> v.!10 <*> v.!11 <*> v.!12<*> v.!13<*> v.!14
+                        <*> v.!4 <*> v.!5 <*> (v.!6 <|> return Nothing) <*> v.!7 <*> v.!8
+                        <*> v.!9 <*> v.!10 <*> v.!11 <*> v.!12 <*> v.!13 <*> v.!14
 
-adult :: Dataset Adult
-adult = csvDataset $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/adult/adult.data"
+adult :: Dataset 'Http Adult
+adult = csvDataset $ URL $ umassMLDB /: "adult" /: "adult.data"
 
-adultTestSet :: Dataset Adult
-adultTestSet = csvDatasetPreprocess (dropLines 1) $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/adult/adult.test"
+adultTestSet :: Dataset 'Http Adult
+adultTestSet = csvDatasetPreprocess (dropLines 1) $ URL $ umassMLDB /: "adult" /: "adult.test"
+
+-- "http://mlr.cs.umass.edu/ml/machine-learning-databases/adult/adult.test"

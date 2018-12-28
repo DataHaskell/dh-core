@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
 
 {-|
 
@@ -17,6 +17,7 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
+import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data CO2 = CO2
   { time :: Double
@@ -25,6 +26,6 @@ data CO2 = CO2
 
 instance FromNamedRecord CO2
 
-maunaLoaCO2 :: Dataset CO2
+maunaLoaCO2 :: Dataset 'Http CO2
 maunaLoaCO2 = csvHdrDataset
-   $ URL "http://vincentarelbundock.github.io/Rdatasets/csv/datasets/co2.csv"
+   $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "datasets" /: "co2.csv"

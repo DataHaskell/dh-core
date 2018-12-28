@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
 
 {-|
 
@@ -15,6 +15,7 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
+import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data Quake = Quake
   { lat :: Double
@@ -26,6 +27,6 @@ data Quake = Quake
 
 instance FromNamedRecord Quake
 
-quakes :: Dataset Quake
+quakes :: Dataset 'Http Quake
 quakes = csvHdrDataset
-   $ URL "http://vincentarelbundock.github.io/Rdatasets/csv/datasets/quakes.csv"
+   $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "datasets" /: "quakes.csv"
