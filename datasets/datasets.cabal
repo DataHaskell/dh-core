@@ -92,7 +92,7 @@ Library
                , filepath
                , hashable
                , microlens
-               , req            >= 1.1.0
+               , req            >= 1.0.0
                , stringsearch
                , text
                , time
