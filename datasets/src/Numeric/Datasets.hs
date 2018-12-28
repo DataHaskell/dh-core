@@ -73,20 +73,19 @@ tempDirForDataset ds =
     Nothing -> getTemporaryDirectory
     Just tdir -> return tdir
 
+-- | A 'Dataset' source can be either a URL (for remotely-hosted datasets) or the filepath of a local file.
 data Source h = URL (Url h)
               | File FilePath
 
 -- | A dataset is a record telling us how to load the data
-
 data Dataset h a = Dataset
-  { source :: Source h
-  , temporaryDirectory :: Maybe FilePath
-  , preProcess :: Maybe (BL.ByteString -> BL.ByteString)
+  { source :: Source h  -- ^ Dataset source
+  , temporaryDirectory :: Maybe FilePath  -- ^ Temporary directory (optional)
+  , preProcess :: Maybe (BL.ByteString -> BL.ByteString)  -- ^ Dataset preprocessing function (optional)
   , readAs :: ReadAs a
   }
 
 -- | ReadAs is a datatype to describe data formats that hold data sets
-
 data ReadAs a where
   JSON :: FromJSON a => ReadAs a
   CSVRecord :: FromRecord a => HasHeader -> DecodeOptions -> ReadAs a
@@ -140,29 +139,29 @@ getFileFromSource cacheDir (URL url) = do
 getFileFromSource _ (File fnm) = 
   BL.readFile fnm
 
--- * Helper functions for parsing
+-- * Helper functions for parsing datasets
 
--- |Turn dashes to CamlCase
+-- | Turn dashes to CamelCase
 dashToCamelCase :: String -> String
 dashToCamelCase ('-':c:cs) = toUpper c : dashToCamelCase cs
 dashToCamelCase (c:cs) = c : dashToCamelCase cs
 dashToCamelCase [] = []
 
--- | Parse a field, first turning dashes to CamlCase
+-- | Parse a field, first turning dashes to CamelCase
 parseDashToCamelField :: Read a => Field -> Parser a
 parseDashToCamelField s =
   case readMaybe (dashToCamelCase $ unpack s) of
     Just wc -> pure wc
     Nothing -> fail "unknown"
 
--- | parse somethign, based on its read instance
+-- | Parse something, based on its read instance
 parseReadField :: Read a => Field -> Parser a
 parseReadField s =
   case readMaybe (unpack s) of
     Just wc -> pure wc
     Nothing -> fail "unknown"
 
--- |Drop lines from a bytestring
+-- | Drop lines from a bytestring
 dropLines :: Int -> BL.ByteString -> BL.ByteString
 dropLines 0 s = s
 dropLines n s = dropLines (n-1) $ BL.tail $ BL8.dropWhile (/='\n') s
@@ -199,9 +198,11 @@ yearToUTCTime yearDbl =
 
 -- * URLs
 
+-- | http://mlr.cs.umass.edu/ml/machine-learning-databases
 umassMLDB :: Url 'Http
 umassMLDB = http "mlr.cs.umass.edu" /: "ml" /: "machine-learning-databases"
 
+-- | https://archive.ics.uci.edu/ml/machine-learning-databases
 uciMLDB :: Url 'Https
 uciMLDB = https "archive.ics.uci.edu" /: "ml" /: "machine-learning-databases"
 

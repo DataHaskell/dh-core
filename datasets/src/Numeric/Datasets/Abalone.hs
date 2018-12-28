@@ -39,4 +39,3 @@ instance FromRecord Abalone
 abalone :: Dataset 'Http Abalone
 abalone = csvDataset $ URL $ umassMLDB /: "abalone" /: "abalone.data"
 
--- http://mlr.cs.umass.edu/ml/machine-learning-databases/abalone/abalone.data
