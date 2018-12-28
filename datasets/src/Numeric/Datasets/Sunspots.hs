@@ -28,7 +28,7 @@ data Sunspot = Sunspot
 instance FromNamedRecord Sunspot where
     parseNamedRecord m = Sunspot <$>
                          m .: "time" <*>
-                         m .: "sunspot.month"
+                         m .: "value"
 
 sunspots :: Dataset 'Http Sunspot
 sunspots = csvHdrDataset
