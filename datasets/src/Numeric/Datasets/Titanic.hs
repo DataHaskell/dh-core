@@ -23,7 +23,9 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
-import Network.HTTP.Req ((/:), https, Scheme(..))
+import Data.FileEmbed
+import Data.ByteString.Lazy (fromStrict)
+import Network.HTTP.Req ((/:), http, https, Scheme(..))
 
 data TitanicEntry = TitanicEntry {
     tClass :: Class
@@ -35,8 +37,8 @@ data TitanicEntry = TitanicEntry {
 
 instance FromNamedRecord TitanicEntry where
   parseNamedRecord v = TitanicEntry <$>
-    (parseClass <$> v .: "Class") <*>
-    (parseAge <$> v .: "Age") <*>
+    (parseClass <$> v .: "Pclass") <*>
+    (v .: "Age") <*>
     (parseSex <$> v .: "Sex") <*>
     (parseBool <$> v .: "Survived")     
     
@@ -45,34 +47,70 @@ data Class = First | Second | Third | Crew deriving (Eq, Read, Show, Generic, En
 
 parseClass :: String -> Class
 parseClass = \case
-  "First" -> First
-  "Second" -> Second
-  "Third" -> Third
+  "1" -> First
+  "2" -> Second
+  "3" -> Third
   "Crew" -> Crew
   x -> error $ unwords ["Unexpected feature value :", show x]  
 
-data Age = Child | Adult deriving (Eq, Read, Show, Generic, Enum, Bounded)
-parseAge :: String -> Age
-parseAge = \case
-  "Child" -> Child
-  "Adult" -> Adult
-  x -> error $ unwords ["Unexpected feature value :", show x]    
+-- data Age = Child | Adult deriving (Eq, Read, Show, Generic, Enum, Bounded) -- 
+
+
+-- parseAge :: String -> Age
+-- parseAge = \case
+--   "Child" -> Child
+--   "Adult" -> Adult
+--   x -> error $ unwords ["Unexpected feature value :", show x]
+
+newtype Age = Age (Maybe Double) deriving (Eq, Read, Show, Generic)
+
+instance FromField Age where
+  parseField s = case runParser (parseField s :: Parser Double) of
+    Left _ -> pure $ Age Nothing
+    Right x -> pure $ Age $ Just x
+
+-- instance FromField Age where
+--   parseField = \case
+--     "NA" -> pure $ Age Nothing
+--     x    -> pure $ Age $ Just x
+--   -- parseField s = case runParser (parseField s) of
+--   --   Left err -> pure $ Age Nothing
+       
+
 
 data Sex = Female | Male deriving (Eq, Read, Show, Generic, Enum, Bounded)
+
 parseSex :: String -> Sex
 parseSex = \case
-  "Female" -> Female
-  "Male" -> Male
+  "female" -> Female
+  "male" -> Male
   x -> error $ unwords ["Unexpected feature value :", show x]      
 
 parseBool :: String -> Bool
 parseBool = \case
-  "Yes" -> True
-  "No" -> False
+  "1" -> True
+  "0" -> False
   x -> error $ unwords ["Unexpected feature value :", show x]   
-  
+
 
 titanic :: Dataset 'Https TitanicEntry
-titanic = csvHdrDatasetSep '\t' $ URL $ https "hofmann.public.iastate.edu" /: "data" /: "titanic.txt"
+titanic = csvHdrDatasetSep '\t' $ URL $ https "raw.githubusercontent.com" /: "JackStat" /: "6003Data" /: "master" /: "Titanic.txt"
 
--- "http://www.public.iastate.edu/~hofmann/data/titanic.txt"
+
+
+
+-- https://raw.githubusercontent.com/JackStat/6003Data/master/Titanic.txt
+
+-- "biostat.mc.vanderbilt.edu" /: "wiki" /: "pub" /: "Main" /: "DataSets" /: "titanic.txt"
+  
+-- http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic.txt
+
+-- https "raw.githubusercontent.com" /: "vincentarelbundock" /: "Rdatasets" /: "master" /: "csv" /: "carData" /: "TitanicSurvival.csv"
+  
+-- "hofmann.public.iastate.edu" /: "data" /: "titanic.txt"
+
+-- https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/carData/TitanicSurvival.csv
+
+
+
+
