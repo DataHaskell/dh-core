@@ -25,9 +25,9 @@ module Numeric.Datasets (getDataset, Dataset(..), Source(..),
                         -- * Defining datasets
                         csvDataset, csvHdrDataset, csvHdrDatasetSep, csvDatasetSkipHdr,
                         jsonDataset,
-                        -- * Modifying datasets
+                        -- ** Dataset options
                         withPreprocess, withTempDir,                        
-                        -- * Preprocessing functions
+                        -- ** Preprocessing functions
                         --
                         -- | These functions are to be used as first argument of 'withPreprocess'. They act on the individual text fields of the raw dataset in order to sanitize the input data to the parsers.
                         dropLines, fixedWidthToCSV, removeEscQuotes, fixAmericanDecimals,
