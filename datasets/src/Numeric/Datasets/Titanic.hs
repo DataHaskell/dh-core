@@ -53,30 +53,19 @@ parseClass = \case
   "Crew" -> Crew
   x -> error $ unwords ["Unexpected feature value :", show x]  
 
--- data Age = Child | Adult deriving (Eq, Read, Show, Generic, Enum, Bounded) -- 
-
-
--- parseAge :: String -> Age
--- parseAge = \case
---   "Child" -> Child
---   "Adult" -> Adult
---   x -> error $ unwords ["Unexpected feature value :", show x]
 
 newtype Age = Age (Maybe Double) deriving (Eq, Read, Show, Generic)
 
 instance FromField Age where
-  parseField s = case runParser (parseField s :: Parser Double) of
-    Left _ -> pure $ Age Nothing
-    Right x -> pure $ Age $ Just x
+  parseField s = case s of
+    "NA" -> pure $ Age Nothing
+    ss -> case runParser (parseField ss :: Parser Double) of
+      Left _ -> pure $ Age Nothing
+      Right x -> pure $ Age $ Just x  
 
--- instance FromField Age where
---   parseField = \case
---     "NA" -> pure $ Age Nothing
---     x    -> pure $ Age $ Just x
---   -- parseField s = case runParser (parseField s) of
---   --   Left err -> pure $ Age Nothing
+
+
        
-
 
 data Sex = Female | Male deriving (Eq, Read, Show, Generic, Enum, Bounded)
 
@@ -96,10 +85,11 @@ parseBool = \case
 titanic :: Dataset 'Https TitanicEntry
 titanic = csvHdrDatasetSep '\t' $ URL $ https "raw.githubusercontent.com" /: "JackStat" /: "6003Data" /: "master" /: "Titanic.txt"
 
-
-
-
 -- https://raw.githubusercontent.com/JackStat/6003Data/master/Titanic.txt
+
+
+
+
 
 -- "biostat.mc.vanderbilt.edu" /: "wiki" /: "pub" /: "Main" /: "DataSets" /: "titanic.txt"
   
