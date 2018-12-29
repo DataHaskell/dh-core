@@ -52,6 +52,25 @@ getDataset ds = do
   bs <- fmap (fromMaybe id $ preProcess ds) $ getFileFromSource dir $ source ds
   return $ readDataset (readAs ds) bs
 
+-- | Get a ByteString from the specified Source
+getFileFromSource ::
+     FilePath  -- ^ Cache directory
+  -> Source h  
+  -> IO BL.ByteString
+getFileFromSource cacheDir (URL url) = do
+  createDirectoryIfMissing True cacheDir
+  let fnm = cacheDir </> "ds" <> show (hash $ show url)
+  ex <- doesFileExist fnm
+  if ex
+     then BL.readFile fnm
+     else do
+       rsp <- runReq def $ req GET url NoReqBody lbsResponse mempty 
+       let bs = responseBody rsp
+       BL.writeFile fnm bs
+       return bs
+getFileFromSource _ (File fnm) = 
+  BL.readFile fnm  
+
 -- | Read a ByteString into a Haskell value
 readDataset :: ReadAs a -> BL.ByteString -> [a]
 readDataset JSON bs =
@@ -119,25 +138,12 @@ csvHdrDatasetSep sepc src
    = Dataset src Nothing Nothing
        $ CSVNamedRecord defaultDecodeOptions { decDelimiter = fromIntegral (ord sepc)}
 
--- |Define a dataset from a source for a JSON file -- data file must be accessible with HTTP, not HTTPS
+-- | Define a dataset from a source for a JSON file 
 jsonDataset :: FromJSON a => Source h -> Dataset h a
 jsonDataset src = Dataset src Nothing Nothing JSON
 
--- | Get a ByteString from the specified Source
-getFileFromSource :: FilePath -> Source h -> IO BL.ByteString
-getFileFromSource cacheDir (URL url) = do
-  createDirectoryIfMissing True cacheDir
-  let fnm = cacheDir </> "ds" <> show (hash $ show url)
-  ex <- doesFileExist fnm
-  if ex
-     then BL.readFile fnm
-     else do
-       rsp <- runReq def $ req GET url NoReqBody lbsResponse mempty 
-       let bs = responseBody rsp
-       BL.writeFile fnm bs
-       return bs
-getFileFromSource _ (File fnm) = 
-  BL.readFile fnm
+
+
 
 -- * Helper functions for parsing datasets
 

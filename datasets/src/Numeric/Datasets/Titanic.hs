@@ -85,6 +85,9 @@ parseBool = \case
 titanic :: Dataset 'Https TitanicEntry
 titanic = csvHdrDatasetSep '\t' $ URL $ https "raw.githubusercontent.com" /: "JackStat" /: "6003Data" /: "master" /: "Titanic.txt"
 
+titanicLocal :: Dataset h TitanicEntry
+titanicLocal = csvHdrDatasetSep '\t' $ File "datafiles/titanic2_full.tsv"
+
 -- https://raw.githubusercontent.com/JackStat/6003Data/master/Titanic.txt
 
 
