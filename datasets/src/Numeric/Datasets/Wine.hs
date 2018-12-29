@@ -36,6 +36,5 @@ data Wine = Wine
 instance FromRecord Wine
 
 wine :: Dataset 'Http Wine
-wine = csvDatasetPreprocess
-            fixAmericanDecimals
-            $ URL $ umassMLDB /: "wine" /: "wine.data"
+wine = withPreprocess fixAmericanDecimals $
+          csvDataset $ URL $ umassMLDB /: "wine" /: "wine.data"

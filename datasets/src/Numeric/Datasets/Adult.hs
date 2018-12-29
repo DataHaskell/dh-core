@@ -32,7 +32,7 @@ data MaritalStatus = MarriedCivSpouse | Divorced | NeverMarried
 
 instance FromField MaritalStatus where
 --  parseField "Married-AF-spouse" = pure MarriedAFSpouse
-  parseField s = parseDashToCamelField s
+  parseField = parseDashToCamelField 
 
 data Occupation = TechSupport | CraftRepair | OtherService | Sales | ExecManagerial | ProfSpecialty
                 | HandlersCleaners | MachineOpInspct | AdmClerical | FarmingFishing | TransportMoving
@@ -41,25 +41,25 @@ data Occupation = TechSupport | CraftRepair | OtherService | Sales | ExecManager
 
 instance FromField Occupation where
 --  parseField "ArmedForces" = pure ArmedForces
-  parseField s = parseDashToCamelField s
+  parseField = parseDashToCamelField 
 
 data Relationship = Wife | OwnChild | Husband | NotInFamily | OtherRelative | Unmarried
   deriving (Show, Read, Eq, Generic, Bounded, Enum)
 
 instance FromField Relationship where
-  parseField s = parseDashToCamelField s
+  parseField = parseDashToCamelField 
 
 data Race = White | AsianPacIslander | AmerIndianEskimo | Other | Black
   deriving (Show, Read, Eq, Generic, Bounded, Enum)
 
 instance FromField Race where
-  parseField s = parseDashToCamelField s
+  parseField = parseDashToCamelField 
 
 data Sex = Female | Male
   deriving (Show, Read, Eq, Generic, Bounded, Enum)
 
 instance FromField Sex where
-  parseField s = parseDashToCamelField s
+  parseField = parseDashToCamelField 
 
 data Income = GT50K | LE50K
   deriving (Show, Read, Eq, Generic, Bounded, Enum)
@@ -100,6 +100,6 @@ adult :: Dataset 'Http Adult
 adult = csvDataset $ URL $ umassMLDB /: "adult" /: "adult.data"
 
 adultTestSet :: Dataset 'Http Adult
-adultTestSet = csvDatasetPreprocess (dropLines 1) $ URL $ umassMLDB /: "adult" /: "adult.test"
+adultTestSet = withPreprocess (dropLines 1) $ csvDataset $ URL $ umassMLDB /: "adult" /: "adult.test"
 
 -- "http://mlr.cs.umass.edu/ml/machine-learning-databases/adult/adult.test"

@@ -23,10 +23,7 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
-import Data.FileEmbed
-import Data.ByteString.Lazy (fromStrict)
-import qualified Data.ByteString.Lazy.Char8 as BL8
-import Network.HTTP.Req ((/:), http, https, Scheme(..))
+import Network.HTTP.Req ((/:), https, Scheme(..))
 
 data TitanicEntry = TitanicEntry {
     tClass :: Class
@@ -87,8 +84,6 @@ titanicRemote = withPreprocess removeEscQuotes $ csvHdrDatasetSep '\t' $ URL $ h
 titanicLocal :: Dataset h TitanicEntry
 titanicLocal = withPreprocess removeEscQuotes $ csvHdrDatasetSep '\t' $ File "datafiles/titanic2_full.tsv"
 
-
--- https://raw.githubusercontent.com/JackStat/6003Data/master/Titanic.txt
 
 
 

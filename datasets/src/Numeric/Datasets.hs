@@ -2,14 +2,14 @@
 
 The datasets package defines two different kinds of datasets:
 
-* small data sets which are directly (or indirectly with `file-embed`)
+* small data sets which are directly (or indirectly with @file-embed@)
   embedded in the package as pure values and do not require
   network or IO to download the data set.
 
 * other data sets which need to be fetched over the network with
-  `getDataset` and are cached in a local temporary directory
+  'getDataset' and are cached in a local temporary directory
 
-This module defines the `getDataset` function for fetching datasets
+This module defines the 'getDataset' function for fetching datasets
 and utilies for defining new data sets. It is only necessary to import
 this module when using fetched data sets. Embedded data sets can be
 imported directly.
@@ -19,7 +19,23 @@ imported directly.
 {-# LANGUAGE OverloadedStrings, GADTs, DataKinds #-}
 -- {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
-module Numeric.Datasets where
+module Numeric.Datasets (getDataset, Dataset(..), Source(..),
+                         -- * Parsing datasets 
+                         readDataset, ReadAs(..), csvRecord,
+                        -- * Defining datasets
+                        csvDataset, csvHdrDataset, csvHdrDatasetSep, csvDatasetSkipHdr,
+                        jsonDataset,
+                        -- * Modifying datasets
+                        withPreprocess, withTempDir,                        
+                        -- * Preprocessing functions
+                        --
+                        -- | These functions are to be used as first argument of 'withPreprocess'. They act on the individual text fields of the raw dataset in order to sanitize the input data to the parsers.
+                        dropLines, fixedWidthToCSV, removeEscQuotes, fixAmericanDecimals,
+                        -- ** Helper functions
+                         parseReadField, parseDashToCamelField, 
+                         yearToUTCTime, 
+                        -- * Dataset sources
+                        umassMLDB, uciMLDB) where
 
 import Data.Csv
 import System.FilePath
@@ -71,8 +87,11 @@ getFileFromSource cacheDir (URL url) = do
 getFileFromSource _ (File fnm) = 
   BL.readFile fnm  
 
--- | Read a ByteString into a Haskell value
-readDataset :: ReadAs a -> BL.ByteString -> [a]
+-- | Parse a ByteString into a list of Haskell values
+readDataset ::
+     ReadAs a      -- ^ How to parse the raw data string 
+  -> BL.ByteString -- ^ The data string
+  -> [a]
 readDataset JSON bs =
   case JSON.decode bs of
     Just theData ->  theData
@@ -110,26 +129,19 @@ data ReadAs a where
   CSVRecord :: FromRecord a => HasHeader -> DecodeOptions -> ReadAs a
   CSVNamedRecord :: FromNamedRecord a => DecodeOptions -> ReadAs a
 
+-- | A CSV record with default decoding options (i.e. columns are separated by commas)
 csvRecord :: FromRecord a => ReadAs a
 csvRecord = CSVRecord NoHeader defaultDecodeOptions
 
 -- * Defining datasets
 
--- | Include a preprocessing stage to a Dataset: each field in the raw data will be preprocessed with the given function.
-withPreprocess :: (BL8.ByteString -> BL8.ByteString) -> Dataset h a -> Dataset h a
-withPreprocess preF ds = ds { preProcess = Just preF}
-
--- |Define a dataset from a pre-processing function and a source for a CSV file
-csvDatasetPreprocess :: FromRecord a => (BL.ByteString -> BL.ByteString) -> Source h -> Dataset h a
-csvDatasetPreprocess preF src = (csvDataset src) { preProcess = Just preF }
---  parseCSV preF <$> getFileFromSource cacheDir src
-
--- |Define a dataset from a source for a CSV file
+-- | Define a dataset from a source for a CSV file
 csvDataset :: FromRecord a =>  Source h -> Dataset h a
 csvDataset src = Dataset src Nothing Nothing csvRecord 
 
+-- | Define a dataset from a source for a CSV file, skipping the header line
 csvDatasetSkipHdr :: FromRecord a => Source h -> Dataset h a
-csvDatasetSkipHdr src = Dataset src Nothing Nothing csvRecord
+csvDatasetSkipHdr src = Dataset src Nothing Nothing $ CSVRecord HasHeader defaultDecodeOptions
 
 
 -- |Define a dataset from a source for a CSV file with a known header
@@ -146,6 +158,16 @@ csvHdrDatasetSep sepc src
 jsonDataset :: FromJSON a => Source h -> Dataset h a
 jsonDataset src = Dataset src Nothing Nothing JSON
 
+
+-- * Modifying datasets
+
+-- | Include a preprocessing stage to a Dataset: each field in the raw data will be preprocessed with the given function.
+withPreprocess :: (BL8.ByteString -> BL8.ByteString) -> Dataset h a -> Dataset h a
+withPreprocess preF ds = ds { preProcess = Just preF}
+
+-- | Include a temporary directory for caching the dataset after this has been downloaded one first time.
+withTempDir :: FilePath -> Dataset h a -> Dataset h a
+withTempDir dir ds = ds { temporaryDirectory = Just dir }
 
 
 
@@ -176,7 +198,7 @@ dropLines :: Int -> BL.ByteString -> BL.ByteString
 dropLines 0 s = s
 dropLines n s = dropLines (n-1) $ BL.tail $ BL8.dropWhile (/='\n') s
 
--- | Turn US-style decimals  starting with a period (e.g. .2) into something Haskell can parse (e.g. 0.2)
+-- | Turn US-style decimals starting with a period (e.g. .2) into something @cassava@ can parse (e.g. 0.2)
 fixAmericanDecimals :: BL.ByteString -> BL.ByteString
 fixAmericanDecimals = replace ",." (",0."::BL.ByteString)
 
@@ -212,11 +234,15 @@ yearToUTCTime yearDbl =
 
 -- * URLs
 
--- | http://mlr.cs.umass.edu/ml/machine-learning-databases
+-- | The UMass machine learning database
+--
+-- <http://mlr.cs.umass.edu/ml/machine-learning-databases>
 umassMLDB :: Url 'Http
 umassMLDB = http "mlr.cs.umass.edu" /: "ml" /: "machine-learning-databases"
 
--- | https://archive.ics.uci.edu/ml/machine-learning-databases
+-- | The UCI machine learning database
+--
+-- | <https://archive.ics.uci.edu/ml/machine-learning-databases>
 uciMLDB :: Url 'Https
 uciMLDB = https "archive.ics.uci.edu" /: "ml" /: "machine-learning-databases"
 
