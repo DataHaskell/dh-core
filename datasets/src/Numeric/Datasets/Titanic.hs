@@ -5,19 +5,19 @@ Titanic Data Set. For each person on board the fatal maiden voyage of the ocean 
 
 ``The Titanic survival data seem to become to categorical data analysis what Fisher's Iris data are to discriminant analysis.'' - Buja A.: A word from the editor of JCGS. Statistical Computing & Graphics Newsletter 10 (1), pp.32-33, 1999.
 
-Retrieved from: <http://www.public.iastate.edu/~hofmann/data/titanic.txt>
+Retrieved from: <https://raw.githubusercontent.com/JackStat/6003Data/master/Titanic.txt>. A copy of the dataset can be found in datasets/titanic2_full.tsv .
 
 Header:
 
-Class	Age	Sex	Survived
+"PassengerId"	"Survived"	"Pclass"	"Name"	"Sex"	"Age"	"SibSp"	"Parch"	"Ticket"	"Fare"	"Cabin"	"Embarked"
 
 Example rows :
 
-Second	Child	Female	Yes
-Third	Adult	Male	Yes
+10	1	2	"Nasser, Mrs. Nicholas (Adele Achem)"	"female"	14	1	0	"237736"	30.0708	""	"C"
+29	1	3	"O'Dwyer, Miss. Ellen \"Nellie\""	"female"	NA	0	0	"330959"	7.8792	""	"Q"
 
 -}
-module Numeric.Datasets.Titanic (titanic, TitanicEntry(..), Class(..), Age(..), Sex(..))where
+module Numeric.Datasets.Titanic (titanicRemote, titanicLocal, TitanicEntry(..), Class(..), Age(..), Sex(..))where
 
 import Numeric.Datasets
 
@@ -25,6 +25,7 @@ import Data.Csv
 import GHC.Generics
 import Data.FileEmbed
 import Data.ByteString.Lazy (fromStrict)
+import qualified Data.ByteString.Lazy.Char8 as BL8
 import Network.HTTP.Req ((/:), http, https, Scheme(..))
 
 data TitanicEntry = TitanicEntry {
@@ -56,16 +57,13 @@ parseClass = \case
 
 newtype Age = Age (Maybe Double) deriving (Eq, Read, Show, Generic)
 
+-- | The "Age" field requires a custom FromField instance because its value may be "NA"
 instance FromField Age where
   parseField s = case s of
     "NA" -> pure $ Age Nothing
     ss -> case runParser (parseField ss :: Parser Double) of
       Left _ -> pure $ Age Nothing
       Right x -> pure $ Age $ Just x  
-
-
-
-       
 
 data Sex = Female | Male deriving (Eq, Read, Show, Generic, Enum, Bounded)
 
@@ -81,28 +79,16 @@ parseBool = \case
   "0" -> False
   x -> error $ unwords ["Unexpected feature value :", show x]   
 
+-- | The Titanic dataset, to be downloaded from <https://raw.githubusercontent.com/JackStat/6003Data/master/Titanic.txt>
+titanicRemote :: Dataset 'Https TitanicEntry
+titanicRemote = withPreprocess removeEscQuotes $ csvHdrDatasetSep '\t' $ URL $ https "raw.githubusercontent.com" /: "JackStat" /: "6003Data" /: "master" /: "Titanic.txt"
 
-titanic :: Dataset 'Https TitanicEntry
-titanic = csvHdrDatasetSep '\t' $ URL $ https "raw.githubusercontent.com" /: "JackStat" /: "6003Data" /: "master" /: "Titanic.txt"
-
+-- | The Titanic dataset, parsed from a local copy
 titanicLocal :: Dataset h TitanicEntry
-titanicLocal = csvHdrDatasetSep '\t' $ File "datafiles/titanic2_full.tsv"
+titanicLocal = withPreprocess removeEscQuotes $ csvHdrDatasetSep '\t' $ File "datafiles/titanic2_full.tsv"
+
 
 -- https://raw.githubusercontent.com/JackStat/6003Data/master/Titanic.txt
-
-
-
-
-
--- "biostat.mc.vanderbilt.edu" /: "wiki" /: "pub" /: "Main" /: "DataSets" /: "titanic.txt"
-  
--- http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/titanic.txt
-
--- https "raw.githubusercontent.com" /: "vincentarelbundock" /: "Rdatasets" /: "master" /: "csv" /: "carData" /: "TitanicSurvival.csv"
-  
--- "hofmann.public.iastate.edu" /: "data" /: "titanic.txt"
-
--- https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/carData/TitanicSurvival.csv
 
 
 

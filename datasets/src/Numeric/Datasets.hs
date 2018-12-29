@@ -115,6 +115,10 @@ csvRecord = CSVRecord NoHeader defaultDecodeOptions
 
 -- * Defining datasets
 
+-- | Include a preprocessing stage to a Dataset: each field in the raw data will be preprocessed with the given function.
+withPreprocess :: (BL8.ByteString -> BL8.ByteString) -> Dataset h a -> Dataset h a
+withPreprocess preF ds = ds { preProcess = Just preF}
+
 -- |Define a dataset from a pre-processing function and a source for a CSV file
 csvDatasetPreprocess :: FromRecord a => (BL.ByteString -> BL.ByteString) -> Source h -> Dataset h a
 csvDatasetPreprocess preF src = (csvDataset src) { preProcess = Just preF }
@@ -122,10 +126,10 @@ csvDatasetPreprocess preF src = (csvDataset src) { preProcess = Just preF }
 
 -- |Define a dataset from a source for a CSV file
 csvDataset :: FromRecord a =>  Source h -> Dataset h a
-csvDataset src = Dataset src Nothing Nothing $ CSVRecord NoHeader defaultDecodeOptions
+csvDataset src = Dataset src Nothing Nothing csvRecord 
 
 csvDatasetSkipHdr :: FromRecord a => Source h -> Dataset h a
-csvDatasetSkipHdr src = Dataset src Nothing Nothing $ CSVRecord HasHeader defaultDecodeOptions
+csvDatasetSkipHdr src = Dataset src Nothing Nothing csvRecord
 
 
 -- |Define a dataset from a source for a CSV file with a known header
@@ -187,6 +191,10 @@ fixedWidthToCSV = BL8.pack . fnl . BL8.unpack where
   chomp (' ':cs) = chomp cs
   chomp (c:cs) = c:cs
   chomp [] = []
+
+-- | Filter out escaped double quotes from a field
+removeEscQuotes :: BL8.ByteString -> BL8.ByteString
+removeEscQuotes = BL8.filter (/= '\"')    
 
 -- * Helper functions for data analysis
 
