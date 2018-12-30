@@ -1,18 +1,23 @@
 {- |
 
-The datasets package defines two different kinds of datasets:
+The datasets package defines three different kinds of datasets:
 
-* small data sets which are directly (or indirectly with @file-embed@)
-  embedded in the package as pure values and do not require
-  network or IO to download the data set.
+* tiny datasets are embedded as part of the library the source code,
+  as lists of values. 
 
+* small data sets are embedded indirectly (via @file-embed@)
+  in the package as pure values and do not require network or IO
+  to be downloaded (strictly speaking, the data IO is done at compile time).
+  
 * other data sets which need to be fetched over the network with
   'getDataset' and are cached in a local temporary directory
 
 This module defines the 'getDataset' function for fetching datasets
-and utilies for defining new data sets. It is only necessary to import
-this module when using fetched data sets. Embedded data sets can be
-imported directly.
+and utilies for defining new data sets and modifying their options.
+It is only necessary to import this module when using fetched data sets.
+Embedded data sets can be used directly.
+
+Please refer to the dataset modules for usage examlpes.
 
 -}
 
@@ -29,12 +34,12 @@ module Numeric.Datasets (getDataset, Dataset(..), Source(..),
                         withPreprocess, withTempDir,                        
                         -- ** Preprocessing functions
                         --
-                        -- | These functions are to be used as first argument of 'withPreprocess'. They act on the individual text fields of the raw dataset in order to sanitize the input data to the parsers.
+                        -- | These functions are to be used as first argument of 'withPreprocess' in order to improve the quality of the parser inputs.
                         dropLines, fixedWidthToCSV, removeEscQuotes, fixAmericanDecimals,
                         -- ** Helper functions
                          parseReadField, parseDashToCamelField, 
                          yearToUTCTime, 
-                        -- * Dataset sources
+                        -- * Dataset source URLs
                         umassMLDB, uciMLDB) where
 
 import Data.Csv
@@ -115,7 +120,7 @@ tempDirForDataset ds =
 data Source h = URL (Url h)
               | File FilePath
 
--- | A dataset is a record telling us how to load the data
+-- | A 'Dataset' contains metadata for loading, caching, preprocessing and parsing data.
 data Dataset h a = Dataset
   { source :: Source h  -- ^ Dataset source
   , temporaryDirectory :: Maybe FilePath  -- ^ Temporary directory (optional)
@@ -186,7 +191,7 @@ parseDashToCamelField s =
     Just wc -> pure wc
     Nothing -> fail "unknown"
 
--- | Parse something, based on its read instance
+-- | Parse a CSV field, based on its read instance
 parseReadField :: Read a => Field -> Parser a
 parseReadField s =
   case readMaybe (unpack s) of
@@ -220,7 +225,7 @@ removeEscQuotes = BL8.filter (/= '\"')
 
 -- * Helper functions for data analysis
 
--- | convert a fractional year to UTCTime with second-level precision (due to not taking into account leap seconds)
+-- | Convert a fractional year to UTCTime with second-level precision (due to not taking into account leap seconds)
 yearToUTCTime :: Double -> UTCTime
 yearToUTCTime yearDbl =
   let (yearn,yearFrac)  = properFraction yearDbl

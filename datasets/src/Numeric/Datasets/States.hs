@@ -44,4 +44,3 @@ states :: Dataset 'Http StateEdu
 states = csvHdrDataset
    $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "car" /: "States.csv"
 
--- "http://vincentarelbundock.github.io/Rdatasets/csv/car/States.csv"

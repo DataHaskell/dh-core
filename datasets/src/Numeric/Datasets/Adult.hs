@@ -40,7 +40,6 @@ data Occupation = TechSupport | CraftRepair | OtherService | Sales | ExecManager
   deriving (Show, Read, Eq, Generic, Bounded, Enum)
 
 instance FromField Occupation where
---  parseField "ArmedForces" = pure ArmedForces
   parseField = parseDashToCamelField 
 
 data Relationship = Wife | OwnChild | Husband | NotInFamily | OtherRelative | Unmarried
