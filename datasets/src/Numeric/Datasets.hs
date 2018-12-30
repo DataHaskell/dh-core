@@ -1,23 +1,22 @@
 {- |
 
-The datasets package defines three different kinds of datasets:
+The @datasets@ package defines three different kinds of datasets:
 
-* tiny datasets are embedded as part of the library the source code,
-  as lists of values. 
+* Tiny datasets (up to a few tens of rows) are embedded as part of the library source code, as lists of values. 
 
-* small data sets are embedded indirectly (via @file-embed@)
-  in the package as pure values and do not require network or IO
-  to be downloaded (strictly speaking, the data IO is done at compile time).
+* Small data sets are embedded indirectly (via @file-embed@)
+  in the package as pure values and do not require IO
+  to be downloaded (i.e. the data is loaded and parsed at compile time).
   
-* other data sets which need to be fetched over the network with
-  'getDataset' and are cached in a local temporary directory
+* Larger data sets which need to be fetched over the network
+  and are cached in a local temporary directory for subsequent use.
 
 This module defines the 'getDataset' function for fetching datasets
-and utilies for defining new data sets and modifying their options.
+and utilities for defining new data sets and modifying their options.
 It is only necessary to import this module when using fetched data sets.
 Embedded data sets can be used directly.
 
-Please refer to the dataset modules for usage examlpes.
+Please refer to the dataset modules for examples.
 
 -}
 
