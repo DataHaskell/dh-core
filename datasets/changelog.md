@@ -1,6 +1,8 @@
 0.3
 	* 'datasets' hosted within the DataHaskell/dh-core project
 
+	* use 'req' for HTTP and HTTPS requests, instead of 'wreq'
+
 	* Mushroom and Titanic datasets
 
 	* Restructured top-level documentation
