@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
 
 {-|
 
@@ -15,7 +15,7 @@ import Numeric.Datasets
 import Data.Csv
 import GHC.Generics
 import Control.Applicative
-
+import Network.HTTP.Req ((/:), Scheme(..))
 
 data Diagnosis = Malignant | Benign deriving (Show, Read, Eq, Generic, Bounded, Enum)
 
@@ -43,9 +43,9 @@ data BreastCancerEntry = BreastCancerEntry
 instance FromRecord BreastCancerEntry where
   parseRecord v = BreastCancerEntry <$> v .! 0 <*> v .! 1 <*> v .! 2 <*> v .! 3 <*> v .! 4 <*> v .! 5 <*> (v .! 6 <|> return Nothing) <*> v .! 7  <*> v .! 8  <*> v .! 9  <*> (intToDiagnosis <$> v .! 10)
 
-breastCancerDatabase :: Dataset BreastCancerEntry
+breastCancerDatabase :: Dataset 'Http BreastCancerEntry
 breastCancerDatabase = csvDataset
-   $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/breast-cancer-wisconsin/breast-cancer-wisconsin.data"
+   $ URL $ umassMLDB /: "breast-cancer-wisconsin" /: "breast-cancer-wisconsin.data"
 
 data DiagnosticBreastCancer = DiagnosticBreastCancer
   { diagnosticID :: Int
@@ -90,10 +90,10 @@ instance FromRecord PrognosticBreastCancer where
 instance FromRecord CellFeatures where
   parseRecord v = CellFeatures <$> v .! 2 <*> v .! 3 <*> v .! 4 <*> v .! 5 <*> v .! 6  <*> v .! 7  <*> v .! 8  <*> v .! 9  <*> v .! 10
 
-diagnosticBreastCancer :: Dataset DiagnosticBreastCancer
+diagnosticBreastCancer :: Dataset 'Http DiagnosticBreastCancer
 diagnosticBreastCancer = csvDataset
-   $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data"
+   $ URL $ umassMLDB /: "breast-cancer-wisconsin" /: "wdbc.data"
 
-prognosticBreastCancer :: Dataset PrognosticBreastCancer
+prognosticBreastCancer :: Dataset 'Http PrognosticBreastCancer
 prognosticBreastCancer = csvDataset
-   $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wpbc.data"
+   $ URL $ umassMLDB /: "breast-cancer-wisconsin" /: "wpbc.data"

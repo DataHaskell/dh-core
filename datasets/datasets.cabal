@@ -4,14 +4,18 @@ Synopsis:            Classical data sets for statistics and machine learning
 Description:         Classical machine learning and statistics datasets from
                      the UCI Machine Learning Repository and other sources.
                      .
-                     The datasets package defines two different kinds of datasets:
+                     The @datasets@ package defines two different kinds of datasets:
                      .
                      * small data sets which are directly (or indirectly with `file-embed`)
                        embedded in the package as pure values and do not require network or IO to download
                        the data set. This includes Iris, Anscombe and OldFaithful.
                      .
                      * other data sets which need to be fetched over the network with
-                       `Numeric.Datasets.getDataset` and are cached in a local temporary directory.
+                     `Numeric.Datasets.getDataset` and are cached in a local temporary directory.
+                     .
+                     The @datafiles/@ directory of this package includes copies of a few famous datasets, such as Titanic, Nightingale and Michelson.
+                     .
+                     Example :
                      .
                      > import Numeric.Datasets (getDataset)
                      > import Numeric.Datasets.Iris (iris)
@@ -41,6 +45,7 @@ extra-source-files:
                    datafiles/iris.data
                    datafiles/michelson.json
                    datafiles/nightingale.json
+                   datafiles/titanic2_full.tsv
                    datafiles/netflix/training/mv_0000001.txt
                    datafiles/netflix/test/qualifying.txt
                    datafiles/netflix/movies/movie_titles.txt
@@ -81,18 +86,20 @@ Library
                  , Numeric.Datasets.WineQuality
                  , Numeric.Datasets.Netflix
    Build-depends:
-                   base          >= 4.6 && < 5
-                 , aeson
-                 , attoparsec    >= 0.13
-                 , bytestring
-                 , cassava
-                 , directory
-                 , file-embed
-                 , filepath
-                 , hashable
-                 , microlens
-                 , stringsearch
-                 , text
-                 , time
-                 , vector
-                 , wreq
+                 base          >= 4.6 && < 5
+               , aeson
+               , attoparsec    >= 0.13
+               , bytestring
+               , cassava
+               , data-default-class
+               , directory
+               , file-embed
+               , filepath
+               , hashable
+               , microlens
+               , req            >= 1.0.0
+               , stringsearch
+               , text
+               , time
+               , vector
+                 -- , wreq

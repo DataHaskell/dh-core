@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 {-|
@@ -16,6 +16,7 @@ import Numeric.Datasets
 import Data.Csv
 import GHC.Generics
 import Control.Applicative
+import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data RelScore = Low | Med | High | VeryHigh deriving (Show, Read, Eq, Generic, Bounded, Enum)
 
@@ -65,6 +66,6 @@ data Car = Car
 
 instance FromRecord Car
 
-car :: Dataset Car
+car :: Dataset 'Http Car
 car = csvDataset
-          $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/car/car.data"
+          $ URL $ umassMLDB /: "car" /: "car.data"

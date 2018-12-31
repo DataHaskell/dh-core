@@ -1,7 +1,13 @@
 0.3
 	* 'datasets' hosted within the DataHaskell/dh-core project
 
+	* use 'req' for HTTP and HTTPS requests, instead of 'wreq'
+
 	* Mushroom and Titanic datasets
+
+	* Restructured top-level documentation
+
+	* Removed 'csvDatasetPreprocess' and added 'withPreprocess'. Now bytestring preprocessing is more compositional, i.e. 'withPreprocess' can be used with JSON datasets as well.
 	
 
 0.2.5
@@ -22,7 +28,7 @@
 
 0.2.2
 
-	* Enum, bounded instances for IrisClass
+	* Enum, Bounded instances for IrisClass
 
 	* Gapminder dataset
 

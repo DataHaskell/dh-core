@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 {-|
@@ -18,6 +18,7 @@ import Numeric.Datasets
 import Data.Csv
 import GHC.Generics
 import Control.Applicative
+import Network.HTTP.Req ((/:), http, Scheme(..))
 
 
 data BostonHousing = BostonHousing
@@ -57,7 +58,7 @@ instance FromRecord BostonHousing where
              intToBool 0 = False
              intToBool 1 = True
              intToBool _ = error "intToBool"
-bostonHousing :: Dataset BostonHousing
-bostonHousing = csvDatasetPreprocess
-            fixedWidthToCSV
-            $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/housing/housing.data"
+             
+bostonHousing :: Dataset 'Http BostonHousing
+bostonHousing = withPreprocess fixedWidthToCSV $ 
+            csvDataset $ URL $ umassMLDB /: "housing" /: "housing.data"
