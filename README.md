@@ -31,9 +31,7 @@ We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool
 
 and this will re-build the main project and the contributed packages.
 
-Developers can use this `stack` command, which will trigger a re-build and run the tests every time a file in the project is modified:
-
-    $ stack build --test --ghc-options -Wall --file-watch
+More detailed developer information can be found in the wiki : https://github.com/DataHaskell/dh-core/wiki/Development 
 
 ### GHC and Stackage compatibility
 
