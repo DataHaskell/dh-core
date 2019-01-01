@@ -5,7 +5,7 @@
 
 Car dataset
 
-UCI ML Repository link <https://archive.ics.uci.edu/ml/datasets/car>
+UCI ML Repository link <http://mlr.cs.umass.edu/ml/machine-learning-databases/car/>
 
 -}
 

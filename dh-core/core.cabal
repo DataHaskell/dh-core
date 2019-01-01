@@ -50,6 +50,12 @@ executable core
   main-is:             Main.hs
   build-depends:       base
                      , analyze >= 0.2.0
+                     , datasets >= 0.3
+                     , exceptions
+                     , generics-sop
+                     , hashable
+                     , unordered-containers
+                     , vector
                      , core
                     
 
