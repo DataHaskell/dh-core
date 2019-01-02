@@ -23,9 +23,9 @@ Please refer to the dataset modules for examples.
 {-# LANGUAGE OverloadedStrings, GADTs, DataKinds #-}
 -- {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
-module Numeric.Datasets (getDataset, Dataset(..), Source(..),
+module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, getPreProcess,
                          -- * Parsing datasets
-                         readDataset, ReadAs(..), csvRecord,
+                         readDataset, safeReadDataset, ReadAs(..), csvRecord,
                         -- * Defining datasets
                         csvDataset, csvHdrDataset, csvHdrDatasetSep, csvDatasetSkipHdr,
                         jsonDataset,

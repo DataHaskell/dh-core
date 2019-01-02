@@ -61,7 +61,8 @@ Library
    default-language:  Haskell2010
 
    Exposed-modules:
-                   Numeric.Datasets
+                   Numeric.Dataloader
+                 , Numeric.Datasets
                  , Numeric.Datasets.Anscombe
                  , Numeric.Datasets.BostonHousing
                  , Numeric.Datasets.OldFaithful
@@ -74,30 +75,37 @@ Library
                  , Numeric.Datasets.Gapminder
                  , Numeric.Datasets.Iris
                  , Numeric.Datasets.Michelson
-                 , Numeric.Datasets.Mushroom                 
+                 , Numeric.Datasets.Mushroom
                  , Numeric.Datasets.Nightingale
                  , Numeric.Datasets.Quakes
                  , Numeric.Datasets.States
                  , Numeric.Datasets.Sunspots
-                 , Numeric.Datasets.Titanic                 
+                 , Numeric.Datasets.Titanic
                  , Numeric.Datasets.UN
                  , Numeric.Datasets.Vocabulary
                  , Numeric.Datasets.Wine
                  , Numeric.Datasets.WineQuality
                  , Numeric.Datasets.Netflix
+                 , Streaming.Instances
    Build-depends:
                  base          >= 4.6 && < 5
                , aeson
                , attoparsec    >= 0.13
+               , async
                , bytestring
                , cassava
+               , containers
                , data-default-class
                , directory
+               , exceptions
                , file-embed
                , filepath
                , hashable
                , microlens
+               , mwc-random
                , req            >= 1.0.0
+               , safe-exceptions
+               , streaming
                , stringsearch
                , text
                , time
