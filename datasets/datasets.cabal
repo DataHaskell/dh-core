@@ -102,6 +102,7 @@ Library
                , text
                , time
                , vector
+               , safe-exceptions
                  -- , wreq
 
 
