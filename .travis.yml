@@ -30,6 +30,9 @@ before_install:
 script:
 - cd dh-core
 - stack $ARGS --no-terminal --install-ghc test --haddock
+- cat /home/travis/build/DataHaskell/dh-core/dh-core/.stack-work/logs/analyze-0.2.0-test.log
+- cat /home/travis/build/DataHaskell/dh-core/dh-core/.stack-work/logs/dense-linear-algebra-0.1.0.0-test.log
+- cat /home/travis/build/DataHaskell/dh-core/dh-core/.stack-work/logs/datasets-0.3.0-test.log
 
 # Caching so the next build will be fast too.
 cache:
