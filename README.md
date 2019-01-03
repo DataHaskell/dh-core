@@ -40,6 +40,7 @@ Tested with :
 
 - Stackage LTS-11.22 (GHC 8.2.2)
 - Stackage LTS-12.13 (GHC 8.4.3)
+- Stackage LTS-13.0  (GHC 8.6.3)
 
 
 ## Contributing
