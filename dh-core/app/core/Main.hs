@@ -52,5 +52,19 @@ tf0 = Tf (Just 42)
 -- instance Generic (Identity a)
 
 
+
+data A = A Int Char deriving (Eq, Show, G.Generic)
+instance Generic A
+
+fA :: (Int -> a) -> (Char -> b) -> A -> (a, b)
+fA f1 f2 (A i c) = (f1 i, f2 c)
+
+a0 = A 42 'z'
+
+
+  
+
+
+
 main = print "hello!"
 
