@@ -74,6 +74,7 @@ Library
                  , Numeric.Datasets.CO2
                  , Numeric.Datasets.Gapminder
                  , Numeric.Datasets.Iris
+                 , Numeric.Datasets.Internal.Streaming
                  , Numeric.Datasets.Michelson
                  , Numeric.Datasets.Mushroom
                  , Numeric.Datasets.Nightingale
@@ -102,13 +103,19 @@ Library
                , filepath
                , hashable
                , microlens
+               , mtl
                , mwc-random
                , req            >= 1.0.0
                , safe-exceptions
                , streaming
+               , streaming-attoparsec
+               , streaming-bytestring
+               , streaming-cassava
+               , streaming-commons
                , stringsearch
                , text
                , time
+               , transformers
                , vector
                , safe-exceptions
                  -- , wreq

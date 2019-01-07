@@ -3,7 +3,14 @@
 {-# LANGUAGE TypeApplications  #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE DataKinds #-}
-module Numeric.Dataloader where
+module Numeric.Dataloader
+  ( Dataloader(..)
+  , getBatchSize
+  , permute
+  , uniformIxline
+  , stream
+  , batchStream
+  ) where
 
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Proxy (Proxy(Proxy))
@@ -15,33 +22,31 @@ import System.Random.MWC (GenIO)
 import qualified Data.Vector          as V
 import qualified Streaming            as S
 import qualified Streaming.Prelude    as S
-import qualified System.Random.MWC    as MWC
 import qualified System.Random.MWC.Distributions as MWC
 import Control.Exception.Safe (MonadThrow)
 import Streaming.Instances ()
 
-#ifdef __PARALLEL_HASKELL__
 import Control.Concurrent.Async (mapConcurrently)
-#endif
 
 import Numeric.Datasets
 
 -- * Configuring data loaders
 
 -- | Options for a data loading functions.
-data Dataloader bs h a = Dataloader
+data Dataloader bs h a b = Dataloader
   { batchSizeProxy :: Proxy (bs :: Nat)
   , indexline :: Maybe (Vector Int)
   , dataset :: Dataset h a
+  , transformIO :: a -> IO b
   }
 
 -- | Get the desired batch size from the type level.
-getBatchSize :: (Integral i, KnownNat bs) => Dataloader bs h a -> i
+getBatchSize :: (Integral i, KnownNat bs) => Dataloader bs h a b -> i
 getBatchSize = fromIntegral . natVal . batchSizeProxy
 
 -- | Use a dataloader's indexline to return a permuted vector (or return the
 -- identity vector).
-permute :: Dataloader bs h a -> Vector a -> Vector a
+permute :: Dataloader bs h a  b -> Vector a -> Vector a
 permute loader va = maybe va (V.backpermute va) (indexline loader)
 
 -- | Generate a uniformly random index line from a dataset and a generator.
@@ -55,29 +60,40 @@ uniformIxline ds gen = do
 
 -- * Data loading functions
 
--- | Stream a dataset.
---
--- NOTE: Run with @-threaded -rtsopts@ to concurrently load data in-memory.
+-- | Stream a dataset in-memory, applying a transformation function, using concurrency where possible
 stream
-  :: forall a h io . (MonadThrow io, MonadIO io)
-  => Dataloader 1 h a
-  -> Stream (Of a) io ()
-stream loader
-  = permute loader <$> getDatavec (dataset loader)
-#ifdef __PARALLEL_HASKELL__
-  >>= liftIO . mapConcurrently pure
-#endif
-  >>= S.each
+  :: forall a b h io . (MonadThrow io, MonadIO io)
+  => Dataloader 1 h a b
+  -> Stream (Of b) io ()
+stream dl = S.mapsM (liftIO . firstOfM (transformIO dl)) (sourceStream dl)
 
--- | Stream batches of a dataset.
+-- | Stream batches of a dataset, concurrently processing each element
 --
 -- NOTE: Run with @-threaded -rtsopts@ to concurrently load data in-memory.
 batchStream
   :: (MonadThrow io, MonadIO io, KnownNat bs)
-  => Dataloader bs h a
-  -> Stream (Of (Seq a)) io ()
+  => Dataloader bs h a b
+  -> Stream (Of (Seq b)) io ()
 batchStream dl
-  = S.slidingWindow (getBatchSize dl)
-  $ stream (dl { batchSizeProxy = Proxy @1 })
+  = S.mapsM (liftIO . firstOfM (mapConcurrently (transformIO dl)))
+  $ S.slidingWindow (getBatchSize dl)
+  $ sourceStream (dl { batchSizeProxy = Proxy @1 })
 
+
+-- * helper functions (not for export)
+
+-- | Stream a dataset in-memory
+sourceStream
+  :: (MonadThrow io, MonadIO io)
+  => Dataloader 1 h a b
+  -> Stream (Of a) io ()
+sourceStream loader
+  = permute loader <$> getDatavec (dataset loader)
+  >>= S.each
+
+-- | Monadic, concrete version of Control.Arrow.first for @Of@
+firstOfM :: Monad m => (a -> m b) -> Of a c -> m (Of b c)
+firstOfM fm (a:>c) = do
+  b <- fm a
+  pure (b:>c)
 

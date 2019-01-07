@@ -23,7 +23,7 @@ Please refer to the dataset modules for examples.
 {-# LANGUAGE OverloadedStrings, GADTs, DataKinds #-}
 -- {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
-module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, getPreProcess,
+module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec,
                          -- * Parsing datasets
                          readDataset, safeReadDataset, ReadAs(..), csvRecord,
                         -- * Defining datasets
@@ -74,14 +74,14 @@ getDataset ds = VB.toList <$> getDatavec ds
 
 -- | Load a dataset into memory as a vector
 getDatavec :: (MonadThrow io, MonadIO io, Vector v a) => Dataset h a -> io (v a)
-getDatavec ds
-  = getPreProcess ds <$>
-      liftIO (tempDirForDataset ds >>= \folder -> getFileFromSource folder (source ds))
-  >>= safeReadDataset (readAs ds)
+getDatavec ds = liftIO $ do
+  folder <- tempDirForDataset ds
+  file <- getFileFromSource folder (source ds)
+  safeReadDataset (readAs ds) (getPreProcess ds file)
 
 -- | Get a ByteString from the specified Source
-getFileFromSource ::
-     FilePath  -- ^ Cache directory
+getFileFromSource
+  :: FilePath  -- ^ Cache directory
   -> Source h
   -> IO BL.ByteString
 getFileFromSource cacheDir (URL url) = do
@@ -109,10 +109,10 @@ readDataset ra bs =
     Right dat -> VB.toList dat
 
 -- | Read a ByteString into a Haskell value
-safeReadDataset :: (Vector v a, MonadThrow m) => ReadAs a -> BL.ByteString -> m (v a)
+safeReadDataset :: forall v a m . (Vector v a, MonadThrow m) => ReadAs a -> BL.ByteString -> m (v a)
 safeReadDataset ra bs = either throwString pure $
   case ra of
-    JSON -> maybe (Left "failed to parse json") (Right . V.fromList) (JSON.decode bs)
+    JSON ->  V.fromList <$> JSON.eitherDecode' bs
     CSVRecord hhdr opts -> V.convert <$> decodeWith opts hhdr bs
     CSVNamedRecord opts -> V.convert . snd <$> decodeByNameWith opts bs
 
@@ -239,15 +239,13 @@ removeEscQuotes = BL8.filter (/= '\"')
 
 -- | Convert a fractional year to UTCTime with second-level precision (due to not taking into account leap seconds)
 yearToUTCTime :: Double -> UTCTime
-yearToUTCTime yearDbl =
-  let (yearn,yearFrac)  = properFraction yearDbl
-      dayYearBegin = fromGregorian yearn 1 1
-      (dayn, dayFrac) = properFraction $ yearFrac * (if isLeapYear yearn then 366 else 365)
-      day = addDays dayn dayYearBegin
-      dt = secondsToDiffTime $ round $ dayFrac * 86400
-  in UTCTime day dt
-
-
+yearToUTCTime yearDbl = UTCTime day dt
+  where
+    (yearn,yearFrac)  = properFraction yearDbl
+    dayYearBegin = fromGregorian yearn 1 1
+    (dayn, dayFrac) = properFraction $ yearFrac * (if isLeapYear yearn then 366 else 365)
+    day = addDays dayn dayYearBegin
+    dt = secondsToDiffTime $ round $ dayFrac * 86400
 
 -- * URLs
 
