@@ -145,6 +145,7 @@ data ReadAs a where
   JSON :: FromJSON a => ReadAs a
   CSVRecord :: FromRecord a => HasHeader -> DecodeOptions -> ReadAs a
   CSVNamedRecord :: FromNamedRecord a => DecodeOptions -> ReadAs a
+  Parsable :: Atto.Parser a -> ReadAs a
 
 -- | A CSV record with default decoding options (i.e. columns are separated by commas)
 csvRecord :: FromRecord a => ReadAs a
