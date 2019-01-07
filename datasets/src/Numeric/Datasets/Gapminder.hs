@@ -41,6 +41,6 @@ instance FromNamedRecord Gapminder where
           where roundIt :: Double -> Integer
                 roundIt = round
 
-gapminder :: Dataset 'Https Gapminder
+gapminder :: Dataset Gapminder
 gapminder = csvHdrDataset
    $ URL $ https "raw.githubusercontent.com" /: "plotly" /: "datasets" /: "master" /: "gapminderDataFiveYear.csv"

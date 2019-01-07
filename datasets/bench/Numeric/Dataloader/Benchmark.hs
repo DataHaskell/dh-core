@@ -18,10 +18,10 @@ instance NFData Abalone
 instance NFData Sex
 instance (NFData a, NFData b) => NFData (Of a b)
 
-mkDataset :: IO (Dataset 'Http Abalone)
+mkDataset :: IO (Dataset Abalone)
 mkDataset = pure abalone
 
-mkDataloaderWithIx :: Dataset h a -> IO (Dataloader h a a)
+mkDataloaderWithIx :: Dataset a -> IO (Dataloader a a)
 mkDataloaderWithIx ds = MWC.withSystemRandom $ \g -> do
   ixl <- uniformIxline ds g
   pure $ Dataloader 1 (Just ixl) ds pure
@@ -43,7 +43,7 @@ main = do
 slow :: S.Stream (Of a) IO r -> S.Stream (Of a) IO r
 slow = S.mapM (\a -> threadDelay 2 >> pure a)
 
-foldStream :: Show a => Dataloader h a a -> IO (Of [a] ())
+foldStream :: Show a => Dataloader a a -> IO (Of [a] ())
 foldStream = S.fold (\memo a -> a:memo) [] id . slow . stream
 
 

@@ -95,10 +95,10 @@ instance FromRecord Adult where
                         <*> v.!4 <*> v.!5 <*> (v.!6 <|> return Nothing) <*> v.!7 <*> v.!8
                         <*> v.!9 <*> v.!10 <*> v.!11 <*> v.!12 <*> v.!13 <*> v.!14
 
-adult :: Dataset 'Http Adult
+adult :: Dataset Adult
 adult = csvDataset $ URL $ umassMLDB /: "adult" /: "adult.data"
 
-adultTestSet :: Dataset 'Http Adult
+adultTestSet :: Dataset Adult
 adultTestSet = withPreprocess (dropLines 1) $ csvDataset $ URL $ umassMLDB /: "adult" /: "adult.test"
 
 -- "http://mlr.cs.umass.edu/ml/machine-learning-databases/adult/adult.test"

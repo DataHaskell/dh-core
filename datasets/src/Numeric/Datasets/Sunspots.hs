@@ -30,7 +30,7 @@ instance FromNamedRecord Sunspot where
                          m .: "time" <*>
                          m .: "value"
 
-sunspots :: Dataset 'Http Sunspot
+sunspots :: Dataset Sunspot
 sunspots = csvHdrDataset
    $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "datasets" /: "sunspot.month.csv"
 

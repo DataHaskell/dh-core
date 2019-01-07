@@ -40,17 +40,17 @@ import Numeric.Datasets
 
 
 -- | Options for a data loading functions.
-data Dataloader h a b = Dataloader
+data Dataloader a b = Dataloader
   { batchSize :: Int
   , indexline :: Maybe (Vector Int)
-  , dataset :: Dataset h a
+  , dataset :: Dataset a
   , transformIO :: a -> IO b
   }
 
 
 -- | Generate a uniformly random index line from a dataset and a generator.
 uniformIxline
-  :: Dataset h a
+  :: Dataset a
   -> GenIO
   -> IO (Vector Int)
 uniformIxline ds gen = do
@@ -63,7 +63,7 @@ uniformIxline ds gen = do
 -- | Stream a dataset in-memory, applying a transformation function.
 stream
   :: (MonadThrow io, MonadIO io)
-  => Dataloader h a b
+  => Dataloader a b
   -> Stream (Of b) io ()
 stream dl = S.mapsM (liftIO . firstOfM (transformIO dl)) (sourceStream dl)
 
@@ -73,7 +73,7 @@ stream dl = S.mapsM (liftIO . firstOfM (transformIO dl)) (sourceStream dl)
 -- NOTE: Run with @-threaded -rtsopts@ to concurrently load data in-memory.
 batchStream
   :: (MonadThrow io, MonadIO io)
-  => Dataloader h a b
+  => Dataloader a b
   -> Stream (Of (Seq b)) io ()
 batchStream dl
   = S.mapsM (liftIO . firstOfM (mapConcurrently (transformIO dl)))
@@ -87,7 +87,7 @@ batchStream dl
 -- | Stream a dataset in-memory
 sourceStream
   :: (MonadThrow io, MonadIO io)
-  => Dataloader h a b
+  => Dataloader a b
   -> Stream (Of a) io ()
 sourceStream loader
   = permute loader <$> getDatavec (dataset loader)
@@ -95,7 +95,7 @@ sourceStream loader
   where
     -- Use a dataloader's indexline to return a permuted vector (or return the
     -- identity vector).
-    permute :: Dataloader h a b -> Vector a -> Vector a
+    permute :: Dataloader a b -> Vector a -> Vector a
     permute loader va = maybe va (V.backpermute va) (indexline loader)
 
 

@@ -29,7 +29,7 @@ instance FromNamedRecord GdpMortality where
                          (m .: "infant.mortality" <|> return Nothing) <*>
                          (m .: "gdp" <|> return Nothing)
 
-gdpMortalityUN :: Dataset 'Http GdpMortality
+gdpMortalityUN :: Dataset GdpMortality
 gdpMortalityUN = csvHdrDataset
    $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "car" /: "UN.csv"
 

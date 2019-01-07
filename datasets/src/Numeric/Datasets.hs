@@ -21,6 +21,7 @@ Please refer to the dataset modules for examples.
 -}
 
 {-# LANGUAGE OverloadedStrings, GADTs, DataKinds #-}
+{-# LANGUAGE LambdaCase #-}
 -- {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, defaultTempDir, getFileFromSource,
@@ -70,11 +71,11 @@ import qualified Data.Attoparsec.ByteString.Lazy as Atto
 -- * Using datasets
 
 -- | Load a dataset into memory
-getDataset :: (MonadThrow io, MonadIO io) => Dataset h a -> io [a]
+getDataset :: (MonadThrow io, MonadIO io) => Dataset a -> io [a]
 getDataset ds = VB.toList <$> getDatavec ds
 
 -- | Load a dataset into memory as a vector
-getDatavec :: (MonadThrow io, MonadIO io, Vector v a) => Dataset h a -> io (v a)
+getDatavec :: (MonadThrow io, MonadIO io, Vector v a) => Dataset a -> io (v a)
 getDatavec ds = liftIO $ do
   folder <- tempDirForDataset ds
   file <- getFileFromSource folder (source ds)
@@ -83,7 +84,7 @@ getDatavec ds = liftIO $ do
 -- | Get a ByteString from the specified Source
 getFileFromSource
   :: FilePath  -- ^ Cache directory
-  -> Source h
+  -> Source
   -> IO BL.ByteString
 getFileFromSource cacheDir (URL url) = do
   createDirectoryIfMissing True cacheDir
@@ -119,7 +120,7 @@ safeReadDataset ra bs = either throwString pure $
     Parsable psr -> V.fromList <$> Atto.eitherResult (Atto.parse (Atto.many' psr) bs)
 
 -- | Get a temporary directory for a dataset.
-tempDirForDataset :: Dataset h a -> IO FilePath
+tempDirForDataset :: Dataset a -> IO FilePath
 tempDirForDataset = defaultTempDir . temporaryDirectory
 
 -- | Reify an optional temporary directory
@@ -130,12 +131,13 @@ defaultTempDir = \case
 
 
 -- | A 'Dataset' source can be either a URL (for remotely-hosted datasets) or the filepath of a local file.
-data Source h = URL (Url h)
-              | File FilePath
+data Source
+  = forall h . URL (Url h)
+  | File FilePath
 
 -- | A 'Dataset' contains metadata for loading, caching, preprocessing and parsing data.
-data Dataset h a = Dataset
-  { source :: Source h  -- ^ Dataset source
+data Dataset a = Dataset
+  { source :: Source    -- ^ Dataset source
   , temporaryDirectory :: Maybe FilePath  -- ^ Temporary directory (optional)
   , preProcess :: Maybe (BL.ByteString -> BL.ByteString)  -- ^ Dataset preprocessing function (optional)
   , readAs :: ReadAs a
@@ -155,37 +157,37 @@ csvRecord = CSVRecord NoHeader defaultDecodeOptions
 -- * Defining datasets
 
 -- | Define a dataset from a source for a CSV file
-csvDataset :: FromRecord a =>  Source h -> Dataset h a
+csvDataset :: FromRecord a =>  Source   -> Dataset a
 csvDataset src = Dataset src Nothing Nothing csvRecord
 
 -- | Define a dataset from a source for a CSV file, skipping the header line
-csvDatasetSkipHdr :: FromRecord a => Source h -> Dataset h a
+csvDatasetSkipHdr :: FromRecord a => Source -> Dataset a
 csvDatasetSkipHdr src = Dataset src Nothing Nothing $ CSVRecord HasHeader defaultDecodeOptions
 
 
 -- |Define a dataset from a source for a CSV file with a known header
-csvHdrDataset :: FromNamedRecord a => Source h -> Dataset h a
+csvHdrDataset :: FromNamedRecord a => Source -> Dataset a
 csvHdrDataset src = Dataset src Nothing Nothing $ CSVNamedRecord defaultDecodeOptions
 
 -- |Define a dataset from a source for a CSV file with a known header and separator
-csvHdrDatasetSep :: FromNamedRecord a => Char -> Source h -> Dataset h a
+csvHdrDatasetSep :: FromNamedRecord a => Char -> Source -> Dataset a
 csvHdrDatasetSep sepc src
    = Dataset src Nothing Nothing
        $ CSVNamedRecord defaultDecodeOptions { decDelimiter = fromIntegral (ord sepc)}
 
 -- | Define a dataset from a source for a JSON file
-jsonDataset :: FromJSON a => Source h -> Dataset h a
+jsonDataset :: FromJSON a => Source -> Dataset a
 jsonDataset src = Dataset src Nothing Nothing JSON
 
 
 -- * Modifying datasets
 
 -- | Include a preprocessing stage to a Dataset: each field in the raw data will be preprocessed with the given function.
-withPreprocess :: (BL8.ByteString -> BL8.ByteString) -> Dataset h a -> Dataset h a
+withPreprocess :: (BL8.ByteString -> BL8.ByteString) -> Dataset a -> Dataset a
 withPreprocess preF ds = ds { preProcess = Just preF}
 
 -- | Include a temporary directory for caching the dataset after this has been downloaded one first time.
-withTempDir :: FilePath -> Dataset h a -> Dataset h a
+withTempDir :: FilePath -> Dataset a -> Dataset a
 withTempDir dir ds = ds { temporaryDirectory = Just dir }
 
 

@@ -29,7 +29,7 @@ import Streaming.Instances ()
 -- | Stream a dataset
 streamDataset
   :: forall io a h . (MonadThrow io, MonadIO io)
-  => Dataset h a
+  => Dataset a
   -> Stream (Of a) io ()
 streamDataset ds = do
   folder <- liftIO $ defaultTempDir (temporaryDirectory ds)

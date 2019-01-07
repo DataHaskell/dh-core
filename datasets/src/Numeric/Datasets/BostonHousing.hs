@@ -58,7 +58,7 @@ instance FromRecord BostonHousing where
              intToBool 0 = False
              intToBool 1 = True
              intToBool _ = error "intToBool"
-             
-bostonHousing :: Dataset 'Http BostonHousing
-bostonHousing = withPreprocess fixedWidthToCSV $ 
+
+bostonHousing :: Dataset BostonHousing
+bostonHousing = withPreprocess fixedWidthToCSV $
             csvDataset $ URL $ umassMLDB /: "housing" /: "housing.data"

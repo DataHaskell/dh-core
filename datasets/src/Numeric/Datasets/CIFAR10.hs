@@ -96,7 +96,7 @@ tempdir :: Maybe FilePath
 tempdir = Nothing
 
 -- | Define a dataset from a source for a CSV file
-cifar10 :: Dataset 'Https CIFARImage
+cifar10 :: Dataset CIFARImage
 cifar10 = Dataset
   (URL $ cifarURL /: "cifar-10-binary.tar.gz")
   tempdir

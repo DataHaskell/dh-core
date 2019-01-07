@@ -27,6 +27,6 @@ data Quake = Quake
 
 instance FromNamedRecord Quake
 
-quakes :: Dataset 'Http Quake
+quakes :: Dataset Quake
 quakes = csvHdrDataset
    $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "datasets" /: "quakes.csv"

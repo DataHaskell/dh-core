@@ -48,7 +48,7 @@ instance FromNamedRecord WineQuality where
                          m .: "alcohol" <*>
                          m .: "quality"
 
-redWineQuality, whiteWineQuality :: Dataset 'Http WineQuality
+redWineQuality, whiteWineQuality :: Dataset WineQuality
 redWineQuality = csvHdrDatasetSep ';'
    $ URL $ umassMLDB /: "wine-quality" /: "winequality-red.csv"
 
