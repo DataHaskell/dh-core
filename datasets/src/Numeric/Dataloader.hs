@@ -1,12 +1,21 @@
-{-# LANGUAGE KindSignatures  #-}
-{-# LANGUAGE CPP #-}
-{-# LANGUAGE TypeApplications  #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE DataKinds #-}
+-------------------------------------------------------------------------------
+-- |
+-- Module    :  Numeric.Dataloader
+-- Stability :  experimental
+-- Portability: non-portable
+--
+-- A Dataloader is an extension of a Dataset and is primarily intended for
+-- compute-intensive, batch loading interfaces. When used with ImageFolder
+-- representations of Datasets, it shuffles the order of files to be loaded
+-- and leverages the async library when possible.
+--
+-- Concurrent loading primarily takes place in 'batchStream'. 'stream' exists
+-- primarily to provide a unified API with training that is not batch-oriented.
+-------------------------------------------------------------------------------
 module Numeric.Dataloader
   ( Dataloader(..)
-  , permute
   , uniformIxline
+
   , stream
   , batchStream
   ) where
@@ -29,6 +38,7 @@ import Numeric.Datasets
 
 -- * Configuring data loaders
 
+
 -- | Options for a data loading functions.
 data Dataloader h a b = Dataloader
   { batchSize :: Int
@@ -37,10 +47,6 @@ data Dataloader h a b = Dataloader
   , transformIO :: a -> IO b
   }
 
--- | Use a dataloader's indexline to return a permuted vector (or return the
--- identity vector).
-permute :: Dataloader h a b -> Vector a -> Vector a
-permute loader va = maybe va (V.backpermute va) (indexline loader)
 
 -- | Generate a uniformly random index line from a dataset and a generator.
 uniformIxline
@@ -53,12 +59,14 @@ uniformIxline ds gen = do
 
 -- * Data loading functions
 
--- | Stream a dataset in-memory, applying a transformation function, using concurrency where possible
+
+-- | Stream a dataset in-memory, applying a transformation function.
 stream
-  :: forall a b h io . (MonadThrow io, MonadIO io)
+  :: (MonadThrow io, MonadIO io)
   => Dataloader h a b
   -> Stream (Of b) io ()
 stream dl = S.mapsM (liftIO . firstOfM (transformIO dl)) (sourceStream dl)
+
 
 -- | Stream batches of a dataset, concurrently processing each element
 --
@@ -75,6 +83,7 @@ batchStream dl
 
 -- * helper functions (not for export)
 
+
 -- | Stream a dataset in-memory
 sourceStream
   :: (MonadThrow io, MonadIO io)
@@ -83,6 +92,12 @@ sourceStream
 sourceStream loader
   = permute loader <$> getDatavec (dataset loader)
   >>= S.each
+  where
+    -- Use a dataloader's indexline to return a permuted vector (or return the
+    -- identity vector).
+    permute :: Dataloader h a b -> Vector a -> Vector a
+    permute loader va = maybe va (V.backpermute va) (indexline loader)
+
 
 -- | Monadic, concrete version of Control.Arrow.first for @Of@
 firstOfM :: Monad m => (a -> m b) -> Of a c -> m (Of b c)

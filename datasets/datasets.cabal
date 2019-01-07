@@ -65,6 +65,7 @@ Library
                  , Numeric.Datasets
                  , Numeric.Datasets.Anscombe
                  , Numeric.Datasets.BostonHousing
+                 , Numeric.Datasets.CIFAR10
                  , Numeric.Datasets.OldFaithful
                  , Numeric.Datasets.Abalone
                  , Numeric.Datasets.Adult
@@ -102,6 +103,7 @@ Library
                , file-embed
                , filepath
                , hashable
+               , JuicyPixels
                , microlens
                , mtl
                , mwc-random
@@ -113,11 +115,13 @@ Library
                , streaming-cassava
                , streaming-commons
                , stringsearch
+               , tar
                , text
                , time
                , transformers
                , vector
                , safe-exceptions
+               , zlib
                  -- , wreq
 
 

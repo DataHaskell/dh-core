@@ -23,7 +23,7 @@ Please refer to the dataset modules for examples.
 {-# LANGUAGE OverloadedStrings, GADTs, DataKinds #-}
 -- {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
-module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec,
+module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, defaultTempDir, getFileFromSource,
                          -- * Parsing datasets
                          readDataset, safeReadDataset, ReadAs(..), csvRecord,
                         -- * Defining datasets
@@ -65,6 +65,7 @@ import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Vector.Generic (Vector)
 import qualified Data.Vector         as VB
 import qualified Data.Vector.Generic as V
+import qualified Data.Attoparsec.ByteString.Lazy as Atto
 
 -- * Using datasets
 
@@ -77,7 +78,7 @@ getDatavec :: (MonadThrow io, MonadIO io, Vector v a) => Dataset h a -> io (v a)
 getDatavec ds = liftIO $ do
   folder <- tempDirForDataset ds
   file <- getFileFromSource folder (source ds)
-  safeReadDataset (readAs ds) (getPreProcess ds file)
+  safeReadDataset (readAs ds) (fromMaybe id (preProcess ds) file)
 
 -- | Get a ByteString from the specified Source
 getFileFromSource
@@ -115,18 +116,18 @@ safeReadDataset ra bs = either throwString pure $
     JSON ->  V.fromList <$> JSON.eitherDecode' bs
     CSVRecord hhdr opts -> V.convert <$> decodeWith opts hhdr bs
     CSVNamedRecord opts -> V.convert . snd <$> decodeByNameWith opts bs
+    Parsable psr -> V.fromList <$> Atto.eitherResult (Atto.parse (Atto.many' psr) bs)
 
--- | Get a dataset's bytestring preprocessing function. Returns @id@ if Nothing is
--- found in the Dataset
-getPreProcess :: Dataset h a -> BL.ByteString -> BL.ByteString
-getPreProcess = fromMaybe id . preProcess
-
--- | Get a temporary director for a dataset.
+-- | Get a temporary directory for a dataset.
 tempDirForDataset :: Dataset h a -> IO FilePath
-tempDirForDataset ds =
-  case temporaryDirectory ds of
-    Nothing -> getTemporaryDirectory
-    Just tdir -> return tdir
+tempDirForDataset = defaultTempDir . temporaryDirectory
+
+-- | Reify an optional temporary directory
+defaultTempDir :: Maybe FilePath -> IO FilePath
+defaultTempDir = \case
+  Nothing -> getTemporaryDirectory
+  Just tdir -> return tdir
+
 
 -- | A 'Dataset' source can be either a URL (for remotely-hosted datasets) or the filepath of a local file.
 data Source h = URL (Url h)

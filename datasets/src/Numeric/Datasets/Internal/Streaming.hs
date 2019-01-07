@@ -3,14 +3,18 @@
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
 module Numeric.Datasets.Internal.Streaming
     ( streamDataset
+    , streamByteString
     ) where
 
 import Control.Exception.Safe (MonadThrow, Exception, throwString, throwM)
-import Streaming (Stream, Of, lift)
+import Control.Monad.Error.Class (MonadError)
+import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Attoparsec.ByteString.Lazy (Parser)
-import Streaming (Of((:>)))
+import Data.Maybe (fromMaybe)
+import Data.Text.Encoding (decodeUtf8)
+import Streaming (Stream, Of((:>)), lift)
 import qualified Data.ByteString.Streaming as BS (fromLazy, ByteString, null)
-import qualified Data.ByteString as B' (pack)
+import qualified Data.ByteString      as B' (pack)
 import qualified Data.ByteString.Lazy as B (ByteString)
 import qualified Data.List as L (intercalate)
 import qualified Data.Attoparsec.ByteString.Streaming as Atto (parse)
@@ -18,20 +22,29 @@ import qualified Data.Attoparsec.ByteString.Lazy as Atto (anyWord8)
 import qualified Streaming         as S (hoist, unfold)
 import qualified Streaming.Cassava as S (decodeWith, decodeByNameWith, CsvParseException)
 import qualified Streaming.Prelude as S (print, maps)
-import Control.Monad.Error.Class (MonadError)
-import Data.Text.Encoding (decodeUtf8)
 
 import Numeric.Datasets
 import Streaming.Instances ()
 
--- | Stream a ByteString into a Haskell value
+-- | Stream a dataset
 streamDataset
+  :: forall io a h . (MonadThrow io, MonadIO io)
+  => Dataset h a
+  -> Stream (Of a) io ()
+streamDataset ds = do
+  folder <- liftIO $ defaultTempDir (temporaryDirectory ds)
+  file   <- liftIO $ getFileFromSource folder (source ds)
+  streamByteString (readAs ds) (fromMaybe id (preProcess ds) file)
+
+
+-- | Stream a ByteString into a Haskell value
+streamByteString
   :: forall m a
   .  (MonadThrow m)
   => ReadAs a
   -> B.ByteString
   -> Stream (Of a) m ()
-streamDataset ra bs = _streamDataset ra (BS.fromLazy bs)
+streamByteString ra bs = _streamDataset ra (BS.fromLazy bs)
 
 
 -- private function which uses the streaming interface of bytestring
