@@ -11,7 +11,9 @@ packages:
 # Dependency packages to be pulled from upstream that are not in the resolver
 # using the same syntax as the packages field.
 # (e.g., acme-missiles-0.3)
-extra-deps: []
+extra-deps:
+- "streaming-attoparsec-1.0.0@sha256:5db3acf7fd2d4c80bda12a8d80cb981bb499c2f586f08a27c31ae6602dd2181e"
+- "streaming-cassava-0.1.0.1@sha256:2d1dfeb09af62009e88311fe92f44d06dafb5cdd38879b437ea6adb3bc40acfe"
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
