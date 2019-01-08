@@ -12,6 +12,7 @@
 -- Concurrent loading primarily takes place in 'batchStream'. 'stream' exists
 -- primarily to provide a unified API with training that is not batch-oriented.
 -------------------------------------------------------------------------------
+{-# LANGUAGE ScopedTypeVariables #-}
 module Numeric.Dataloader
   ( Dataloader(..)
   , uniformIxline
@@ -32,7 +33,7 @@ import qualified System.Random.MWC.Distributions as MWC
 import Control.Exception.Safe (MonadThrow)
 import Streaming.Instances ()
 
-import Control.Concurrent.Async (mapConcurrently)
+import Control.Parallel.Strategies
 
 import Numeric.Datasets
 
@@ -44,7 +45,7 @@ data Dataloader a b = Dataloader
   { batchSize :: Int
   , indexline :: Maybe (Vector Int)
   , dataset :: Dataset a
-  , transformIO :: a -> IO b
+  , transform :: a -> b
   }
 
 
@@ -65,20 +66,22 @@ stream
   :: (MonadThrow io, MonadIO io)
   => Dataloader a b
   -> Stream (Of b) io ()
-stream dl = S.mapsM (liftIO . firstOfM (transformIO dl)) (sourceStream dl)
+stream dl = S.maps (\(a:>b) -> (transform dl a `using` rpar) :> b) (sourceStream dl)
 
 
 -- | Stream batches of a dataset, concurrently processing each element
 --
 -- NOTE: Run with @-threaded -rtsopts@ to concurrently load data in-memory.
 batchStream
-  :: (MonadThrow io, MonadIO io)
+  :: (MonadThrow io, MonadIO io, NFData b)
   => Dataloader a b
   -> Stream (Of [b]) io ()
 batchStream dl
-  = S.mapsM (S.toList >=> liftIO . firstOfM (mapConcurrently (transformIO dl)))
+  = S.mapsM (S.toList >=> liftIO . firstOfM go)
   $ S.chunksOf (batchSize dl)
   $ sourceStream dl
+  where
+    go as = fmap (transform dl) as `usingIO` parList rdeepseq
 
 
 -- * helper functions (not for export)

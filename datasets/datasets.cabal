@@ -93,7 +93,6 @@ Library
                  base          >= 4.6 && < 5
                , aeson
                , attoparsec    >= 0.13
-               , async
                , bytestring
                , cassava
                , data-default-class
@@ -107,6 +106,7 @@ Library
                , microlens
                , mtl
                , mwc-random
+               , parallel
                , req            >= 1.0.0
                , safe-exceptions
                , streaming

@@ -20,6 +20,7 @@ import System.Directory
 import Codec.Picture
 import Control.Exception.Safe
 import Text.Read
+import System.IO.Unsafe
 import qualified Data.List.NonEmpty   as NonEmpty
 
 import Criterion.Main
@@ -34,7 +35,7 @@ mkDataset = pure abalone
 mkDataloaderWithIx :: Dataset a -> IO (Dataloader a a)
 mkDataloaderWithIx ds = MWC.withSystemRandom $ \g -> do
   ixl <- uniformIxline ds g
-  pure $ Dataloader 1 (Just ixl) ds pure
+  pure $ Dataloader 1 (Just ixl) ds id
 
 main :: IO ()
 main = do
@@ -46,10 +47,10 @@ main = do
       [ bench "making an ixline" $ nfIO $ MWC.withSystemRandom (uniformIxline ds)
       , bgroup "testStream"
         [ bench "with ixline" . nfIO $ foldStream (S.take 100 $ slow . stream $ dl)
-        , bench "no ixline"   . nfIO $ foldStream (S.take 100 $ slow . stream $ Dataloader 1 Nothing ds pure)
+        , bench "no ixline"   . nfIO $ foldStream (S.take 100 $ slow . stream $ Dataloader 1 Nothing ds id)
         ]
       , bench "cifar10 image folder" $ nfIO $ foldStream $ S.take 1000 $ stream cifar10l
-      , bench "cifar10 batch folder" $ nfIO $ foldStream $ S.take 100  $ batchStream (cifar10l { batchSize = 10 })
+      , bench "cifar10 batch folder" $ nfIO $ foldStream $ S.take 1  $ batchStream (cifar10l { batchSize = 1000 })
       ]
     ]
 
@@ -99,15 +100,15 @@ cifar10ImageLoader = do
       Nothing
       (ImageFolder labelFolders)
 
-  load :: (String, FilePath) -> IO CIFARImage
-  load (lbl, fp) = CIFARImage <$> ((,) <$> imgIO <*> lblIO)
+  load :: (String, FilePath) -> CIFARImage
+  load (str, fp) = CIFARImage (img, lbl)
     where
-      lblIO :: IO Label
-      lblIO = either throwString pure $ readEither lbl
+      lbl :: Label
+      lbl = either error id $ readEither str
 
-      imgIO :: IO (Image PixelRGB8)
-      imgIO = readPng fp >>= \case
-        Left err -> throwString err
-        Right (ImageRGB8 i) -> pure i
-        Right _ -> throwString "decoded image was not rgb8"
+      img :: Image PixelRGB8
+      img = case unsafePerformIO (readPng fp) of
+        Left err -> error err
+        Right (ImageRGB8 i) -> i
+        Right _ -> error "decoded image was not rgb8"
 
