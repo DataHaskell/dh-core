@@ -22,6 +22,8 @@ Please refer to the dataset modules for examples.
 
 {-# LANGUAGE OverloadedStrings, GADTs, DataKinds #-}
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE ExistentialQuantification #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 -- {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, defaultTempDir, getFileFromSource,
@@ -43,6 +45,10 @@ module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, defaul
                         umassMLDB, uciMLDB) where
 
 import Data.Csv
+import Data.Monoid
+import Data.Foldable
+import Data.List.NonEmpty (NonEmpty((:|)))
+import qualified Data.List.NonEmpty as NE
 import System.FilePath
 import System.Directory
 import Data.Hashable
@@ -60,12 +66,14 @@ import Data.Char (ord, toUpper)
 import Text.Read (readMaybe)
 import Data.Maybe (fromMaybe)
 import Data.ByteString.Char8 (unpack)
+import qualified Data.ByteString.Char8 as B8
 import qualified Data.ByteString.Lazy.Char8 as BL8
 import Data.ByteString.Lazy.Search (replace)
 import Control.Monad.IO.Class (MonadIO, liftIO)
 import Data.Vector.Generic (Vector)
 import qualified Data.Vector         as VB
 import qualified Data.Vector.Generic as V
+import qualified Data.Attoparsec.ByteString as Atto'
 import qualified Data.Attoparsec.ByteString.Lazy as Atto
 
 -- * Using datasets
@@ -78,46 +86,84 @@ getDataset ds = VB.toList <$> getDatavec ds
 getDatavec :: (MonadThrow io, MonadIO io, Vector v a) => Dataset a -> io (v a)
 getDatavec ds = liftIO $ do
   folder <- tempDirForDataset ds
-  file <- getFileFromSource folder (source ds)
-  safeReadDataset (readAs ds) (fromMaybe id (preProcess ds) file)
+  files <- getFileFromSource folder (source ds)
+  safeReadDataset (readAs ds) (fromMaybe id (preProcess ds) <$> files)
 
 -- | Get a ByteString from the specified Source
 getFileFromSource
   :: FilePath  -- ^ Cache directory
   -> Source
-  -> IO BL.ByteString
+  -> IO (NonEmpty BL.ByteString)
 getFileFromSource cacheDir (URL url) = do
   createDirectoryIfMissing True cacheDir
   let fnm = cacheDir </> "ds" <> show (hash $ show url)
   ex <- doesFileExist fnm
   if ex
-     then BL.readFile fnm
+     then (:|[]) <$> BL.readFile fnm
      else do
        rsp <- runReq def $ req GET url NoReqBody lbsResponse mempty
        let bs = responseBody rsp
        BL.writeFile fnm bs
-       return bs
-getFileFromSource _ (File fnm) =
-  BL.readFile fnm
+       return (bs:|[])
+getFileFromSource _ (File fnm) = (:|[]) <$> BL.readFile fnm
+getFileFromSource _ (ImgFolder root labels) =
+  NE.fromList <$> foldrM allImFolderData [] labels
+  where
+    allImFolderData :: String -> [BL.ByteString] -> IO [BL.ByteString]
+    allImFolderData label agg = (agg ++) <$> toImFolderData label
+
+    toImFolderData :: String -> IO [BL.ByteString]
+    toImFolderData l = map (asBytes l) . filter hasValidExt <$> listDirectory (root </> l)
+
+    asBytes :: String -> FilePath -> BL8.ByteString
+    asBytes label fp = BL8.pack $ label ++ "<<.>>" ++ (root </> label </> fp)
+
+    hasValidExt :: FilePath -> Bool
+    hasValidExt fp = any (`isExtensionOf` fp) ["png", "jpeg", "bitmap", "tiff"] -- "gif", "tga"]
+
+
+newtype TaggedFile = TaggedFile { getImData :: (String, FilePath) }
+  deriving (Eq, Ord, Show)
+
+taggedFileParser :: NonEmpty String -> Atto.Parser TaggedFile
+taggedFileParser (l0:|ls) = do
+  lbl <- Atto.choice $ Atto.string . B8.pack <$> (l0:ls)
+  _ <- Atto.string "<<.>>"
+  fp <- Atto.takeByteString
+  pure . TaggedFile $ (B8.unpack lbl, B8.unpack fp)
+
 
 -- | Parse a ByteString into a list of Haskell values
 readDataset
-  :: ReadAs a      -- ^ How to parse the raw data string
-  -> BL.ByteString -- ^ The data string
+  :: ReadAs a               -- ^ How to parse the raw data string
+  -> BL.ByteString -- ^ The data strings
   -> [a]
 readDataset ra bs =
-  case safeReadDataset ra bs of
+  case safeReadDataset ra (bs:|[]) of
     Left e    -> error (show e)
     Right dat -> VB.toList dat
 
+
 -- | Read a ByteString into a Haskell value
-safeReadDataset :: forall v a m . (Vector v a, MonadThrow m) => ReadAs a -> BL.ByteString -> m (v a)
-safeReadDataset ra bs = either throwString pure $
+safeReadDataset :: (Vector v a, MonadThrow m) => ReadAs a -> NonEmpty BL.ByteString -> m (v a)
+safeReadDataset ra bss = either throwString pure $
   case ra of
     JSON ->  V.fromList <$> JSON.eitherDecode' bs
     CSVRecord hhdr opts -> V.convert <$> decodeWith opts hhdr bs
     CSVNamedRecord opts -> V.convert . snd <$> decodeByNameWith opts bs
     Parsable psr -> V.fromList <$> Atto.eitherResult (Atto.parse (Atto.many' psr) bs)
+    ImageFolder labels -> do
+      ds <- mapM (go labels) bss
+      pure $ V.fromList (toList ds)
+  where
+    go :: NonEmpty String -> BL.ByteString -> Either String (String, FilePath)
+    go labels bs' = getImData <$> Atto.eitherResult (Atto.parse (taggedFileParser labels) bs')
+
+    bs :: BL.ByteString
+    bs = case bss of
+      bs' :| [] -> bs'
+      _ -> error "Cannot parse more than one file for this data format"
+
 
 -- | Get a temporary directory for a dataset.
 tempDirForDataset :: Dataset a -> IO FilePath
@@ -134,6 +180,7 @@ defaultTempDir = \case
 data Source
   = forall h . URL (Url h)
   | File FilePath
+  | ImgFolder FilePath (NonEmpty String)
 
 -- | A 'Dataset' contains metadata for loading, caching, preprocessing and parsing data.
 data Dataset a = Dataset
@@ -149,6 +196,9 @@ data ReadAs a where
   CSVRecord :: FromRecord a => HasHeader -> DecodeOptions -> ReadAs a
   CSVNamedRecord :: FromNamedRecord a => DecodeOptions -> ReadAs a
   Parsable :: Atto.Parser a -> ReadAs a
+  ImageFolder
+    :: NonEmpty String           -- labels used as folders
+    -> ReadAs (String, FilePath) -- FilePaths representing images on disk, Strings are labels
 
 -- | A CSV record with default decoding options (i.e. columns are separated by commas)
 csvRecord :: FromRecord a => ReadAs a

@@ -20,8 +20,8 @@ module Numeric.Dataloader
   , batchStream
   ) where
 
+import Control.Monad ((>=>))
 import Control.Monad.IO.Class (MonadIO, liftIO)
-import Data.Sequence (Seq)
 import Data.Vector (Vector)
 import Streaming (Stream, Of(..))
 import System.Random.MWC (GenIO)
@@ -74,10 +74,10 @@ stream dl = S.mapsM (liftIO . firstOfM (transformIO dl)) (sourceStream dl)
 batchStream
   :: (MonadThrow io, MonadIO io)
   => Dataloader a b
-  -> Stream (Of (Seq b)) io ()
+  -> Stream (Of [b]) io ()
 batchStream dl
-  = S.mapsM (liftIO . firstOfM (mapConcurrently (transformIO dl)))
-  $ S.slidingWindow (batchSize dl)
+  = S.mapsM (S.toList >=> liftIO . firstOfM (mapConcurrently (transformIO dl)))
+  $ S.chunksOf (batchSize dl)
   $ sourceStream dl
 
 
@@ -104,4 +104,6 @@ firstOfM :: Monad m => (a -> m b) -> Of a c -> m (Of b c)
 firstOfM fm (a:>c) = do
   b <- fm a
   pure (b:>c)
+
+
 

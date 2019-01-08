@@ -21,9 +21,14 @@
 -- the image.
 -------------------------------------------------------------------------------
 
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TupleSections #-}
 module Numeric.Datasets.CIFAR10
   ( Label(..)
   , CIFARImage(..), height, width, image, label
@@ -34,6 +39,7 @@ module Numeric.Datasets.CIFAR10
 
 import Codec.Picture (Image, PixelRGB8(PixelRGB8), Pixel8, writePixel)
 import Codec.Picture.Types (newMutableImage, freezeImage)
+import Control.DeepSeq
 import Control.Exception (throw)
 -- import Control.Exception.Safe (throwM)
 import Control.Monad.ST (runST)
@@ -62,11 +68,12 @@ data Label
   | Horse
   | Ship
   | Truck
-  deriving stock (Show, Eq, Generic, Bounded, Enum)
+  deriving stock (Show, Eq, Generic, Bounded, Enum, Read)
+  deriving anyclass NFData
 
 -- | Data representation of a CIFAR image is a 32x32 RGB image
 newtype CIFARImage = CIFARImage { getXY :: (Image PixelRGB8, Label) }
-  deriving newtype (Eq)
+  deriving newtype (Eq, NFData)
 
 instance Show CIFARImage where
   show im = "CIFARImage{Height: 32, Width: 32, Pixel: RGB8, Label: " ++ show (label im) ++ "}"
@@ -108,12 +115,12 @@ cifar10 = Dataset
 -- | parser for a cifar binary
 parseCifar :: Atto.Parser CIFARImage
 parseCifar = do
-  label :: Label <- toEnum . fromIntegral <$> Atto.anyWord8
+  lbl :: Label <- toEnum . fromIntegral <$> Atto.anyWord8
   rs :: [Pixel8] <- BS.unpack <$> Atto.take 1024
   gs :: [Pixel8] <- BS.unpack <$> Atto.take 1024
   bs :: [Pixel8] <- BS.unpack <$> Atto.take 1024
   let ipixels = zipWith4 (\ix r g b -> (ix, PixelRGB8 r g b)) ixs rs gs bs
-  pure $ CIFARImage (newImage ipixels, label)
+  pure $ CIFARImage (newImage ipixels, lbl)
   where
     newImage :: [((Int, Int), PixelRGB8)] -> Image PixelRGB8
     newImage ipixels = runST $ do

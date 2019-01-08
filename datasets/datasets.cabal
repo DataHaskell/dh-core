@@ -96,8 +96,8 @@ Library
                , async
                , bytestring
                , cassava
-               , containers
                , data-default-class
+               , deepseq
                , directory
                , exceptions
                , file-embed
@@ -138,8 +138,12 @@ Benchmark bench
      , criterion
      , datasets
      , deepseq
+     , directory
+     , filepath
+     , JuicyPixels
      , mwc-random
      , req
+     , safe-exceptions
      , streaming
 
 
