@@ -47,9 +47,10 @@ module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, defaul
 import Data.Csv
 import Data.Monoid
 import Data.Foldable
+import Data.List (isSuffixOf)
 import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
-import System.FilePath
+import System.FilePath (takeExtensions, (</>))
 import System.Directory
 import Data.Hashable
 import Data.Monoid
@@ -121,16 +122,10 @@ getFileFromSource _ (ImgFolder root labels) =
     hasValidExt :: FilePath -> Bool
     hasValidExt fp = any (`isExtensionOf` fp) ["png", "jpeg", "bitmap", "tiff"] -- "gif", "tga"]
 
-
-newtype TaggedFile = TaggedFile { getImData :: (String, FilePath) }
-  deriving (Eq, Ord, Show)
-
-taggedFileParser :: NonEmpty String -> Atto.Parser TaggedFile
-taggedFileParser (l0:|ls) = do
-  lbl <- Atto.choice $ Atto.string . B8.pack <$> (l0:ls)
-  _ <- Atto.string "<<.>>"
-  fp <- Atto.takeByteString
-  pure . TaggedFile $ (B8.unpack lbl, B8.unpack fp)
+    -- For backwards compatability (only in filepath >= 1.4.2)
+    isExtensionOf :: String -> FilePath -> Bool
+    isExtensionOf ext@('.':_) = isSuffixOf ext . takeExtensions
+    isExtensionOf ext         = isSuffixOf ('.':ext) . takeExtensions
 
 
 -- | Parse a ByteString into a list of Haskell values
@@ -153,11 +148,18 @@ safeReadDataset ra bss = either throwString pure $
     CSVNamedRecord opts -> V.convert . snd <$> decodeByNameWith opts bs
     Parsable psr -> V.fromList <$> Atto.eitherResult (Atto.parse (Atto.many' psr) bs)
     ImageFolder labels -> do
-      ds <- mapM (go labels) bss
+      ds <- mapM (getImFiles labels) bss
       pure $ V.fromList (toList ds)
   where
-    go :: NonEmpty String -> BL.ByteString -> Either String (String, FilePath)
-    go labels bs' = getImData <$> Atto.eitherResult (Atto.parse (taggedFileParser labels) bs')
+    getImFiles :: NonEmpty String -> BL.ByteString -> Either String (String, FilePath)
+    getImFiles labels bs' = Atto.eitherResult (Atto.parse (parseTaggedFile labels) bs')
+
+    parseTaggedFile :: NonEmpty String -> Atto.Parser (String, FilePath)
+    parseTaggedFile (l0:|ls) = do
+      lbl <- Atto.choice $ Atto.string . B8.pack <$> (l0:ls)
+      _ <- Atto.string "<<.>>"
+      fp <- Atto.takeByteString
+      pure (B8.unpack lbl, B8.unpack fp)
 
     bs :: BL.ByteString
     bs = case bss of

@@ -88,7 +88,10 @@ Library
                  , Numeric.Datasets.Wine
                  , Numeric.Datasets.WineQuality
                  , Numeric.Datasets.Netflix
-                 , Streaming.Instances
+
+   other-modules:
+     Streaming.Instances
+
    Build-depends:
                  base          >= 4.6 && < 5
                , aeson

@@ -20,15 +20,21 @@
 -- order, so the first 32 bytes are the red channel values of the first row of
 -- the image.
 -------------------------------------------------------------------------------
-
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
+#if MIN_VERSION_GLASGOW_HASKELL(8,2,0,0)
 {-# LANGUAGE DerivingStrategies #-}
+#endif
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
+#if MIN_VERSION_JuicyPixels(3,3,0)
+#else
+{-# LANGUAGE UndecidableInstances #-}
+#endif
 module Numeric.Datasets.CIFAR10
   ( Label(..)
   , CIFARImage(..), height, width, image, label
@@ -41,7 +47,6 @@ import Codec.Picture (Image, PixelRGB8(PixelRGB8), Pixel8, writePixel)
 import Codec.Picture.Types (newMutableImage, freezeImage)
 import Control.DeepSeq
 import Control.Exception (throw)
--- import Control.Exception.Safe (throwM)
 import Control.Monad.ST (runST)
 import Data.List (zipWith4)
 import GHC.Generics (Generic)
@@ -54,6 +59,11 @@ import qualified Data.ByteString.Lazy as BL
 
 import Numeric.Datasets
 
+#if MIN_VERSION_JuicyPixels(3,3,0)
+#else
+import Foreign.Storable (Storable)
+import qualified Codec.Picture as Compat
+#endif
 -- ========================================================================= --
 
 -- | labels of CIFAR-10 dataset. Enum corresponds to binary-based uint8 label.
@@ -68,12 +78,24 @@ data Label
   | Horse
   | Ship
   | Truck
-  deriving stock (Show, Eq, Generic, Bounded, Enum, Read)
-  deriving anyclass NFData
+  deriving (Show, Eq, Generic, Bounded, Enum, Read, NFData)
+
+#if MIN_VERSION_JuicyPixels(3,3,0)
+#else
+instance (Eq (Compat.PixelBaseComponent a), Storable (Compat.PixelBaseComponent a))
+    => Eq (Image a) where
+  a == b = Compat.imageWidth  a == Compat.imageWidth  b &&
+           Compat.imageHeight a == Compat.imageHeight b &&
+           Compat.imageData   a == Compat.imageData   b
+#endif
 
 -- | Data representation of a CIFAR image is a 32x32 RGB image
 newtype CIFARImage = CIFARImage { getXY :: (Image PixelRGB8, Label) }
+#if MIN_VERSION_GLASGOW_HASKELL(8,2,0,0)
   deriving newtype (Eq, NFData)
+#else
+  deriving (Eq, Generic, NFData)
+#endif
 
 instance Show CIFARImage where
   show im = "CIFARImage{Height: 32, Width: 32, Pixel: RGB8, Label: " ++ show (label im) ++ "}"
