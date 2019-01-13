@@ -26,7 +26,7 @@ data CO2 = CO2
 
 instance FromNamedRecord CO2
 
-maunaLoaCO2 :: Dataset 'Https CO2
+maunaLoaCO2 :: Dataset CO2
 maunaLoaCO2 = csvHdrDataset
    $ URL $ https "raw.githubusercontent.com" /: "vincentarelbundock" /: "Rdatasets" /: "master" /: "csv" /: "datasets" /: "CO2.csv"
 

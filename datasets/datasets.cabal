@@ -61,9 +61,11 @@ Library
    default-language:  Haskell2010
 
    Exposed-modules:
-                   Numeric.Datasets
+                   Numeric.Dataloader
+                 , Numeric.Datasets
                  , Numeric.Datasets.Anscombe
                  , Numeric.Datasets.BostonHousing
+                 , Numeric.Datasets.CIFAR10
                  , Numeric.Datasets.OldFaithful
                  , Numeric.Datasets.Abalone
                  , Numeric.Datasets.Adult
@@ -73,18 +75,23 @@ Library
                  , Numeric.Datasets.CO2
                  , Numeric.Datasets.Gapminder
                  , Numeric.Datasets.Iris
+                 , Numeric.Datasets.Internal.Streaming
                  , Numeric.Datasets.Michelson
-                 , Numeric.Datasets.Mushroom                 
+                 , Numeric.Datasets.Mushroom
                  , Numeric.Datasets.Nightingale
                  , Numeric.Datasets.Quakes
                  , Numeric.Datasets.States
                  , Numeric.Datasets.Sunspots
-                 , Numeric.Datasets.Titanic                 
+                 , Numeric.Datasets.Titanic
                  , Numeric.Datasets.UN
                  , Numeric.Datasets.Vocabulary
                  , Numeric.Datasets.Wine
                  , Numeric.Datasets.WineQuality
                  , Numeric.Datasets.Netflix
+
+   other-modules:
+     Streaming.Instances
+
    Build-depends:
                  base          >= 4.6 && < 5
                , aeson
@@ -92,17 +99,55 @@ Library
                , bytestring
                , cassava
                , data-default-class
+               , deepseq
                , directory
+               , exceptions
                , file-embed
                , filepath
                , hashable
+               , JuicyPixels
                , microlens
+               , mtl
+               , mwc-random
+               , parallel
                , req            >= 1.0.0
+               , safe-exceptions
+               , streaming
+               , streaming-attoparsec
+               , streaming-bytestring
+               , streaming-cassava
+               , streaming-commons
                , stringsearch
+               , tar
                , text
                , time
+               , transformers
                , vector
+               , safe-exceptions
+               , zlib
                  -- , wreq
+
+
+Benchmark bench
+   type: exitcode-stdio-1.0
+   hs-source-dirs: bench
+   main-is: Main.hs
+   default-language: Haskell2010
+   ghc-options: -Wall -O2 -rtsopts -threaded
+   other-modules:
+       Numeric.Dataloader.Benchmark
+   build-depends:
+       base >= 4.6 && < 5
+     , criterion
+     , datasets
+     , deepseq
+     , directory
+     , filepath
+     , JuicyPixels
+     , mwc-random
+     , req
+     , safe-exceptions
+     , streaming
 
 
 test-suite spec
@@ -117,3 +162,5 @@ test-suite spec
                 QuickCheck ,
                 hspec
   default-language: Haskell2010
+
+

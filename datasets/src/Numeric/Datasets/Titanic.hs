@@ -68,20 +68,20 @@ parseSex :: String -> Sex
 parseSex = \case
   "female" -> Female
   "male" -> Male
-  x -> error $ unwords ["Unexpected feature value :", show x]      
+  x -> error $ unwords ["Unexpected feature value :", show x]
 
 parseBool :: String -> Bool
 parseBool = \case
   "1" -> True
   "0" -> False
-  x -> error $ unwords ["Unexpected feature value :", show x]   
+  x -> error $ unwords ["Unexpected feature value :", show x]
 
 -- | The Titanic dataset, to be downloaded from <https://raw.githubusercontent.com/JackStat/6003Data/master/Titanic.txt>
-titanicRemote :: Dataset 'Https TitanicEntry
+titanicRemote :: Dataset TitanicEntry
 titanicRemote = withPreprocess removeEscQuotes $ csvHdrDatasetSep '\t' $ URL $ https "raw.githubusercontent.com" /: "JackStat" /: "6003Data" /: "master" /: "Titanic.txt"
 
 -- | The Titanic dataset, parsed from a local copy
-titanicLocal :: Dataset h TitanicEntry
+titanicLocal :: Dataset TitanicEntry
 titanicLocal = withPreprocess removeEscQuotes $ csvHdrDatasetSep '\t' $ File "datafiles/titanic2_full.tsv"
 
 

@@ -31,6 +31,6 @@ data Vocab = Vocab
 
 instance FromNamedRecord Vocab
 
-vocab :: Dataset 'Http Vocab
+vocab :: Dataset Vocab
 vocab = csvHdrDataset
    $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "car" /: "Vocab.csv"

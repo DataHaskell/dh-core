@@ -28,6 +28,6 @@ newtype Coal = Coal
 instance FromRecord Coal where
   parseRecord v = Coal <$> v .! 1
 
-coal :: Dataset 'Http Coal
+coal :: Dataset Coal
 coal = let src = URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "boot" /: "coal.csv"
        in Dataset src Nothing Nothing $ CSVRecord HasHeader defaultDecodeOptions

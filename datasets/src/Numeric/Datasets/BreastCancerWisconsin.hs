@@ -43,7 +43,7 @@ data BreastCancerEntry = BreastCancerEntry
 instance FromRecord BreastCancerEntry where
   parseRecord v = BreastCancerEntry <$> v .! 0 <*> v .! 1 <*> v .! 2 <*> v .! 3 <*> v .! 4 <*> v .! 5 <*> (v .! 6 <|> return Nothing) <*> v .! 7  <*> v .! 8  <*> v .! 9  <*> (intToDiagnosis <$> v .! 10)
 
-breastCancerDatabase :: Dataset 'Http BreastCancerEntry
+breastCancerDatabase :: Dataset BreastCancerEntry
 breastCancerDatabase = csvDataset
    $ URL $ umassMLDB /: "breast-cancer-wisconsin" /: "breast-cancer-wisconsin.data"
 
@@ -90,10 +90,10 @@ instance FromRecord PrognosticBreastCancer where
 instance FromRecord CellFeatures where
   parseRecord v = CellFeatures <$> v .! 2 <*> v .! 3 <*> v .! 4 <*> v .! 5 <*> v .! 6  <*> v .! 7  <*> v .! 8  <*> v .! 9  <*> v .! 10
 
-diagnosticBreastCancer :: Dataset 'Http DiagnosticBreastCancer
+diagnosticBreastCancer :: Dataset DiagnosticBreastCancer
 diagnosticBreastCancer = csvDataset
    $ URL $ umassMLDB /: "breast-cancer-wisconsin" /: "wdbc.data"
 
-prognosticBreastCancer :: Dataset 'Http PrognosticBreastCancer
+prognosticBreastCancer :: Dataset PrognosticBreastCancer
 prognosticBreastCancer = csvDataset
    $ URL $ umassMLDB /: "breast-cancer-wisconsin" /: "wpbc.data"

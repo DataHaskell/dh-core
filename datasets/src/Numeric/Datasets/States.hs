@@ -40,7 +40,7 @@ instance FromNamedRecord StateEdu where
                          m .: "dollars"  <*>
                          m .: "pay"
 
-states :: Dataset 'Http StateEdu
+states :: Dataset StateEdu
 states = csvHdrDataset
    $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "car" /: "States.csv"
 

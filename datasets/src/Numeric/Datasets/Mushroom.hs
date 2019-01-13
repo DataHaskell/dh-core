@@ -354,9 +354,9 @@ charToHabitat = \case
   'u' -> Urban
   'w' -> Waste
   'd' -> Woods
-  x -> error $ unwords ["Unexpected feature value :", show x]    
+  x -> error $ unwords ["Unexpected feature value :", show x]
 
 
-mushroom :: Dataset 'Https MushroomEntry
+mushroom :: Dataset MushroomEntry
 mushroom = csvDataset
    $ URL $ uciMLDB /: "mushroom" /: "agaricus-lepiota.data"

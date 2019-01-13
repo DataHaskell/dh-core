@@ -66,6 +66,6 @@ data Car = Car
 
 instance FromRecord Car
 
-car :: Dataset 'Http Car
+car :: Dataset Car
 car = csvDataset
           $ URL $ umassMLDB /: "car" /: "car.data"
