@@ -1,5 +1,5 @@
 {-# language DeriveDataTypeable, DeriveGeneric #-}
-{-# language GADTs #-}
+{-# language GADTs, DataKinds, FlexibleContexts #-}
 {-# language LambdaCase #-}
 module Main where
 
@@ -9,12 +9,9 @@ import Analyze.Conversions (projectRow, projectRows)
 import qualified GHC.Generics as G
 
 -- | generics-sop
-import Generics.SOP (Proxy(..), Generic, from, unSOP, unZ, mapIK, hcmap)
+import Generics.SOP (Proxy(..), Generic, Code(..), from, unSOP, unZ, mapIK, hcmap, K(..), I(..), AllN(..), All(..), HAp(..), Prod(..), NP(..))
 -- | sop-core
-import Data.SOP.BasicFunctors (K(..), I(..))
-import Data.SOP.Constraint (AllN(..))
-import Data.SOP.Classes (HAp(..), Prod(..))
-import Data.SOP.NP (NP(..), collapse_NP)
+-- import Data.SOP.NP (collapse_NP)
 
 -- | typeable
 import Data.Data (Typeable, Data(..), constrFields)
@@ -65,10 +62,6 @@ instance Show DataException where
 instance Exception DataException
 
 
--- gToList d = unZ $ unSOP (from d)
-
--- baz d = hcmap (Proxy :: Proxy Show) (mapIK show) d
-
 
 data Value = VInt Int | VDouble Double | VText T.Text | VChar Char deriving (Eq, Show)
 
@@ -80,8 +73,25 @@ instance ToValue Double where toValue = VDouble
 instance ToValue T.Text where toValue = VText
 instance ToValue Char where toValue = VChar
 
-gMapToValue :: (AllN (Prod h) ToValue xs, HAp h) => h I xs -> h (K Value) xs
+-- | Python in Haskell yay!
+npToValue :: (Generic a, All ToValue xs, Code a ~ '[xs]) => a -> [Value]
+npToValue = collapse_NP . gMapToValue . gToList
+
+-- | 
+-- 
+-- >>> gMapToValue :: (AllN (Prod h) ToValue xs, HAp h) => h I xs -> h (K Value) xs
+-- >>> gMapToValue :: AllN (Prod NP) ToValue xs => NP I xs -> NP (K Value) xs
+gMapToValue :: All ToValue xs => NP I xs -> NP (K Value) xs
 gMapToValue d = hcmap (Proxy :: Proxy ToValue) (mapIK toValue) d
+
+gToList :: (Generic a, Code a ~ '[x]) => a -> NP I x
+gToList d = unZ $ unSOP (from d)
+
+-- | This is here because generics-sop doesn't re-export a function with the same name that was recently moved into sop-core
+collapse_NP :: NP (K a) xs -> [a]
+collapse_NP Nil         = []
+collapse_NP (K x :* xs) = x : collapse_NP xs
+
 
 
 -- experiments with generics
