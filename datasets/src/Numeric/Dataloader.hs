@@ -42,10 +42,13 @@ import Numeric.Datasets
 
 -- | Options for a data loading functions.
 data Dataloader a b = Dataloader
-  { batchSize :: Int
-  , indexline :: Maybe (Vector Int)
-  , dataset :: Dataset a
-  , transform :: a -> b
+  { batchSize :: Int                 -- ^ Batch size used with 'batchStream'.
+  , shuffle :: Maybe (Vector Int)    -- ^ Optional shuffle order (forces the dataset to be loaded in memory if it wasn't already).
+  , dataset :: Dataset a             -- ^ Dataset associated with the dataloader.
+  , transform :: a -> b              -- ^ Transformation associated with the dataloader which will be run in parallel. If using an
+                                     --   ImageFolder, this is where you would transform image filepaths to an image (or other
+                                     --   compute-optimized form). Additionally, this is where you should perform any
+                                     --   static normalization.
   }
 
 
@@ -96,10 +99,10 @@ sourceStream loader
   = permute loader <$> getDatavec (dataset loader)
   >>= S.each
   where
-    -- Use a dataloader's indexline to return a permuted vector (or return the
+    -- Use a dataloader's shuffle order to return a permuted vector (or return the
     -- identity vector).
     permute :: Dataloader a b -> Vector a -> Vector a
-    permute loader va = maybe va (V.backpermute va) (indexline loader)
+    permute loader va = maybe va (V.backpermute va) (shuffle loader)
 
 
 -- | Monadic, concrete version of Control.Arrow.first for @Of@

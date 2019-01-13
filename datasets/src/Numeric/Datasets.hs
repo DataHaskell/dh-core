@@ -142,14 +142,21 @@ readDataset ra bs =
 -- | Read a ByteString into a Haskell value
 safeReadDataset :: (Vector v a, MonadThrow m) => ReadAs a -> NonEmpty BL.ByteString -> m (v a)
 safeReadDataset ra bss = either throwString pure $
-  case ra of
-    JSON ->  V.fromList <$> JSON.eitherDecode' bs
-    CSVRecord hhdr opts -> V.convert <$> decodeWith opts hhdr bs
-    CSVNamedRecord opts -> V.convert . snd <$> decodeByNameWith opts bs
-    Parsable psr -> V.fromList <$> Atto.eitherResult (Atto.parse (Atto.many' psr) bs)
-    ImageFolder labels -> do
+  case (ra, bss) of
+    (JSON, bs:|[]) ->  V.fromList <$> JSON.eitherDecode' bs
+    (CSVRecord hhdr opts, bs:|[]) -> V.convert <$> decodeWith opts hhdr bs
+    (CSVNamedRecord opts, bs:|[]) -> V.convert . snd <$> decodeByNameWith opts bs
+    (Parsable psr, bs:|[]) -> V.fromList <$> Atto.eitherResult (Atto.parse (Atto.many' psr) bs)
+
+    (ImageFolder labels, _) -> do
       ds <- mapM (getImFiles labels) bss
       pure $ V.fromList (toList ds)
+
+    _ -> Left $
+      if length bss > 1
+      then "Cannot parse more than one file for this data format"
+      else "impossible: logic has changed, please file this issue on dh-core"
+
   where
     getImFiles :: NonEmpty String -> BL.ByteString -> Either String (String, FilePath)
     getImFiles labels bs' = Atto.eitherResult (Atto.parse (parseTaggedFile labels) bs')
@@ -160,11 +167,6 @@ safeReadDataset ra bss = either throwString pure $
       _ <- Atto.string "<<.>>"
       fp <- Atto.takeByteString
       pure (B8.unpack lbl, B8.unpack fp)
-
-    bs :: BL.ByteString
-    bs = case bss of
-      bs' :| [] -> bs'
-      _ -> error "Cannot parse more than one file for this data format"
 
 
 -- | Get a temporary directory for a dataset.

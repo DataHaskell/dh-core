@@ -29,25 +29,23 @@ instance NFData Abalone
 instance NFData Sex
 instance (NFData a, NFData b) => NFData (Of a b)
 
-mkDataset :: IO (Dataset Abalone)
-mkDataset = pure abalone
 
 mkDataloaderWithIx :: Dataset a -> IO (Dataloader a a)
 mkDataloaderWithIx ds = MWC.withSystemRandom $ \g -> do
   ixl <- uniformIxline ds g
   pure $ Dataloader 1 (Just ixl) ds id
 
+
 main :: IO ()
 main = do
-  ds <- mkDataset
-  dl <- mkDataloaderWithIx ds
+  dl <- mkDataloaderWithIx abalone
   cifar10l <- cifar10ImageLoader
   defaultMain
     [ bgroup "Numeric.Dataloader"
-      [ bench "making an ixline" $ nfIO $ MWC.withSystemRandom (uniformIxline ds)
+      [ bench "making an ixline" $ nfIO $ MWC.withSystemRandom (uniformIxline abalone)
       , bgroup "testStream"
         [ bench "with ixline" . nfIO $ foldStream (S.take 100 $ slow . stream $ dl)
-        , bench "no ixline"   . nfIO $ foldStream (S.take 100 $ slow . stream $ Dataloader 1 Nothing ds id)
+        , bench "no ixline"   . nfIO $ foldStream (S.take 100 $ slow . stream $ Dataloader 1 Nothing abalone id)
         ]
       , bench "cifar10 image folder" $ nfIO $ foldStream $ S.take 1000 $ stream cifar10l
       , bench "cifar10 batch folder" $ nfIO $ foldStream $ S.take 1  $ batchStream (cifar10l { batchSize = 1000 })
