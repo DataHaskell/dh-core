@@ -53,7 +53,9 @@ executable core
                      , datasets >= 0.3
                      , exceptions
                      , generics-sop
+                     , sop-core
                      , hashable
+                     , text
                      , unordered-containers
                      , vector
                      , core

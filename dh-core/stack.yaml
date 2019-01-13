@@ -1,6 +1,6 @@
-resolver: lts-12.13 # GHC 8.4.3
+# resolver: lts-12.13 # GHC 8.4.3
 # resolver: lts-11.22 # GHC 8.2.2
-# resolver: lts-13.0 # GHC 8.6.3
+resolver: lts-13.0 # GHC 8.6.3
 
 packages:
 - .
