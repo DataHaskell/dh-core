@@ -12,9 +12,9 @@ import qualified Data.Vector         as V
 
 exampleDecl :: Vector (Text, ValueType)
 exampleDecl = V.fromList
-  [ ("id", ValueTypeInteger)
-  , ("name", ValueTypeText)
-  , ("score", ValueTypeDouble)
+  [ ("id", VTypeInteger)
+  , ("name", VTypeText)
+  , ("score", VTypeDouble)
   ]
 
 exampleHeader :: Vector Text
@@ -26,23 +26,23 @@ exampleHeader = V.fromList
 
 exampleObj1 :: Vector (Text, Value)
 exampleObj1 = V.fromList
-  [ ("id", ValueInteger 42)
-  , ("name", ValueText "foo")
-  , ("score", ValueDouble 5.0)
+  [ ("id", VInteger 42)
+  , ("name", VText "foo")
+  , ("score", VDouble 5.0)
   ]
 
 exampleRecord1 :: Vector Value
 exampleRecord1 = V.fromList
-  [ ValueInteger 42
-  , ValueText "foo"
-  , ValueDouble 50.0
+  [ VInteger 42
+  , VText "foo"
+  , VDouble 50.0
   ]
 
 exampleObj2 :: Vector (Text, Value)
 exampleObj2 = V.fromList
-  [ ("id", ValueInteger 43)
-  , ("name", ValueText "bar")
-  , ("score", ValueDouble 3.0)
+  [ ("id", VInteger 43)
+  , ("name", VText "bar")
+  , ("score", VDouble 3.0)
   ]
 
 fullUpdate :: RFrameUpdate Text Value
@@ -50,8 +50,8 @@ fullUpdate = RFrameUpdate names values
   where
     names = V.fromList ["id", "name", "score"]
     values = V.fromList
-      [ V.fromList [ValueInteger 42, ValueText "foo", ValueDouble 5.0]
-      , V.fromList [ValueInteger 43, ValueText "bar", ValueDouble 3.0]
+      [ V.fromList [VInteger 42, VText "foo", VDouble 5.0]
+      , V.fromList [VInteger 43, VText "bar", VDouble 3.0]
       ]
 
 noNameUpdate :: RFrameUpdate Text Value
@@ -59,8 +59,8 @@ noNameUpdate = RFrameUpdate names values
   where
     names = V.fromList ["id", "score"]
     values = V.fromList
-      [ V.fromList [ValueInteger 42, ValueDouble 5.0]
-      , V.fromList [ValueInteger 43, ValueDouble 3.0]
+      [ V.fromList [VInteger 42, VDouble 5.0]
+      , V.fromList [VInteger 43, VDouble 3.0]
       ]
 
 colorUpdate :: RFrameUpdate Text Value
@@ -68,8 +68,8 @@ colorUpdate = RFrameUpdate names values
   where
     names = V.fromList ["color"]
     values = V.fromList
-      [ V.fromList [ValueText "purple"]
-      , V.fromList [ValueText "orange"]
+      [ V.fromList [VText "purple"]
+      , V.fromList [VText "orange"]
       ]
 
 colorOneUpdate :: RFrameUpdate Text Value
@@ -77,7 +77,7 @@ colorOneUpdate = RFrameUpdate names values
   where
     names = V.fromList ["color"]
     values = V.fromList
-      [ V.fromList [ValueText "purple"]
+      [ V.fromList [VText "purple"]
       ]
 
 colorSpanishUpdate :: RFrameUpdate Text Value
@@ -85,8 +85,8 @@ colorSpanishUpdate = RFrameUpdate names values
   where
     names = V.fromList ["color", "spanishColor"]
     values = V.fromList
-      [ V.fromList [ValueText "purple", ValueText "lila"]
-      , V.fromList [ValueText "orange", ValueText "naranja"]
+      [ V.fromList [VText "purple", VText "lila"]
+      , V.fromList [VText "orange", VText "naranja"]
       ]
 
 colorHotUpdate :: RFrameUpdate Text Value
@@ -94,8 +94,8 @@ colorHotUpdate = RFrameUpdate names values
   where
     names = V.fromList ["color/purple", "color/orange"]
     values = V.fromList
-      [ V.fromList [ValueBool True, ValueBool False]
-      , V.fromList [ValueBool False, ValueBool True]
+      [ V.fromList [VBool True, VBool False]
+      , V.fromList [VBool False, VBool True]
       ]
 
 fullColorUpdate :: RFrameUpdate Text Value
@@ -103,8 +103,8 @@ fullColorUpdate = RFrameUpdate names values
   where
     names = V.fromList ["id", "name", "score", "color"]
     values = V.fromList
-      [ V.fromList [ValueInteger 42, ValueText "foo", ValueDouble 5.0, ValueText "purple"]
-      , V.fromList [ValueInteger 43, ValueText "bar", ValueDouble 3.0, ValueText "orange"]
+      [ V.fromList [VInteger 42, VText "foo", VDouble 5.0, VText "purple"]
+      , V.fromList [VInteger 43, VText "bar", VDouble 3.0, VText "orange"]
       ]
 
 overlapUpdate :: RFrameUpdate Text Value
@@ -112,8 +112,8 @@ overlapUpdate = RFrameUpdate names values
   where
     names = V.fromList ["color", "score"]
     values = V.fromList
-      [ V.fromList [ValueText "purple", ValueDouble 10.0]
-      , V.fromList [ValueText "orange", ValueDouble 6.0]
+      [ V.fromList [VText "purple", VDouble 10.0]
+      , V.fromList [VText "orange", VDouble 6.0]
       ]
 
 fullOverlapUpdate :: RFrameUpdate Text Value
@@ -121,8 +121,8 @@ fullOverlapUpdate = RFrameUpdate names values
   where
     names = V.fromList ["id", "name", "score", "color"]
     values = V.fromList
-      [ V.fromList [ValueInteger 42, ValueText "foo", ValueDouble 10.0, ValueText "purple"]
-      , V.fromList [ValueInteger 43, ValueText "bar", ValueDouble 6.0, ValueText "orange"]
+      [ V.fromList [VInteger 42, VText "foo", VDouble 10.0, VText "purple"]
+      , V.fromList [VInteger 43, VText "bar", VDouble 6.0, VText "orange"]
       ]
 
 emptyUpdate :: RFrameUpdate Text Value

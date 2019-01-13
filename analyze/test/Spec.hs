@@ -128,7 +128,7 @@ testAddColumn = testCase "add column" $ do
   A.numCols before @?= 1
   expected <- getFrameFixture "colorSpanish"
   A.numCols expected @?= 2
-  actual <- A.addColumn before "spanishColor" (V.fromList [ A.ValueText "lila", A.ValueText "naranja"])
+  actual <- A.addColumn before "spanishColor" (V.fromList [ A.VText "lila", A.VText "naranja"])
   --A.numRows actual @?= 1
   actual @?= expected
 
@@ -136,7 +136,7 @@ testOneHot :: TestTree
 testOneHot = testCase "one hot" $ do
   color <- getFrameFixture "color"
   colorHot <- getFrameFixture "colorHot"
-  actual <- A.oneHot (\k (A.ValueText v) -> k <> "/" <> v) "color" (A.ValueBool True) (A.ValueBool False) color
+  actual <- A.oneHot (\k (A.VText v) -> k <> "/" <> v) "color" (A.VBool True) (A.VBool False) color
   actual @?= colorHot
 
 -- Runner

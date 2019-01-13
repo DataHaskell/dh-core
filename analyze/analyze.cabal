@@ -26,7 +26,9 @@ library
       Analyze.Html
       Analyze.Ops
       Analyze.RFrame
+      Analyze.RFrame.Generic
       Analyze.Values
+      Analyze.Values.Generic                  
   other-modules:
       Paths_analyze
   hs-source-dirs:
@@ -41,6 +43,7 @@ library
         exceptions ,
         foldl ,
         free ,
+        generics-sop ,        
         hashable ,
         lucid ,
         text ,

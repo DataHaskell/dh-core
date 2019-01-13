@@ -16,7 +16,7 @@ import           Data.Vector         (Vector)
 import qualified Data.Vector         as V
 
 -- | Column keys need to have equality and hashability.
-type Data k = (Eq k, Hashable k, Show k, Typeable k)
+type Key k = (Eq k, Hashable k, Show k, Typeable k)
 
 -- | flip <$>
 (<&>) :: Functor f => f a -> (a -> b) -> f b
@@ -41,7 +41,7 @@ data RowSizeMismatch = RowSizeMismatch Int Int deriving (Show, Eq, Typeable)
 instance Exception RowSizeMismatch
 
 -- | Throws when duplicate keys are present in a vector.
-checkForDupes :: (Data k, MonadThrow m) => Vector k -> m ()
+checkForDupes :: (Key k, MonadThrow m) => Vector k -> m ()
 checkForDupes vs = go HS.empty (V.toList vs)
   where
     go _ [] = pure ()
@@ -51,7 +51,7 @@ checkForDupes vs = go HS.empty (V.toList vs)
         else go (HS.insert k s) ks
 
 -- | Throws when one vector is not a reordering of the other.
-checkReorder :: (Data k, MonadThrow m) => Vector k -> Vector k -> m ()
+checkReorder :: (Key k, MonadThrow m) => Vector k -> Vector k -> m ()
 checkReorder xs ys =
   let xSize = V.length xs
       ySize = V.length ys
@@ -60,28 +60,28 @@ checkReorder xs ys =
     else checkSubset (V.toList xs) (HS.fromList (V.toList ys))
 
 -- | Throws when any key is not present in the set.
-checkSubset :: (Data k, MonadThrow m) => [k] -> HashSet k -> m ()
+checkSubset :: (Key k, MonadThrow m) => [k] -> HashSet k -> m ()
 checkSubset qs ks = forM_ qs (\q -> unless (HS.member q ks) (throwM (MissingKeyError q)))
 
 -- | Builds a reverse lookup for the vector.
-makeLookup :: Data k => Vector k -> HashMap k Int
+makeLookup :: Key k => Vector k -> HashMap k Int
 makeLookup = HM.fromList . flip zip [0..] . V.toList
 
 -- | Indexes into the vector of values, throwing on key missing or bad index.
-runLookup :: (Data k, MonadThrow m) => HashMap k Int -> Vector v -> k -> m v
+runLookup :: (Key k, MonadThrow m) => HashMap k Int -> Vector v -> k -> m v
 runLookup look vs k =
   case HM.lookup k look >>= (vs V.!?) of
     Nothing -> throwM (MissingKeyError k)
     Just v  -> pure v
 
 -- | Reorders the vector of values by a new key order and an old lookup.
-reorder :: Data k => Vector k -> HashMap k Int -> Vector v -> Vector v
+reorder :: Key k => Vector k -> HashMap k Int -> Vector v -> Vector v
 reorder ks look vs = pick <$> ks
   where
     pick k = vs V.! (look HM.! k)
 
 -- | Merges two key vectors and tags each with its provenance (favoring the second).
-mergeKeys :: Data k => Vector k -> Vector k -> Vector (k, Int, Int)
+mergeKeys :: Key k => Vector k -> Vector k -> Vector (k, Int, Int)
 mergeKeys xs ys =
   let m = HM.fromList (V.toList (V.imap (\i x -> (x, (0, i))) xs))
       n = HM.fromList (V.toList (V.imap (\i x -> (x, (1, i))) ys))
@@ -93,4 +93,4 @@ mergeKeys xs ys =
 
 -- | Uses a merged key vector to select values.
 runIndexedLookup :: Vector (k, Int, Int) -> Vector v -> Vector v -> Vector v
-runIndexedLookup ks xs ys = (\(k, i, j) -> (if i == 0 then xs else ys) V.! j) <$> ks
+runIndexedLookup ks xs ys = (\(_, i, j) -> (if i == 0 then xs else ys) V.! j) <$> ks

@@ -13,7 +13,7 @@ module Analyze.Decoding
   , runDecoder
   ) where
 
-import           Analyze.Common           (Data)
+import           Analyze.Common           (Key)
 import           Control.Applicative.Free (Ap (..), liftAp)
 import           Data.Maybe               (fromMaybe)
 
@@ -36,7 +36,7 @@ requireWhere :: k -> (k -> v -> m a) -> Decoder m k v a
 requireWhere k e = fromArg (Arg k (e k))
 
 -- | List all column names used in the 'Decoder'.
-decoderKeys :: Data k => Decoder m k v a -> [k]
+decoderKeys :: Key k => Decoder m k v a -> [k]
 decoderKeys (Decoder x) = go x
   where
     go :: Ap (Arg m k v) a -> [k]
@@ -44,7 +44,7 @@ decoderKeys (Decoder x) = go x
     go (Ap (Arg k _) rest) = k : go rest
 
 -- This is pretty sensitive to let bindings
-apRow :: (Data k, Monad m) => Ap (Arg m k v) a -> (k -> m v) -> m a
+apRow :: (Key k, Monad m) => Ap (Arg m k v) a -> (k -> m v) -> m a
 apRow (Pure a) _ = pure a
 apRow (Ap (Arg k f) rest) row = do
   v <- row k
@@ -53,5 +53,5 @@ apRow (Ap (Arg k f) rest) row = do
   return (fz z)
 
 -- | Run a 'Decoder' with a lookup function (typically row lookup).
-runDecoder :: (Data k, Monad m) => Decoder m k v a -> (k -> m v) -> m a
+runDecoder :: (Key k, Monad m) => Decoder m k v a -> (k -> m v) -> m a
 runDecoder (Decoder x) = apRow x
