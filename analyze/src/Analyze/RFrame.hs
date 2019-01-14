@@ -79,11 +79,11 @@ toUpdate (RFrame ks _ vs) = RFrameUpdate ks vs
 
 -- | Number of columns in an 'RFrame'
 numCols :: RFrame k v -> Int
-numCols (RFrame ks _ _) = length ks
+numCols = length . rframeKeys
 
 -- | Number of rows in an 'RFrame'
 numRows :: RFrame k v -> Int
-numRows (RFrame _ _ vs) = length vs
+numRows = length . rframeData
 
 -- | Project to the given column
 col :: (Key k, MonadThrow m) => k -> RFrame k v -> m (Vector v)
@@ -102,11 +102,11 @@ decode decoder (RFrame ks look vs) = checkSubset required keySet >> pure decoded
 flatDecode :: (Key k, MonadThrow m) => Decoder m k v a -> RFrame k v -> m (Vector a)
 flatDecode decoder rframe = join $ sequence <$> decode decoder rframe
 
--- | Filter an 'RFrame' by row
-filter :: Key k => RFrameFilter k v -> RFrame k v -> RFrame k v
-filter p (RFrame ks look vs) = RFrame ks look vs'
-  where
-    vs' = V.ifilter (p ks look) vs
+-- -- | Filter an 'RFrame' by row
+-- -- filter :: Key k => RFrameFilter k v -> RFrame k v -> RFrame k v
+-- filter p (RFrame ks look vs) = RFrame ks look vs'
+--   where
+--     vs' = V.ifilter (p ks look) vs
 
 -- | Update row-wise, adding or replacing values per-column.
 --   Retains the existing column order, appending new columns.
