@@ -5,13 +5,15 @@
 {-# language GADTs #-}
 module Analyze.RFrame.Generic (gToRFrame, DataException(..)) where
 
-import Generics.SOP
+import Generics.SOP (Generic(..), All, Code)
 import Generics.SOP.NP
 import qualified GHC.Generics as G
 
 import Control.Exception (Exception(..))
 import Control.Monad.Catch (MonadThrow(..))
 import Data.Data (Typeable, Data(..), constrFields)
+
+import qualified Data.Foldable as F (Foldable(..)) 
 
 import qualified Data.Text as T
 import qualified Data.Vector as V
@@ -22,7 +24,7 @@ import qualified Analyze.Values as AV
 import qualified Analyze.Values.Generic as AVG
 
 
--- | Populates an RFrame using the rows' 'Data', 'G.Generic' and 'Generic' instances. Only works with records that have named constructors, e.g. P2 in the following:
+-- | Populates an RFrame using the rows' 'Data', 'G.Generic' and 'Generic' instances and throws a 'DataException' if the input data is malformed. This function only accepts records that have named constructor fields, such as P2 in the following:
 --
 -- @
 -- data P1 = P1 Int Char deriving (Eq, Show, Data, G.Generic)
@@ -37,16 +39,19 @@ import qualified Analyze.Values.Generic as AVG
 --
 -- >>> gToRFrame [P1 1 'a', P1 42 'z']
 -- *** Exception: Anonymous records not implemented yet
-gToRFrame :: (Generic a, Data a, All AV.ToValue xs, Code a ~ '[xs], MonadThrow m) =>
-            [a]
-         -> m (AR.RFrame T.Text AV.Value)
+gToRFrame :: (Generic a, Data a, All AV.ToValue xs, Code a ~ '[xs]
+            , MonadThrow m
+            , Foldable t, Functor t) =>
+              t a
+           -> m (AR.RFrame T.Text AV.Value)
 gToRFrame ds
   | null ds = throwM NoDataE
   | null constrs = throwM AnonRecordE
   | otherwise = pure $ AR.RFrame vc cm vss
   where
-    d = head ds
-    vss = V.fromList (V.fromList . AVG.npToValue <$> ds)
+    dsl = F.toList ds
+    d = head dsl 
+    vss = V.fromList $ F.toList (V.fromList . AVG.npToValue <$> ds)
     cm = HM.fromList $ zip (T.pack `map` constrs) [0 ..]
     constrs = constrFields (toConstr d)
     vc = T.pack <$> V.fromList constrs

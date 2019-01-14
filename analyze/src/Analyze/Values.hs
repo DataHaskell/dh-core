@@ -75,21 +75,26 @@ data ValueTypeError k = ValueTypeError k ValueType Value deriving (Show, Eq, Typ
 instance (Show k, Typeable k) => Exception (ValueTypeError k)
 
 -- | Use with 'Analyze.Decoding.requireWhere' to read 'Text' values.
-textual :: (Key k, MonadThrow m) => k -> Value -> m Text
-textual _ (VText s) = pure s
-textual k v             = throwM (ValueTypeError k VTypeText v)
+text :: (Key k, MonadThrow m) => k -> Value -> m Text
+text _ (VText s) = pure s
+text k v         = throwM (ValueTypeError k VTypeText v)
 
 -- | Use with 'Analyze.Decoding.requireWhere' to read 'Integer' values.
-integral :: (Key k, MonadThrow m) => k -> Value -> m Integer
-integral _ (VInteger s) = pure s
-integral k v                = throwM (ValueTypeError k VTypeInteger v)
+integer :: (Key k, MonadThrow m) => k -> Value -> m Integer
+integer _ (VInteger s) = pure s
+integer k v            = throwM (ValueTypeError k VTypeInteger v)
+
+-- | Use with 'Analyze.Decoding.requireWhere' to read 'Int' values.
+int :: (Key k, MonadThrow m) => k -> Value -> m Int
+int _ (VInt s) = pure s
+int k v        = throwM (ValueTypeError k VTypeInt v)
 
 -- | Use with 'Analyze.Decoding.requireWhere' to read 'Double' values.
-floating :: (Key k, MonadThrow m) => k -> Value -> m Double
-floating _ (VDouble s) = pure s
-floating k v               = throwM (ValueTypeError k VTypeDouble v)
+double :: (Key k, MonadThrow m) => k -> Value -> m Double
+double _ (VDouble s) = pure s
+double k v           = throwM (ValueTypeError k VTypeDouble v)
 
 -- | Use with 'Analyze.Decoding.requireWhere' to read 'Bool' values.
-boolean :: (Key k, MonadThrow m) => k -> Value -> m Bool
-boolean _ (VBool s) = pure s
-boolean k v             = throwM (ValueTypeError k VTypeBool v)
+bool :: (Key k, MonadThrow m) => k -> Value -> m Bool
+bool _ (VBool s) = pure s
+bool k v         = throwM (ValueTypeError k VTypeBool v)
