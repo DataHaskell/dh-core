@@ -14,9 +14,12 @@ import qualified Data.HashSet        as HS
 import           Data.Typeable       (Typeable)
 import           Data.Vector         (Vector)
 import qualified Data.Vector         as V
+import qualified Data.Text as T
 
 -- | Column keys need to have equality and hashability.
-type Key k = (Eq k, Hashable k, Show k, Typeable k)
+class (Eq k, Hashable k, Show k, Typeable k) => Key k where
+instance Key Int
+instance Key T.Text
 
 -- | flip <$>
 (<&>) :: Functor f => f a -> (a -> b) -> f b

@@ -19,6 +19,7 @@ library
   exposed-modules:
       Analyze
       Analyze.Common
+      Analyze.Dplyr            
       Analyze.IO.CSV
       Analyze.IO.HTML                  
       Analyze.Decoding
