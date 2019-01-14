@@ -1,4 +1,5 @@
 {-# language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
+{-# OPTIONS_GHC -Wno-type-defaults #-}
 module Core.Numeric.Statistics.Classification.DecisionTrees where
 
 import qualified Data.Foldable as F
@@ -7,7 +8,7 @@ import Data.Ord (comparing)
 
 import Core.Data.Dataset
 import qualified Core.Data.Datum.Vector as XV
-import Core.Numeric.Statistics.Classification.Utils
+-- import Core.Numeric.Statistics.Classification.Utils
 import Core.Numeric.Statistics.InformationTheory (entropyR)
 
 -- | A binary tree.
@@ -88,8 +89,8 @@ maxInfoGainSplit :: (Ord k, Ord a, Eq a) =>
 maxInfoGainSplit decision (TState tjs ds) = (jstar, tstar, TState tjs' dsl, TState tjs' dsr) where
   tjs' = S.delete (jstar, tstar) tjs  -- See Note (OPTIMIZATIONS maxInfoGainSPlit)
   (jstar, tstar, _, dsl, dsr) = F.maximumBy (comparing third5) $ infog `map` S.toList tjs
-  infog (j, t) = (j, t, h, dsl, dsr) where
-    (h, dsl, dsr) = infoGainR (decision t) j ds
+  infog (j, t) = (j, t, h, dsl', dsr') where
+    (h, dsl', dsr') = infoGainR (decision t) j ds
 
 
 third5 :: (a, b, c, d, e) -> c
