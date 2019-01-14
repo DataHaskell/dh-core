@@ -57,7 +57,7 @@ testFixture = testCase "fixture" $ do
 testRowDecode :: TestTree
 testRowDecode = testCase "rowDecode" $ do
   frame <- getFrameFixture "full"
-  let decoder = A.requireWhere "score" A.floating <&> (*2)
+  let decoder = A.requireWhere "score" A.double <&> (*2)
   result <- sequenceA =<< A.decode decoder frame
   V.fromList [10.0, 6.0] @?= result
 
