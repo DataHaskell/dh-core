@@ -147,7 +147,7 @@ takeRows :: Int -> RFrame k v -> RFrame k v
 takeRows n (RFrame ks look vs) = RFrame ks look (V.take n vs)
 
 -- | Adds a 'Vector' column to the 'RFrame'
-addColumn :: (Key k, MonadThrow m) => RFrame k v -> k -> Vector v -> m (RFrame k v)                         
+addColumn :: (Key k, MonadThrow m) => RFrame k v -> k -> Vector v -> m (RFrame k v)
 addColumn rf name v = do
   c <- newRFrameColumn name $ V.singleton <$> v
   extendCols rf c
