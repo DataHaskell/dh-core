@@ -23,6 +23,21 @@ import qualified Analyze.RFrame as AR
 import qualified Analyze.Values as AV
 import qualified Analyze.Values.Generic as AVG
 
+-- $setup
+-- >>> :set -XDataKinds
+-- >>> :set -XFlexibleContexts
+-- >>> :set -XDeriveDataTypeable
+-- >>> :set -XDeriveGeneric
+-- >>> :set -XGADTs
+-- >>> import Generics.SOP (Generic(..), All, Code)
+-- >>> import Generics.SOP.NP
+-- >>> import qualified GHC.Generics as G
+-- >>> import Data.Data (Typeable, Data(..), constrFields)
+-- >>> data P1 = P1 Int Char deriving (Eq, Show, Data, G.Generic)
+-- >>> instance Generic P1
+-- >>> data P2 = P2 { p2i :: Int, p2c :: Char } deriving (Eq, Show, Data, G.Generic)
+-- >>> instance Generic P2
+
 
 -- | Populates an RFrame using the rows' 'Data', 'G.Generic' and 'Generic' instances and throws a 'DataException' if the input data is malformed.
 --
