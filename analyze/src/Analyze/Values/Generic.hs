@@ -20,7 +20,7 @@ import qualified Analyze.Values as AV
 
 -- | Encodes a record as a list of 'AV.Value's.
 --
--- This function computes the generic representation of the record and populates a list with the record entry values, as they appear in the record implementation
+-- This function computes the generic representation of the record and populates a list with the record entry values, in the order in which they appear in the record implementation.
 --
 -- For example :
 --

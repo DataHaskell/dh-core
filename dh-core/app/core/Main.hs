@@ -8,8 +8,6 @@ import qualified Analyze.Values as AV
 -- import qualified Analyze.Values.Generic as AVG
 import qualified Analyze.RFrame.Generic as ARG
 
-import Analyze.Conversions (projectRow, projectRows)
-
 import qualified GHC.Generics as G
 
 -- | generics-sop
