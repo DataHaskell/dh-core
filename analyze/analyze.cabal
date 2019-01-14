@@ -19,7 +19,6 @@ library
   exposed-modules:
       Analyze
       Analyze.Common
-      Analyze.Conversions
       Analyze.IO.CSV
       Analyze.IO.HTML                  
       Analyze.Decoding
@@ -65,9 +64,8 @@ test-suite spec
       Generation
       Analyze
       Analyze.Common
-      Analyze.Conversions
       Analyze.IO.CSV
-      Analyze.IO.HTML                
+      Analyze.IO.HTML                      
       Analyze.Datasets
       Analyze.Decoding
       Analyze.Ops

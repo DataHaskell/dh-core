@@ -4,7 +4,6 @@ module Analyze
   ) where
 
 import Analyze.Common as X
-import Analyze.Conversions as X
 import Analyze.IO.CSV as X
 import Analyze.IO.HTML as X
 import Analyze.Datasets as X
