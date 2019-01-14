@@ -1,3 +1,4 @@
+{-# language OverloadedStrings #-}
 module Analyze.Dplyr where
 
 import Analyze.RFrame

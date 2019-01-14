@@ -1,4 +1,6 @@
 {-# LANGUAGE DeriveFunctor     #-}
+{-# LANGUAGE DeriveFoldable    #-}
+{-# LANGUAGE DeriveTraversable #-}
 {-# LANGUAGE FlexibleInstances #-}
 
 -- | Core frame types and functions
@@ -6,18 +8,29 @@ module Analyze.RFrame where
 
 import           Analyze.Common
 import           Analyze.Decoding    (Decoder (..), decoderKeys, runDecoder)
--- import qualified Control.Foldl       as F
+import qualified Data.Foldable       as F
+-- import qualified Control.Foldl       as Foldl
 import           Control.Monad       (join)
 import           Control.Monad.Catch (MonadThrow (..))
 -- import qualified Data.Aeson          as A
 import           Data.HashMap.Strict (HashMap)
 import qualified Data.HashMap.Strict as HM
--- import           Data.HashSet        (HashSet)
 import qualified Data.HashSet        as HS
 -- import           Data.Text           (Text)
 -- import qualified Data.Text           as T
 import           Data.Vector         (Vector)
 import qualified Data.Vector         as V
+
+-- data Table k v = Table {
+--     tableColLookup :: HashMap k Int
+--   , tableRows      :: [Vector v]
+--                        } deriving (Eq, Show, Functor, Foldable, Traversable)
+
+-- foldrRows :: (Vector v -> a -> a) -> a -> Table k v -> a
+-- foldrRows f z (Table _ rows) = foldr f z rows
+
+-- foldlRows' :: (a -> Vector v -> a) -> a -> Table k v -> a
+-- foldlRows' f z (Table _ rows) = F.foldl' f z rows
 
 -- | In-memory row-oriented frame with columns named by `k` and values by `v`
 data RFrame k v = RFrame
@@ -27,7 +40,7 @@ data RFrame k v = RFrame
     _rframeLookup :: !(HashMap k Int)
   , -- | Vector of rows. Each element should be the length of number of columns.
     _rframeData   :: !(Vector (Vector v))
-  } deriving (Eq, Show, Functor)
+  } deriving (Eq, Show, Functor, Foldable, Traversable)
 
 -- | A simpler 'RFrame' for updates
 data RFrameUpdate k v = RFrameUpdate
@@ -43,11 +56,11 @@ type RFrameMap k v a = Vector k -> HashMap k Int -> Int -> Vector v -> a
 -- | Alias for a row filter
 type RFrameFilter k v = RFrameMap k v Bool
 
--- | Prettier alias for getting the keys of an 'RFrame'
-rframeKeys :: RFrame k v -> Vector k
-rframeKeys = _rframeKeys
+-- | Keys of an 'RFrame'
+rframeKeys :: RFrame k v -> [k]
+rframeKeys rf = HM.keys (_rframeLookup rf)
 
--- | Prettier alias for getting the data matrix of an 'RFrame'
+-- | Data matrix of an 'RFrame'
 rframeData :: RFrame k v -> Vector (Vector v)
 rframeData = _rframeData
 
