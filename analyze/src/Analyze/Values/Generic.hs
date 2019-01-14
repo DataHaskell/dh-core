@@ -22,7 +22,7 @@ import qualified Analyze.Values as AV
 --
 -- This function computes the generic representation of the record and populates a list with the record entry values, as they appear in the record implementation
 --
--- For example, given
+-- For example :
 --
 -- @
 -- data P = P Int Char deriving (Eq, Show, G.Generic)
@@ -30,7 +30,7 @@ import qualified Analyze.Values as AV
 -- @
 -- 
 -- >>> npToValue $ P 132 'x'
--- [VInt 132, VChar 'x']
+-- [VInt 132,VChar 'x']
 npToValue :: (Generic a, All AV.ToValue xs, Code a ~ '[xs]) => a -> [AV.Value]
 npToValue = collapse_NP . gMapToValue . gToList
 
