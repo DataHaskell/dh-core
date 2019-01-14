@@ -154,8 +154,6 @@ addColumn rf name v = do
  where
   newRFrameColumn rfName = fromUpdate . RFrameUpdate (V.singleton rfName)
 
-
-
 -- | Projects values out of the map according to the given key order.
 projectRow :: (Key k, MonadThrow m) => Vector k -> HashMap k v -> m (Vector v)
 projectRow ks row = V.mapM f ks
