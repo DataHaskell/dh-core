@@ -3,7 +3,7 @@
 -- | Functions to work with included datasets.
 module Analyze.Datasets where
 
-import           Analyze.Csv
+import           Analyze.IO.CSV
 import           Analyze.RFrame       (RFrame)
 import           Control.Monad.Catch  (MonadThrow (..))
 import qualified Data.ByteString.Lazy as LBS

@@ -1,5 +1,5 @@
 -- | Functions for working with HTML.
-module Analyze.Html where
+module Analyze.IO.HTML where
 
 import           Analyze.RFrame (RFrame (..))
 import           Control.Monad  (forM_)

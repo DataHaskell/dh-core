@@ -20,17 +20,17 @@ library
       Analyze
       Analyze.Common
       Analyze.Conversions
-      Analyze.Csv
-      Analyze.Datasets
+      Analyze.IO.CSV
+      Analyze.IO.HTML                  
       Analyze.Decoding
-      Analyze.Html
       Analyze.Ops
       Analyze.RFrame
       Analyze.RFrame.Generic
       Analyze.Values
-      Analyze.Values.Generic                  
+      Analyze.Values.Generic                   
   other-modules:
       Paths_analyze
+      Analyze.Datasets
   hs-source-dirs:
       src
   default-extensions: OverloadedStrings
@@ -66,10 +66,10 @@ test-suite spec
       Analyze
       Analyze.Common
       Analyze.Conversions
-      Analyze.Csv
+      Analyze.IO.CSV
+      Analyze.IO.HTML                
       Analyze.Datasets
       Analyze.Decoding
-      Analyze.Html
       Analyze.Ops
       Analyze.RFrame
       Analyze.Values

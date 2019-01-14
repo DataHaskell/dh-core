@@ -1,5 +1,5 @@
 -- | Functions for working with CSV files.
-module Analyze.Csv where
+module Analyze.IO.CSV where
 
 import           Analyze.Conversions        (projectRows)
 import           Analyze.RFrame             (RFrame (..), RFrameUpdate (..), empty, fromUpdate)
