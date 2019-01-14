@@ -24,7 +24,13 @@ import qualified Analyze.Values as AV
 import qualified Analyze.Values.Generic as AVG
 
 
--- | Populates an RFrame using the rows' 'Data', 'G.Generic' and 'Generic' instances and throws a 'DataException' if the input data is malformed. This function only accepts records that have named constructor fields, such as P2 in the following:
+-- | Populates an RFrame using the rows' 'Data', 'G.Generic' and 'Generic' instances and throws a 'DataException' if the input data is malformed.
+--
+-- For example, a list of records having two fields each will produce an RFrame with two columns, having the record field names as column labels.
+--
+-- All record fields in the input data must be of types that are instances of the 'AV.ToValue' class (as prescribed by the @All ToValue xs@ constraint).
+-- 
+-- This function only accepts records that have named constructor fields, such as P2 in the following code :
 --
 -- @
 -- data P1 = P1 Int Char deriving (Eq, Show, Data, G.Generic)
@@ -40,9 +46,9 @@ import qualified Analyze.Values.Generic as AVG
 -- >>> gToRFrame [P1 1 'a', P1 42 'z']
 -- *** Exception: Anonymous records not implemented yet
 gToRFrame :: (Generic a, Data a, All AV.ToValue xs, Code a ~ '[xs]
-            , MonadThrow m
-            , Foldable t, Functor t) =>
-              t a
+            , MonadThrow m  
+            , Foldable t, Functor t) => 
+              t a -- ^ A container of input records (e.g. a list). Must contain at least one element.
            -> m (AR.RFrame T.Text AV.Value)
 gToRFrame ds
   | null ds = throwM NoDataE

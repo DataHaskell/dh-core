@@ -1,7 +1,5 @@
 -- | Simple value types and functions.
-module Analyze.Values (Value(..), ToValue(..), valueToType, ValueType(..),
-                       -- * Extracting primitive types from 'Value'
-                      getText, getInteger, getInt, getDouble, getBool,
+module Analyze.Values (Value(..), ToValue(..), FromValue(..), valueToType, ValueType(..),
                       -- * Require functions
                       text, integer, int, double, bool,
                       -- ** Value type exceptions
@@ -11,8 +9,20 @@ import           Analyze.Common      (Key)
 import           Control.Monad.Catch (Exception, MonadThrow (..))
 import           Data.Text           (Text)
 import           Data.Typeable       (Typeable)
+import Prelude hiding (getChar)
 
--- | Interpret a primitive type as a 'Value'
+-- | Interpret a 'Value' as a primitive type
+class FromValue v where
+  fromValue :: Value -> Maybe v
+
+instance FromValue Int where fromValue = getInt
+instance FromValue Integer where fromValue = getInteger
+instance FromValue Double where fromValue = getDouble
+instance FromValue Char where fromValue = getChar
+instance FromValue Text where fromValue = getText
+instance FromValue Bool where fromValue = getBool
+
+-- | Wrap a primitive type into a 'Value'
 class ToValue v where
   toValue :: v -> Value
 
@@ -56,6 +66,11 @@ valueToType (VBool _)    = VTypeBool
 getText :: Value -> Maybe Text
 getText (VText s) = Just s
 getText _         = Nothing
+
+-- | Extracts 'Char' from the 'Value'.
+getChar :: Value -> Maybe Char
+getChar (VChar s) = Just s
+getChar _         = Nothing 
 
 -- | Extracts 'Integer' from the 'Value'.
 getInteger :: Value -> Maybe Integer

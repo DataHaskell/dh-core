@@ -66,11 +66,11 @@ toUpdate (RFrame ks _ vs) = RFrameUpdate ks vs
 
 -- | Number of columns in an 'RFrame'
 numCols :: RFrame k v -> Int
-numCols (RFrame ks _ _) = V.length ks
+numCols (RFrame ks _ _) = length ks
 
 -- | Number of rows in an 'RFrame'
 numRows :: RFrame k v -> Int
-numRows (RFrame _ _ vs) = V.length vs
+numRows (RFrame _ _ vs) = length vs
 
 -- | Project to the given column
 col :: (Key k, MonadThrow m) => k -> RFrame k v -> m (Vector v)
