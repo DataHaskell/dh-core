@@ -1,19 +1,26 @@
 {-# language OverloadedStrings #-}
 {-# language FlexibleInstances #-}
 {-# language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
+{-# language DeriveGeneric, DeriveDataTypeable #-}
 module Analyze.Dplyr where
 
 import Analyze.RFrame
 import Analyze.Common
+import Analyze.Values
 
 import Control.Applicative (Alternative(..))
 import qualified Data.Foldable as F
 import qualified Data.Vector as V
+import qualified Data.Text as T
 import qualified Data.HashMap.Strict as HM
 import qualified Data.List.NonEmpty as NE
 import Data.Hashable (Hashable(..))
 
-import Prelude hiding (filter, zipWith, lookup)
+import qualified GHC.Generics as G
+import Data.Data
+import Generics.SOP (Generic(..))
+
+import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head)
 
 
       
@@ -39,6 +46,14 @@ filterByKey qv k (RFrame ks hm vs) = do
 
 -- ** Example data
 
+type Id = Int
+data Order = Order { oId :: Id, oItemName :: T.Text, oQty :: Int } deriving (Eq, Show, G.Generic, Data)
+instance Generic Order
+data Price = Price Id Double deriving (Eq, Show, G.Generic)
+instance Generic Price
+
+orders = [Order 129 "book" 1, Order 129 "book" 1, Order 234 "ball" 1]
+
 -- | Orders
 t0 :: Table (Row String String)
 t0 = fromList [ book1, ball, bike, book2 ] where
@@ -55,6 +70,9 @@ t1 = fromList [ r1, r2, r3, r4 ] where
   r3 = fromListR [("id.1", "3"), ("price", "150")]
   r4 = fromListR [("id.1", "99"), ("price", "30")]  
 
+t2 :: Table (Row String Value)
+t2 = fromList [ r1 ] where
+  r1 = fromListR [("id.2", VInt 129), ("price", VDouble 100.0)]
 
 -- ** Relational functions
 
@@ -123,6 +141,8 @@ lookup :: (Eq k, Hashable k) => k -> Row k v -> Maybe v
 lookup k = HM.lookup k . unRow
 lookupDefault :: (Eq k, Hashable k) => v -> k -> Row k v -> v
 lookupDefault v k = HM.lookupDefault v k . unRow
+insert :: (Eq k, Hashable k) => k -> v -> Row k v -> Row k v
+insert k v = Row . HM.insert k v . unRow
 keys :: Row k v -> [k]
 keys = HM.keys . unRow
 union :: (Eq k, Hashable k) => Row k v -> Row k v -> Row k v
@@ -131,9 +151,20 @@ unionWith :: (Eq k, Hashable k) =>
              (v -> v -> v) -> Row k v -> Row k v -> Row k v
 unionWith f r1 r2 = Row $ HM.unionWith f (unRow r1) (unRow r2)
 
+rowBool :: (Eq k, Hashable k) => (a -> Bool) -> k -> Row k a -> Bool
+rowBool f k row = maybe False f (lookup k row)
+
+-- | Creates or updates a column with a function of the whole row
+insertRowFun :: (Eq k, Hashable k) => (Row k v -> v) -> k -> Row k v -> Row k v
+insertRowFun f knew row = insert knew (f row) row
+
+-- | A 'Table' is a non-empty list of rows.
 newtype Table row = Table {
     -- nTableRows :: Maybe Int  -- ^ Nothing means unknown
     tableRows :: NE.NonEmpty row } deriving (Eq, Show, Functor, Foldable, Traversable)
+
+head :: Table row -> row
+head = NE.head . tableRows
 
 fromNEList :: [row] -> Maybe (Table row)
 fromNEList l = Table <$> NE.nonEmpty l
@@ -149,7 +180,19 @@ unionRowsWith :: (Eq k, Hashable k) =>
                  (v -> v -> v) -> Table (Row k v) -> Table (Row k v) -> Table (Row k v)
 unionRowsWith f = zipWith (unionWith f)
 
+filter :: (row -> Bool) -> Table row -> Maybe (Table row)
+filter ff = fromNEList . NE.filter ff . tableRows
 
+-- | (called 'filterByKey' in Analyze.RFrame)
+filterByElem :: (Eq k, Hashable k) =>
+                (v -> Bool) -> k -> Table (Row k v) -> Maybe (Table (Row k v))
+filterByElem ff k = filter (rowBool ff k)
+
+scanl :: (b -> a -> b) -> b -> Table a -> Table b
+scanl f z tt = Table $ NE.scanl f z (tableRows tt)
+
+scanr :: (a -> b -> b) -> b -> Table a -> Table b
+scanr f z tt = Table $ NE.scanr f z (tableRows tt)
 
 
 
