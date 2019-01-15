@@ -50,7 +50,23 @@ import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head)
 
 -- $setup
 -- >>> let row0 = fromListR [(0, 'a'), (3, 'b')] :: Row Int Char
--- >>> let row1 = fromListR [(0, 'x'), (1, 'b'), (666, 'z')] :: Row Int Char
+-- >>> let row1 = fromListR [(0, 'x'), (1, 'b'), (666, 'z')] :: Row Int Char 
+
+t0 :: Table (Row String String)
+t0 = fromList [ book1, ball, bike, book2 ] 
+           where
+             book1 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "1")]
+             book2 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "5")]  
+             ball = fromListR [("item", "ball"), ("id.0", "234"), ("qty", "1")]  
+             bike = fromListR [("item", "bike"), ("id.0", "410"), ("qty", "1")]
+
+t1 :: Table (Row String String)
+t1 = fromList [ r1, r2, r3, r4 ] :: Table (Row String String)
+           where
+             r1 = fromListR [("id.1", "129"), ("price", "100")]
+             r2 = fromListR [("id.1", "234"), ("price", "50")]  
+             r3 = fromListR [("id.1", "3"), ("price", "150")]
+             r4 = fromListR [("id.1", "99"), ("price", "30")]
 
 
 
@@ -62,7 +78,13 @@ import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head)
 newtype Row k v = Row { unRow :: HM.HashMap k v } deriving (Eq)
 instance (Show k, Show v) => Show (Row k v) where
   show = show . HM.toList . unRow
-  
+
+-- | Construct a 'Row' from a list of key-element pairs.
+--
+-- >>> lookup 3 (fromListR [(3,'a'),(4,'b')])
+-- Just 'a'
+-- >>> lookup 6 (fromListR [(3,'a'),(4,'b')])
+-- Nothing
 fromListR :: (Eq k, Hashable k) => [(k, v)] -> Row k v
 fromListR = Row . HM.fromList
 
@@ -133,9 +155,19 @@ newtype Table row = Table {
     -- nTableRows :: Maybe Int  -- ^ Nothing means unknown
     tableRows :: NE.NonEmpty row } deriving (Eq, Show, Functor, Foldable, Traversable)
 
+-- | Take the first row of a 'Table'
+--
+-- >>> head (fromList [row0, row1]) == row0
+-- True
 head :: Table row -> row
 head = NE.head . tableRows
 
+-- | Construct a table given a non-empty list of rows
+--
+-- >>> (head <$> fromNEList [row0]) == Just row0
+-- True
+-- >>> (head <$> fromNEList []) == Nothing
+-- True
 fromNEList :: [row] -> Maybe (Table row)
 fromNEList l = Table <$> NE.nonEmpty l
 
@@ -150,17 +182,23 @@ unionRowsWith :: (Eq k, Hashable k) =>
                  (v -> v -> v) -> Table (Row k v) -> Table (Row k v) -> Table (Row k v)
 unionRowsWith f = zipWith (unionWith f)
 
+-- | Filters a 'Table' according to a predicate. Returns Nothing only if the resulting table is empty (i.e. if no rows satisfy the predicate).
+--
 filter :: (row -> Bool) -> Table row -> Maybe (Table row)
 filter ff = fromNEList . NE.filter ff . tableRows
 
--- | (called 'filterByKey' in Analyze.RFrame)
+-- | Filter a table according to predicate applied to an element pointed to by a given key.
+--
+-- This function is called 'filterByKey' in Analyze.RFrame
 filterByElem :: (Eq k, Hashable k) =>
                 (v -> Bool) -> k -> Table (Row k v) -> Maybe (Table (Row k v))
 filterByElem ff k = filter (rowBool ff k)
 
+-- | Left-associative scan
 scanl :: (b -> a -> b) -> b -> Table a -> Table b
 scanl f z tt = Table $ NE.scanl f z (tableRows tt)
 
+-- | Right-associative scan
 scanr :: (a -> b -> b) -> b -> Table a -> Table b
 scanr f z tt = Table $ NE.scanr f z (tableRows tt)
 
@@ -170,9 +208,11 @@ scanr f z tt = Table $ NE.scanr f z (tableRows tt)
 
 -- * Relational operations
 
--- | GROUP BY
+-- | GROUP BY : given a key and a table that uses it, split the table in multiple tables, one per value taken by the key.
 groupBy :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
-              k -> t (Row k v) -> Maybe (HM.HashMap v (Table (Row k v)))
+           k  -- ^ Key to group by
+        -> t (Row k v) -- ^ A Foldable of rows (e.g. a 'Table')
+        -> Maybe (HM.HashMap v (Table (Row k v)))
 groupBy k tab = do
   groups <- groupL k tab
   pure $ fromList <$> groups
@@ -185,13 +225,16 @@ groupL k tab = F.foldlM insf HM.empty tab where
     pure $ HM.insertWith (++) v [row] acc
 
 
--- | INNER JOIN
+-- | INNER JOIN : given two tables and one key from each, compute the tables' inner join using the keys as relations.
 --
--- > innerJoin "id.0" "id.1" t0 t1
--- Just [
---    [("id.1","129"),("id.0","129"),("qty","1"),("item","book"),("price","100")],
---    [("id.1","234"),("id.0","234"),("qty","1"),("item","ball"),("price","50")],
---    [("id.1","129"),("id.0","129"),("qty","1"),("item","book"),("price","100")]]
+-- >>> head t0
+-- [("id.0","129"),("qty","1"),("item","book")]
+--
+-- >>> head t1
+-- [("id.1","129"),("price","100")]
+-- 
+-- >>> head <$> innerJoin "id.0" "id.1" t0 t1
+-- Just [("id.1","129"),("id.0","129"),("qty","5"),("item","book"),("price","100")]
 innerJoin :: (Foldable t, Hashable v, Hashable k, Eq v, Eq k) =>
              k -> k -> t (Row k v) -> t (Row k v) -> Maybe (Table (Row k v))
 innerJoin k1 k2 table1 table2 = fromList <$> F.foldlM insf [] table1 where
@@ -219,33 +262,6 @@ hjBuild k = F.foldlM insf HM.empty where
     v <- lookup k row
     let hm' = HM.insertWith mappend v [row] hmAcc
     pure hm'
-
-
-
-
-
-
--- ** Example data
-
--- | Orders
-t0 :: Table (Row String String)
-t0 = fromList [ book1, ball, bike, book2 ] where
-  book1 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "1")]
-  book2 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "5")]  
-  ball = fromListR [("item", "ball"), ("id.0", "234"), ("qty", "1")]  
-  bike = fromListR [("item", "bike"), ("id.0", "410"), ("qty", "1")]
-
--- | Prices
-t1 :: Table (Row String String)
-t1 = fromList [ r1, r2, r3, r4 ] where
-  r1 = fromListR [("id.1", "129"), ("price", "100")]
-  r2 = fromListR [("id.1", "234"), ("price", "50")]  
-  r3 = fromListR [("id.1", "3"), ("price", "150")]
-  r4 = fromListR [("id.1", "99"), ("price", "30")]  
-
-t2 :: Table (Row String Value)
-t2 = fromList [ r1 ] where
-  r1 = fromListR [("id.2", VInt 129), ("price", VDouble 100.0)]
 
 
 
