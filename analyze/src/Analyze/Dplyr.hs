@@ -47,7 +47,7 @@ hjProbe :: (Hashable v, Eq v, Foldable t, Key k) =>
         -> HM.HashMap k Int
         -> t (V.Vector v)
         -> t (V.Vector v)
-        -> Maybe [V.Vector v]
+        -> Maybe [V.Vector v]  -- ^ What rows are these?
 hjProbe k1 k2 hm1 hm2 rows1 rows2 = F.foldlM insf [] rows1 where
   insf acc row1 = do
     v1  <- look k1 hm1 row1
