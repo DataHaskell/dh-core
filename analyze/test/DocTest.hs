@@ -7,5 +7,6 @@ main :: IO ()
 main = doctest [
   "src/Analyze/RFrame/Generic.hs",
   "src/Analyze/Values/Generic.hs",
-  "src/Analyze/Dplyr.hs"
+  "src/Analyze/Dplyr.hs",
+  "src/Analyze/Dplyr/Generic.hs"
   ]
