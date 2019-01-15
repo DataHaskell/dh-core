@@ -49,10 +49,11 @@ filterByKey qv k (RFrame ks hm vs) = do
 type Id = Int
 data Order = Order { oId :: Id, oItemName :: T.Text, oQty :: Int } deriving (Eq, Show, G.Generic, Data)
 instance Generic Order
-data Price = Price Id Double deriving (Eq, Show, G.Generic)
+data Price = Price { pId :: Id, pPrice :: Double } deriving (Eq, Show, G.Generic, Data)
 instance Generic Price
 
 orders = [Order 129 "book" 1, Order 129 "book" 1, Order 234 "ball" 1]
+prices = [Price 129 100.0, Price 234 50.0] 
 
 -- | Orders
 t0 :: Table (Row String String)
