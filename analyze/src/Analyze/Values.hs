@@ -1,4 +1,4 @@
--- | Simple value types and functions.
+{-# language DeriveGeneric #-}
 module Analyze.Values (Value(..), ToValue(..), FromValue(..), valueToType, ValueType(..),
                       -- * Require functions
                       text, integer, int, double, bool,
@@ -9,6 +9,8 @@ import           Analyze.Common      (Key)
 import           Control.Monad.Catch (Exception, MonadThrow (..))
 import           Data.Text           (Text)
 import           Data.Typeable       (Typeable)
+import qualified GHC.Generics as G
+import Data.Hashable (Hashable(..))
 import Prelude hiding (getChar)
 
 -- | Interpret a 'Value' as a primitive type
@@ -51,7 +53,8 @@ data Value =
   | VInt Int  
   | VDouble Double
   | VBool Bool
-  deriving (Show, Eq)
+  deriving (Show, Eq, G.Generic)
+instance Hashable Value
 
 -- | Returns the type of the value.
 valueToType :: Value -> ValueType
