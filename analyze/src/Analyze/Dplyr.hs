@@ -5,12 +5,30 @@
 module Analyze.Dplyr (
   -- * Table
   Table,
-  head, fromNEList, fromList, zipWith, unionRowsWith, filter, filterByElem, scanl, scanr, 
+  -- ** Construction
+  fromNEList, fromList,
+  -- ** Access
+  head, zipWith, unionRowsWith,
+  -- ** Filtering 
+  filter, filterByElem,
+  -- ** Scans (row-wise cumulative operations)
+  scanl, scanr, 
   -- * Row
   Row,
-  fromListR, lookup, lookupDefault, insert, keys, union, unionWith, rowBool, insertRowFun, 
-  -- | Relational operations
-  groupTable, groupBy, innerJoin) where
+  -- ** Construction 
+  fromListR,
+  -- ** Access
+  keys, elems, 
+  -- ** Lookup 
+  lookup, lookupDefault,
+  -- ** Insertion 
+  insert, insertRowFun,
+  -- ** Set-like row operations
+  union, unionWith,
+  -- ** Row functions
+  rowBool, 
+  -- * Relational operations
+  groupBy, innerJoin) where
 
 import Analyze.RFrame
 import Analyze.Common
@@ -30,81 +48,10 @@ import Generics.SOP (Generic(..))
 
 import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head)
 
+-- $setup
+-- >>> let row0 = fromListR [(0, 'a'), (3, 'b')] :: Row Int Char
+-- >>> let row1 = fromListR [(0, 'x'), (1, 'b'), (666, 'z')] :: Row Int Char
 
-      
--- | Filter the RFrame rows according to a predicate applied to a column value
-filterByKey :: Key k =>
-               (v -> Bool) -- ^ Predicate 
-            -> k           -- ^ Column key
-            -> RFrame k v  
-            -> Maybe (RFrame k v)
-filterByKey qv k (RFrame ks hm vs) = do
-  vsf <- V.filterM ff vs
-  pure $ RFrame ks hm vsf
-  where 
-    ff vrow = do
-      i <- HM.lookup k hm
-      v <- vrow V.!? i
-      pure $ qv v
-
-
-
-
--- * Relational operations
-
-
-
--- ** Relational functions
-
--- | GROUP BY
-groupTable :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
-              k -> t (Row k v) -> Maybe (HM.HashMap v (Table (Row k v)))
-groupTable k tab = do
-  groups <- groupBy k tab
-  pure $ fromList <$> groups
-
-groupBy :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
-         k -> t (Row k v) -> Maybe (HM.HashMap v [Row k v])
-groupBy k tab = F.foldlM insf HM.empty tab where
-  insf acc row = do
-    v <- lookup k row
-    pure $ HM.insertWith (++) v [row] acc
-
-
--- | INNER JOIN
---
--- > innerJoin "id.0" "id.1" t0 t1
--- Just [
---    [("id.1","129"),("id.0","129"),("qty","1"),("item","book"),("price","100")],
---    [("id.1","234"),("id.0","234"),("qty","1"),("item","ball"),("price","50")],
---    [("id.1","129"),("id.0","129"),("qty","1"),("item","book"),("price","100")]]
-innerJoin :: (Foldable t, Hashable v, Hashable k, Eq v, Eq k) =>
-             k -> k -> t (Row k v) -> t (Row k v) -> Maybe [Row k v]
-innerJoin k1 k2 table1 table2 = F.foldlM insf [] table1 where
-  insf acc row1 = do
-    v <- lookup k1 row1
-    matchRows2 <- matchingRows k2 v table2 <|> Just [] 
-    let rows' = map (union row1) matchRows2
-    pure (rows' ++ acc)
-
--- | Return all rows that match a value at a given key
-matchingRows :: (Foldable t, Hashable v, Hashable k, Eq v, Eq k) =>
-                k
-             -> v
-             -> t (Row k v)
-             -> Maybe [Row k v]
-matchingRows k v rows = do
-  rowMap <- hjBuild k rows
-  HM.lookup v rowMap
-
--- | "build" phase of the hash-join algorithm
-hjBuild :: (Foldable t, Hashable a, Hashable k, Eq a, Eq k) =>
-            k -> t (Row k a) -> Maybe (HM.HashMap a [Row k a])
-hjBuild k = F.foldlM insf HM.empty where
-  insf hmAcc row = do
-    v <- lookup k row
-    let hm' = HM.insertWith mappend v [row] hmAcc
-    pure hm'
 
 
 -- | A 'Row' type is internally a hashmap:
@@ -115,22 +62,65 @@ hjBuild k = F.foldlM insf HM.empty where
 newtype Row k v = Row { unRow :: HM.HashMap k v } deriving (Eq)
 instance (Show k, Show v) => Show (Row k v) where
   show = show . HM.toList . unRow
+  
 fromListR :: (Eq k, Hashable k) => [(k, v)] -> Row k v
 fromListR = Row . HM.fromList
+
+-- | Lookup the value stored at a given key in a row
+--
+-- >>> lookup 0 row0
+-- Just 'a'
+-- >>> lookup 1 row0
+-- Nothing
 lookup :: (Eq k, Hashable k) => k -> Row k v -> Maybe v
 lookup k = HM.lookup k . unRow
+
+-- | Lookup a key using a default value for non-existing keys
+--
+-- >>> lookupDefault 'x' 0 row0
+-- 'a'
+-- >>> lookupDefault 'x' 2 row0
+-- 'x'
 lookupDefault :: (Eq k, Hashable k) => v -> k -> Row k v -> v
 lookupDefault v k = HM.lookupDefault v k . unRow
+
+-- >>> keys $ insert 2 'y' row0
+-- [0,2,3]
 insert :: (Eq k, Hashable k) => k -> v -> Row k v -> Row k v
 insert k v = Row . HM.insert k v . unRow
+
+-- | List the keys of a given row
+--
+-- >>> keys row0
+-- [0,3]
 keys :: Row k v -> [k]
 keys = HM.keys . unRow
+
+-- | List the elements of a given row
+--
+-- >>> elems row0
+-- "ab"
+elems :: Row k v -> [v]
+elems = HM.elems . unRow
+
+-- | Set union of two rows
+--
+-- >>> keys $ union row0 row1
+-- [0,1,3,666]
 union :: (Eq k, Hashable k) => Row k v -> Row k v -> Row k v
 union r1 r2 = Row $ HM.union (unRow r1) (unRow r2)
 unionWith :: (Eq k, Hashable k) =>
              (v -> v -> v) -> Row k v -> Row k v -> Row k v
 unionWith f r1 r2 = Row $ HM.unionWith f (unRow r1) (unRow r2)
 
+-- | Looks up a key from a row and applies a predicate to its value (if this is found). If no value is found at that key the function returns False.
+--
+-- This function is meant to be used as first argument to 'filter'.
+--
+-- >>> rowBool (== 'a') 0 row0
+-- True
+-- >>> rowBool (== 'a') 42 row0
+-- False
 rowBool :: (Eq k, Hashable k) => (a -> Bool) -> k -> Row k a -> Bool
 rowBool f k row = maybe False f (lookup k row)
 
@@ -175,6 +165,65 @@ scanr :: (a -> b -> b) -> b -> Table a -> Table b
 scanr f z tt = Table $ NE.scanr f z (tableRows tt)
 
 
+     
+
+
+-- * Relational operations
+
+-- | GROUP BY
+groupBy :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
+              k -> t (Row k v) -> Maybe (HM.HashMap v (Table (Row k v)))
+groupBy k tab = do
+  groups <- groupL k tab
+  pure $ fromList <$> groups
+
+groupL :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
+         k -> t (Row k v) -> Maybe (HM.HashMap v [Row k v])
+groupL k tab = F.foldlM insf HM.empty tab where
+  insf acc row = do
+    v <- lookup k row
+    pure $ HM.insertWith (++) v [row] acc
+
+
+-- | INNER JOIN
+--
+-- > innerJoin "id.0" "id.1" t0 t1
+-- Just [
+--    [("id.1","129"),("id.0","129"),("qty","1"),("item","book"),("price","100")],
+--    [("id.1","234"),("id.0","234"),("qty","1"),("item","ball"),("price","50")],
+--    [("id.1","129"),("id.0","129"),("qty","1"),("item","book"),("price","100")]]
+innerJoin :: (Foldable t, Hashable v, Hashable k, Eq v, Eq k) =>
+             k -> k -> t (Row k v) -> t (Row k v) -> Maybe (Table (Row k v))
+innerJoin k1 k2 table1 table2 = fromList <$> F.foldlM insf [] table1 where
+  insf acc row1 = do
+    v <- lookup k1 row1
+    matchRows2 <- matchingRows k2 v table2 <|> Just [] 
+    let rows' = map (union row1) matchRows2
+    pure (rows' ++ acc)
+
+-- | Return all rows that match a value at a given key
+matchingRows :: (Foldable t, Hashable v, Hashable k, Eq v, Eq k) =>
+                k
+             -> v
+             -> t (Row k v)
+             -> Maybe [Row k v]
+matchingRows k v rows = do
+  rowMap <- hjBuild k rows
+  HM.lookup v rowMap
+
+-- | "build" phase of the hash-join algorithm
+hjBuild :: (Foldable t, Hashable a, Hashable k, Eq a, Eq k) =>
+            k -> t (Row k a) -> Maybe (HM.HashMap a [Row k a])
+hjBuild k = F.foldlM insf HM.empty where
+  insf hmAcc row = do
+    v <- lookup k row
+    let hm' = HM.insertWith mappend v [row] hmAcc
+    pure hm'
+
+
+
+
+
 
 -- ** Example data
 
@@ -197,6 +246,27 @@ t1 = fromList [ r1, r2, r3, r4 ] where
 t2 :: Table (Row String Value)
 t2 = fromList [ r1 ] where
   r1 = fromListR [("id.2", VInt 129), ("price", VDouble 100.0)]
+
+
+
+
+
+
+-- | Filter the RFrame rows according to a predicate applied to a column value
+filterByKey :: Key k =>
+               (v -> Bool) -- ^ Predicate 
+            -> k           -- ^ Column key
+            -> RFrame k v  
+            -> Maybe (RFrame k v)
+filterByKey qv k (RFrame ks hm vs) = do
+  vsf <- V.filterM ff vs
+  pure $ RFrame ks hm vsf
+  where 
+    ff vrow = do
+      i <- HM.lookup k hm
+      v <- vrow V.!? i
+      pure $ qv v
+
 
 
 
