@@ -7,6 +7,7 @@ import Analyze.Common
 import qualified Data.Foldable as F
 import qualified Data.Vector as V
 import qualified Data.HashMap.Strict as HM
+import Data.Hashable (Hashable(..))
 
 import Prelude hiding (filter)
 
@@ -30,29 +31,44 @@ filterByKey qv k (RFrame ks hm vs) = do
 
   
 
-innerJoin q row1 fr2 = undefined
-  where
+-- * Relational operations
 
--- | Right half of the loop for a hash-join    
-looks :: (Foldable t, Key k, Eq v) =>
-         v
-      -> k
-      -> HM.HashMap k Int
-      -> t (V.Vector v)
-      -> Maybe (HM.HashMap k v, Maybe v)
-looks v1 k2 hm2 vecs2 = F.foldlM insf z vecs2 
-  where
-    z = (HM.empty, Nothing)
-    insf (acc, _) vec2 = do
-      v2 <- look k2 hm2 vec2
-      if v1 == v2
-        then
-          pure (acc, Just v2)
-        else do
-          let acc' = HM.insert k2 v2 acc
-          pure (acc', Nothing)
+-- | INNER JOIN
+innerJoin :: (Hashable v, Eq v, Key k) =>
+             k -> k -> RFrame k v -> RFrame k v -> Maybe [V.Vector v]
+innerJoin k1 k2 (RFrame ks1 hm1 rows1) (RFrame ks2 hm2 rows2) =
+  hjProbe k1 k2 hm1 hm2 rows1 rows2
+
+
+hjProbe :: (Hashable v, Eq v, Foldable t, Key k) =>
+           k
+        -> k
+        -> HM.HashMap k Int
+        -> HM.HashMap k Int
+        -> t (V.Vector v)
+        -> t (V.Vector v)
+        -> Maybe [V.Vector v]
+hjProbe k1 k2 hm1 hm2 rows1 rows2 = F.foldlM insf [] rows1 where
+  insf acc row1 = do
+    v1  <- look k1 hm1 row1
+    built <- hjBuild k2 hm2 rows2    
+    v2s <- HM.lookup v1 built
+    pure (v2s `mappend` acc)
+
+
+-- | "build" phase of the hash-join algorithm
+hjBuild :: (Hashable a, Eq a, Foldable t, Key k) =>
+           k
+        -> HM.HashMap k Int
+        -> t (V.Vector a)     -- ^ Smaller of the two tables
+        -> Maybe (HM.HashMap a [V.Vector a])    
+hjBuild k hm = F.foldlM insf HM.empty where
+  insf hmAcc vec = do
+    v <- look k hm vec
+    let hm' = HM.insertWith mappend v [vec] hmAcc
+    pure hm'
       
-    
+         
 look :: Key k =>
         k
      -> HM.HashMap k Int
