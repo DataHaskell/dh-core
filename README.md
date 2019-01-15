@@ -33,8 +33,17 @@ and this will re-build the main project and the contributed packages.
 
 More detailed developer information can be found in the wiki : https://github.com/DataHaskell/dh-core/wiki/Development 
 
-### GHC and Stackage compatibility
+## Testing
 
+Run the tests with
+
+    $ stack test
+
+### Doctest
+
+API functions should be provided with doctests, i.e. executable comment headers, to reassure both the human reader and the compiler that the library behaves as intended.
+
+### GHC and Stackage compatibility
 
 Tested with :
 

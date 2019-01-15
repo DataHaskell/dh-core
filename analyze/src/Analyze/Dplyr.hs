@@ -30,21 +30,21 @@ module Analyze.Dplyr (
   -- * Relational operations
   groupBy, innerJoin) where
 
-import Analyze.RFrame
-import Analyze.Common
-import Analyze.Values
+-- import Analyze.RFrame
+-- import Analyze.Common
+-- import Analyze.Values
 
 import Control.Applicative (Alternative(..))
 import qualified Data.Foldable as F
-import qualified Data.Vector as V
+-- import qualified Data.Vector as V
 import qualified Data.Text as T
 import qualified Data.HashMap.Strict as HM
 import qualified Data.List.NonEmpty as NE
 import Data.Hashable (Hashable(..))
 
-import qualified GHC.Generics as G
-import Data.Data
-import Generics.SOP (Generic(..))
+-- import qualified GHC.Generics as G
+-- import Data.Data
+-- import Generics.SOP (Generic(..))
 
 import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head)
 
@@ -131,6 +131,8 @@ elems = HM.elems . unRow
 -- [0,1,3,666]
 union :: (Eq k, Hashable k) => Row k v -> Row k v -> Row k v
 union r1 r2 = Row $ HM.union (unRow r1) (unRow r2)
+
+-- | Set union of two rows, using a combining function for equal keys
 unionWith :: (Eq k, Hashable k) =>
              (v -> v -> v) -> Row k v -> Row k v -> Row k v
 unionWith f r1 r2 = Row $ HM.unionWith f (unRow r1) (unRow r2)
@@ -164,7 +166,7 @@ head = NE.head . tableRows
 
 -- | Construct a table given a non-empty list of rows
 --
--- >>> (head <$> fromNEList [row0]) == Just row0
+-- >>> (head <$> fromNEList [row0, row1]) == Just row0
 -- True
 -- >>> (head <$> fromNEList []) == Nothing
 -- True
@@ -190,6 +192,9 @@ filter ff = fromNEList . NE.filter ff . tableRows
 -- | Filter a table according to predicate applied to an element pointed to by a given key.
 --
 -- This function is called 'filterByKey' in Analyze.RFrame
+--
+-- >>> head <$> filterByElem (/= "book") "item" t0
+-- Just [("id.0","234"),("qty","1"),("item","ball")]
 filterByElem :: (Eq k, Hashable k) =>
                 (v -> Bool) -> k -> Table (Row k v) -> Maybe (Table (Row k v))
 filterByElem ff k = filter (rowBool ff k)
@@ -236,7 +241,11 @@ groupL k tab = F.foldlM insf HM.empty tab where
 -- >>> head <$> innerJoin "id.0" "id.1" t0 t1
 -- Just [("id.1","129"),("id.0","129"),("qty","5"),("item","book"),("price","100")]
 innerJoin :: (Foldable t, Hashable v, Hashable k, Eq v, Eq k) =>
-             k -> k -> t (Row k v) -> t (Row k v) -> Maybe (Table (Row k v))
+             k  -- ^ Key into the first table
+          -> k  -- ^ Key into the second table
+          -> t (Row k v)  -- ^ First table
+          -> t (Row k v)  -- ^ Second table
+          -> Maybe (Table (Row k v))
 innerJoin k1 k2 table1 table2 = fromList <$> F.foldlM insf [] table1 where
   insf acc row1 = do
     v <- lookup k1 row1
@@ -268,20 +277,20 @@ hjBuild k = F.foldlM insf HM.empty where
 
 
 
--- | Filter the RFrame rows according to a predicate applied to a column value
-filterByKey :: Key k =>
-               (v -> Bool) -- ^ Predicate 
-            -> k           -- ^ Column key
-            -> RFrame k v  
-            -> Maybe (RFrame k v)
-filterByKey qv k (RFrame ks hm vs) = do
-  vsf <- V.filterM ff vs
-  pure $ RFrame ks hm vsf
-  where 
-    ff vrow = do
-      i <- HM.lookup k hm
-      v <- vrow V.!? i
-      pure $ qv v
+-- -- | Filter the RFrame rows according to a predicate applied to a column value
+-- filterByKey :: Key k =>
+--                (v -> Bool) -- ^ Predicate 
+--             -> k           -- ^ Column key
+--             -> RFrame k v  
+--             -> Maybe (RFrame k v)
+-- filterByKey qv k (RFrame ks hm vs) = do
+--   vsf <- V.filterM ff vs
+--   pure $ RFrame ks hm vsf
+--   where 
+--     ff vrow = do
+--       i <- HM.lookup k hm
+--       v <- vrow V.!? i
+--       pure $ qv v
 
 
 
