@@ -33,16 +33,17 @@ filterByKey qv k (RFrame ks hm vs) = do
       pure $ qv v
 
 
-  
+
 
 -- * Relational operations
 
-
+-- ** Example data
 
 -- | Orders
 t0 :: Table (Row String String)
-t0 = fromList [ book, ball, bike, book ] where
-  book = fromListR [("item", "book"), ("id.0", "129"), ("qty", "1")]
+t0 = fromList [ book1, ball, bike, book2 ] where
+  book1 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "1")]
+  book2 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "5")]  
   ball = fromListR [("item", "ball"), ("id.0", "234"), ("qty", "1")]  
   bike = fromListR [("item", "bike"), ("id.0", "410"), ("qty", "1")]
 
@@ -52,7 +53,24 @@ t1 = fromList [ r1, r2, r3, r4 ] where
   r1 = fromListR [("id.1", "129"), ("price", "100")]
   r2 = fromListR [("id.1", "234"), ("price", "50")]  
   r3 = fromListR [("id.1", "3"), ("price", "150")]
-  r4 = fromListR [("id.1", "99"), ("price", "30")]
+  r4 = fromListR [("id.1", "99"), ("price", "30")]  
+
+
+-- ** Relational functions
+
+-- | GROUP BY
+groupTable :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
+              k -> t (Row k v) -> Maybe (HM.HashMap v (Table (Row k v)))
+groupTable k tab = do
+  groups <- groupBy k tab
+  pure $ fromList <$> groups
+
+groupBy :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
+         k -> t (Row k v) -> Maybe (HM.HashMap v [Row k v])
+groupBy k tab = F.foldlM insf HM.empty tab where
+  insf acc row = do
+    v <- lookup k row
+    pure $ HM.insertWith (++) v [row] acc
 
 
 -- | INNER JOIN
@@ -67,7 +85,7 @@ innerJoin :: (Foldable t, Hashable v, Hashable k, Eq v, Eq k) =>
 innerJoin k1 k2 table1 table2 = F.foldlM insf [] table1 where
   insf acc row1 = do
     v <- lookup k1 row1
-    matchRows2 <- matchingRows k2 v table2 <|> Just []
+    matchRows2 <- matchingRows k2 v table2 <|> Just [] 
     let rows' = map (union row1) matchRows2
     pure (rows' ++ acc)
 
@@ -93,8 +111,9 @@ hjBuild k = F.foldlM insf HM.empty where
 
 -- | A 'Row' type is internally a hashmap:
 --
--- * logarithmic random access
--- * 
+-- * /O(log n)/ random access
+-- * /O(n log n)/ set operations
+-- * Supports missing elements
 newtype Row k v = Row { unRow :: HM.HashMap k v } deriving (Eq)
 instance (Show k, Show v) => Show (Row k v) where
   show = show . HM.toList . unRow
