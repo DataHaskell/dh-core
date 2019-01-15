@@ -2,7 +2,15 @@
 {-# language FlexibleInstances #-}
 {-# language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
 {-# language DeriveGeneric, DeriveDataTypeable #-}
-module Analyze.Dplyr where
+module Analyze.Dplyr (
+  -- * Table
+  Table,
+  head, fromNEList, fromList, zipWith, unionRowsWith, filter, filterByElem, scanl, scanr, 
+  -- * Row
+  Row,
+  fromListR, lookup, lookupDefault, insert, keys, union, unionWith, rowBool, insertRowFun, 
+  -- | Relational operations
+  groupTable, groupBy, innerJoin) where
 
 import Analyze.RFrame
 import Analyze.Common
@@ -44,36 +52,7 @@ filterByKey qv k (RFrame ks hm vs) = do
 
 -- * Relational operations
 
--- ** Example data
 
-type Id = Int
-data Order = Order { oId :: Id, oItemName :: T.Text, oQty :: Int } deriving (Eq, Show, G.Generic, Data)
-instance Generic Order
-data Price = Price { pId :: Id, pPrice :: Double } deriving (Eq, Show, G.Generic, Data)
-instance Generic Price
-
-orders = [Order 129 "book" 1, Order 129 "book" 1, Order 234 "ball" 1]
-prices = [Price 129 100.0, Price 234 50.0] 
-
--- | Orders
-t0 :: Table (Row String String)
-t0 = fromList [ book1, ball, bike, book2 ] where
-  book1 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "1")]
-  book2 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "5")]  
-  ball = fromListR [("item", "ball"), ("id.0", "234"), ("qty", "1")]  
-  bike = fromListR [("item", "bike"), ("id.0", "410"), ("qty", "1")]
-
--- | Prices
-t1 :: Table (Row String String)
-t1 = fromList [ r1, r2, r3, r4 ] where
-  r1 = fromListR [("id.1", "129"), ("price", "100")]
-  r2 = fromListR [("id.1", "234"), ("price", "50")]  
-  r3 = fromListR [("id.1", "3"), ("price", "150")]
-  r4 = fromListR [("id.1", "99"), ("price", "30")]  
-
-t2 :: Table (Row String Value)
-t2 = fromList [ r1 ] where
-  r1 = fromListR [("id.2", VInt 129), ("price", VDouble 100.0)]
 
 -- ** Relational functions
 
@@ -194,6 +173,31 @@ scanl f z tt = Table $ NE.scanl f z (tableRows tt)
 
 scanr :: (a -> b -> b) -> b -> Table a -> Table b
 scanr f z tt = Table $ NE.scanr f z (tableRows tt)
+
+
+
+-- ** Example data
+
+-- | Orders
+t0 :: Table (Row String String)
+t0 = fromList [ book1, ball, bike, book2 ] where
+  book1 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "1")]
+  book2 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "5")]  
+  ball = fromListR [("item", "ball"), ("id.0", "234"), ("qty", "1")]  
+  bike = fromListR [("item", "bike"), ("id.0", "410"), ("qty", "1")]
+
+-- | Prices
+t1 :: Table (Row String String)
+t1 = fromList [ r1, r2, r3, r4 ] where
+  r1 = fromListR [("id.1", "129"), ("price", "100")]
+  r2 = fromListR [("id.1", "234"), ("price", "50")]  
+  r3 = fromListR [("id.1", "3"), ("price", "150")]
+  r4 = fromListR [("id.1", "99"), ("price", "30")]  
+
+t2 :: Table (Row String Value)
+t2 = fromList [ r1 ] where
+  r1 = fromListR [("id.2", VInt 129), ("price", VDouble 100.0)]
+
 
 
 
