@@ -4,7 +4,7 @@ module Analyze.Ops
   ) where
 
 import           Analyze.Common      (Key)
-import           Analyze.RFrame      (RFrame (..), RFrameUpdate (..), col, splitCols, update)
+import           Analyze.Frame.Dense (RFrame (..), RFrameUpdate (..), col, splitCols, update)
 import           Control.Monad.Catch (MonadThrow (..))
 import qualified Data.HashSet        as HS
 import           Data.Vector         (Vector)

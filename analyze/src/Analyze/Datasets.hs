@@ -4,7 +4,7 @@
 module Analyze.Datasets where
 
 import           Analyze.IO.CSV
-import           Analyze.RFrame       (RFrame)
+import           Analyze.Frame.Dense  (RFrame)
 import           Control.Monad.Catch  (MonadThrow (..))
 import qualified Data.ByteString.Lazy as LBS
 import           Data.Text            (Text)

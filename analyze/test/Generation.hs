@@ -1,7 +1,7 @@
 module Generation where
 
 import           Analyze.Common  (Key, makeLookup)
-import           Analyze.RFrame  (RFrame (..))
+import           Analyze.Frame.Dense (RFrame (..))
 import           Analyze.Values
 import           Data.HashSet    (HashSet)
 import qualified Data.HashSet    as HS

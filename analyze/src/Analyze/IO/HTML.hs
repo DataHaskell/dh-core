@@ -1,7 +1,7 @@
 -- | Functions for working with HTML.
 module Analyze.IO.HTML where
 
-import           Analyze.RFrame (RFrame (..))
+import           Analyze.Frame.Dense (RFrame (..))
 import           Control.Monad  (forM_)
 import qualified Lucid          as L
 

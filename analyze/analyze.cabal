@@ -19,14 +19,14 @@ library
   exposed-modules:
       Analyze
       Analyze.Common
-      Analyze.Dplyr
-      Analyze.Dplyr.Generic
+      Analyze.Frame.Sparse
+      Analyze.Frame.Sparse.Generic
+      Analyze.Frame.Dense            
+      Analyze.Frame.Dense.Generic
       Analyze.IO.CSV
       Analyze.IO.HTML
       Analyze.Decoding
       Analyze.Ops
-      Analyze.RFrame
-      Analyze.RFrame.Generic
       Analyze.Values
       Analyze.Values.Generic
   other-modules:
@@ -49,7 +49,7 @@ library
         lucid ,
         text ,
         unordered-containers ,
-        vector ,  
+        vector ,
         -- DEBUG                
         tasty-hunit,
         tasty-quickcheck
@@ -71,7 +71,8 @@ test-suite spec
       Analyze.Datasets
       Analyze.Decoding
       Analyze.Ops
-      Analyze.RFrame
+      Analyze.Frame.Dense
+      Analyze.Frame.Sparse                
       Analyze.Values
       Paths_analyze
   hs-source-dirs:

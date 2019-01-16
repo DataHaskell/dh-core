@@ -1,10 +1,9 @@
 {-# language DataKinds #-}
 {-# language FlexibleContexts #-}
 {-# language GADTs #-}
-module Analyze.Dplyr.Generic (
+module Analyze.Frame.Sparse.Generic (
   gToTable, gToRow
   ) where
-
 
 import Generics.SOP (Generic(..), All, Code)
 -- import Generics.SOP.NP
@@ -19,10 +18,10 @@ import qualified Data.Text as T
 -- import qualified Data.Vector as V
 -- import qualified Data.HashMap.Strict as HM
 
-import Analyze.Dplyr (Row, Table, fromKVs, fromList)
+import Analyze.Frame.Sparse (Row, Table, fromKVs, fromList)
 import qualified Analyze.Values as AV
 import qualified Analyze.Values.Generic as AVG
-import Analyze.RFrame.Generic (DataException(..))
+import Analyze.Frame.Dense.Generic (DataException(..))
 
 -- $setup
 -- >>> :set -XDataKinds

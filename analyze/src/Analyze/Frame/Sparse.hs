@@ -2,7 +2,7 @@
 {-# language FlexibleInstances #-}
 {-# language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
 {-# language DeriveGeneric, DeriveDataTypeable #-}
-module Analyze.Dplyr (
+module Analyze.Frame.Sparse (
   -- * Table
   Table,
   -- ** Construction
@@ -296,7 +296,6 @@ hjBuild k = F.foldlM insf HM.empty where
     v <- lookup k row
     let hm' = HM.insertWith mappend v [row] hmAcc
     pure hm'
-
 
 
 

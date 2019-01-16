@@ -3,7 +3,7 @@
 {-# language DataKinds #-}
 {-# language FlexibleContexts #-}
 {-# language GADTs #-}
-module Analyze.RFrame.Generic (gToRFrame, DataException(..)) where
+module Analyze.Frame.Dense.Generic (gToRFrame, DataException(..)) where
 
 import Generics.SOP (Generic(..), All, Code)
 import Generics.SOP.NP
@@ -19,7 +19,7 @@ import qualified Data.Text as T
 import qualified Data.Vector as V
 import qualified Data.HashMap.Strict as HM
 
-import qualified Analyze.RFrame as AR
+import qualified Analyze.Frame.Dense as AR
 import qualified Analyze.Values as AV
 import qualified Analyze.Values.Generic as AVG
 

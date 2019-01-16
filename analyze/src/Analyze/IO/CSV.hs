@@ -1,7 +1,7 @@
 -- | Functions for working with CSV files.
 module Analyze.IO.CSV where
 
-import           Analyze.RFrame             (RFrame (..), RFrameUpdate (..), empty, fromUpdate, projectRows)
+import           Analyze.Frame.Dense        (RFrame (..), RFrameUpdate (..), empty, fromUpdate, projectRows)
 import           Control.Monad.Catch        (Exception, MonadThrow (..))
 import qualified Data.Binary.Builder        as B
 import qualified Data.ByteString.Lazy       as LBS

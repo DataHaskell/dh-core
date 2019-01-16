@@ -114,6 +114,13 @@ progMoo = do
 
 
 
+data Moo2 = Moo2 { unM2 :: Maybe Double } deriving (Eq, Show, Data, G.Generic)
+instance Generic Moo2
+
+
+
+
+
 main = putStrLn "hello!"
 
 

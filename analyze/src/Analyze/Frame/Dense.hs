@@ -4,7 +4,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 -- | Core frame types and functions
-module Analyze.RFrame where
+module Analyze.Frame.Dense where
 
 import           Analyze.Common
 import           Analyze.Decoding    (Decoder (..), decoderKeys, runDecoder)
