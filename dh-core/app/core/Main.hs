@@ -4,7 +4,9 @@
 module Main where
 
 -- import qualified Analyze.RFrame as AR
+import Analyze.Common (Key(..))
 import qualified Analyze.Values as AV
+import qualified Analyze.Decoding as AD
 -- import qualified Analyze.Values.Generic as AVG
 -- import qualified Analyze.RFrame.Generic as ARG
 import Analyze.Dplyr 
@@ -59,14 +61,39 @@ pricesTable = gToTable prices_
 purchasesTable = gToTable purchases_
 
 
-row0 = Purchase 1 "bob" "computer" 1
-
 
 prog = do
   prices <- pricesTable
   purchases <- purchasesTable
   p1 <- filterByElem (/= AV.VText "legal fees") "itemBought" purchases
   innerJoin "item" "itemBought" prices p1
+
+
+data Moo = Moo { m1 :: Double, m2 :: Double, m3 :: Double} deriving (Eq, Show, G.Generic, Data)
+instance Generic Moo
+
+withDoubles :: (Key k, MonadThrow m) =>
+               (Double -> Double -> b) -> k -> k -> AD.Decoder m k AV.Value b
+withDoubles f k1 k2 =
+  f <$> withDouble k1 <*> withDouble k2 
+
+decodeRow :: Key k => AD.Decoder Maybe k v a -> Row k v -> Maybe a
+decodeRow dec row = AD.runDecoder dec (`lookup` row)
+
+withDouble :: (Key k, MonadThrow m) => k -> AD.Decoder m k AV.Value Double
+withDouble k = AD.requireWhere k AV.double
+
+withInt k = fromIntegral <$> AD.requireWhere k AV.int
+
+
+m00 = Moo 0.3 0.5 10.2
+
+progMoo = do
+  m <- gToRow m00
+  let dec = withDoubles (+) "m1" "m3"
+  decodeRow dec m
+
+
 
 
 main = putStrLn "hello!"

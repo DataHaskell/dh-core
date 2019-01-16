@@ -4,13 +4,16 @@
 -- | Applicative decoding with key-value lookups.
 --   Think of a 'Decoder' as a row function that exposes the columns it uses.
 module Analyze.Decoding
-  ( Arg (..)
-  , Decoder(..)
-  , decoderKeys
-  , fromArg
+  (
+    -- * Decoder
+    Decoder
+    -- ** Construction
   , require
   , requireWhere
+  -- ** Execution
   , runDecoder
+  -- ** Utilities
+  , decoderKeys
   ) where
 
 import           Analyze.Common           (Key)
@@ -20,7 +23,7 @@ import           Data.Maybe               (fromMaybe)
 -- | Pair of key and an extraction function.
 data Arg m k v a = Arg k (v -> m a) deriving (Functor)
 
--- | Free applicative over 'Arg'.
+-- | Composable row lookup
 newtype Decoder m k v a = Decoder (Ap (Arg m k v) a) deriving (Functor, Applicative)
 
 -- | Lifts a single 'Arg' into a 'Decoder'
