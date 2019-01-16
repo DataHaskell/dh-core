@@ -20,15 +20,15 @@ library
       Analyze
       Analyze.Common
       Analyze.Dplyr
-      Analyze.Dplyr.Generic                  
+      Analyze.Dplyr.Generic
       Analyze.IO.CSV
-      Analyze.IO.HTML                  
+      Analyze.IO.HTML
       Analyze.Decoding
       Analyze.Ops
       Analyze.RFrame
       Analyze.RFrame.Generic
       Analyze.Values
-      Analyze.Values.Generic                   
+      Analyze.Values.Generic
   other-modules:
       Paths_analyze
       Analyze.Datasets
@@ -108,4 +108,4 @@ test-suite doctest
   build-depends:
        base , 
        doctest ,
-       generics-sop   
+       generics-sop

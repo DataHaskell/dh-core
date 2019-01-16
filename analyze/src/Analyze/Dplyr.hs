@@ -28,7 +28,7 @@ module Analyze.Dplyr (
   -- ** Set-like row operations
   union, unionWith,
   -- ** Row functions
-  rowBool, 
+  elemSatisfies, (!:),  
   -- * Relational operations
   groupBy, innerJoin) where
 
@@ -149,13 +149,16 @@ unionWith f r1 r2 = Row $ HM.unionWith f (unRow r1) (unRow r2)
 --
 -- This function is meant to be used as first argument to 'filter'.
 --
--- >>> rowBool (== 'a') 0 row0
+-- >>> elemSatisfies (== 'a') 0 row0
 -- True
--- >>> rowBool (== 'a') 42 row0
+-- >>> elemSatisfies (== 'a') 42 row0
 -- False
-rowBool :: (Eq k, Hashable k) => (a -> Bool) -> k -> Row k a -> Bool
-rowBool f k row = maybe False f (lookup k row)
+elemSatisfies :: (Eq k, Hashable k) => (a -> Bool) -> k -> Row k a -> Bool
+elemSatisfies f k row = maybe False f (lookup k row)
 
+-- | Inline synonim for 'elemSatisfies'
+(!:) :: (Eq k, Hashable k) => k -> (a -> Bool) -> Row k a -> Bool
+k !: f = elemSatisfies f k 
 
 -- | Creates or updates a column with a function of the whole row
 insertRowFun :: (Eq k, Hashable k) => (Row k v -> v) -> k -> Row k v -> Row k v
@@ -214,7 +217,7 @@ filterByKey :: (Eq k, Hashable k) =>
             -> k            -- ^ Key
             -> Table (Row k v)
             -> Maybe (Table (Row k v))
-filterByKey ff k = filter (rowBool ff k)
+filterByKey ff k = filter (k !: ff)
 
 -- | Left-associative scan
 scanl :: (b -> a -> b) -> b -> Table a -> Table b
