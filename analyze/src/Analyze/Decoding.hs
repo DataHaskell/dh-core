@@ -14,17 +14,49 @@ module Analyze.Decoding
   , runDecoder
   -- ** Utilities
   , decoderKeys
+    -- * Decoder based on a free alternative functor
+  , DecAlt
+  , fromArgA
+  , requireA
+  , requireWhereA
   ) where
 
 import           Analyze.Common           (Key)
-import           Control.Applicative.Free (Ap (..), liftAp)
-import           Data.Maybe               (fromMaybe)
+import           Control.Applicative      (Alternative(..))
+import           Control.Applicative.Free (Ap(..), liftAp)
+import qualified Control.Alternative.Free as L (Alt(..), liftAlt, AltF(..)) 
+-- import           Data.Maybe               (fromMaybe)
+
+
+newtype DecAlt m k v a = DecAlt (L.Alt (Arg m k v) a) deriving (Functor, Applicative, Alternative)
+
+fromArgA :: Arg m k v a -> DecAlt m k v a
+fromArgA = DecAlt . L.liftAlt
+
+requireA :: Applicative m => k -> DecAlt m k a a
+requireA k = fromArgA $ Arg k pure
+
+requireWhereA :: k -> (k -> v -> m a) -> DecAlt m k v a
+requireWhereA k e = fromArgA $ Arg k (e k)
+
+-- altRow (L.Alt (L.Pure f : as)) = undefined
+
+-- altRow (L.Alt alt) rowf = case alt of
+--   L.Ap fx ff : rest -> undefined
+--   L.Pure f   : rest -> f rowf
+
+-- runDecAlt (DecAlt da) = altRow da
+
 
 -- | Pair of key and an extraction function.
 data Arg m k v a = Arg k (v -> m a) deriving (Functor)
 
 -- | Composable row lookup
 newtype Decoder m k v a = Decoder (Ap (Arg m k v) a) deriving (Functor, Applicative)
+
+-- instance Monad (Decoder m k v)
+
+-- bindDecoder :: Decoder m k v a -> (a -> Decoder m k v b) -> Decoder m k v b
 
 -- | Lifts a single 'Arg' into a 'Decoder'
 fromArg :: Arg m k v a -> Decoder m k v a

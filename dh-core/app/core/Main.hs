@@ -3,6 +3,8 @@
 {-# OPTIONS_GHC -Wall #-}
 module Main where
 
+import Control.Applicative (Alternative(..))
+
 -- import qualified Analyze.RFrame as AR
 import Analyze.Common (Key(..))
 import qualified Analyze.Values as AV
@@ -69,13 +71,17 @@ prog = do
   innerJoin "item" "itemBought" prices p1
 
 
+
+
+
+
 data Moo = Moo { m1 :: Double, m2 :: Double, m3 :: Double} deriving (Eq, Show, G.Generic, Data)
 instance Generic Moo
 
-withDoubles :: (Key k, MonadThrow m) =>
-               (Double -> Double -> b) -> k -> k -> AD.Decoder m k AV.Value b
+-- withDoubles :: (Key k, MonadThrow m) =>
+--                (Double -> Double -> b) -> k -> k -> AD.Decoder m k AV.Value b
 withDoubles f k1 k2 =
-  f <$> withDouble k1 <*> withDouble k2 
+  f <$> withDouble k1 <*> withInt k2 
 
 decodeRow :: Key k => AD.Decoder Maybe k v a -> Row k v -> Maybe a
 decodeRow dec row = AD.runDecoder dec (`lookup` row)
@@ -86,11 +92,23 @@ withDouble k = AD.requireWhere k AV.double
 withInt k = fromIntegral <$> AD.requireWhere k AV.int
 
 
+
+
+withNum2 :: (Key k, MonadThrow m) =>
+            (Double -> Double -> b) -> k -> k -> AD.DecAlt m k AV.Value b
+withNum2 f k1 k2 = f <$> withNumAlt k1 <*> withNumAlt k2
+
+withNumAlt :: (Key k, MonadThrow m) => k -> AD.DecAlt m k AV.Value Double
+withNumAlt k = fromIntegral <$> AD.requireWhereA k AV.int <|> AD.requireWhereA k AV.double
+
+
+
 m00 = Moo 0.3 0.5 10.2
 
 progMoo = do
   m <- gToRow m00
   let dec = withDoubles (+) "m1" "m3"
+  -- print $ AD.decoderKeys dec
   decodeRow dec m
 
 
