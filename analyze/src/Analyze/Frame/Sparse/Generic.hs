@@ -65,14 +65,14 @@ gToTable ds
   | null ds = throwM NoDataE 
   | otherwise = do
       constrs <- check (head ds)
-      fromList <$> traverse (gToRow constrs) ds 
+      pure $ fromList $ map (gToRow constrs) ds 
 
 -- | Populate a 'Row' using the rows' 'Data', 'G.Generic' and 'Generic' instances and throws a 'DataException' if the input data is malformed.
-gToRow :: (MonadThrow m, Code a ~ '[xs], Data a, Generic a, All AV.ToValue xs) =>
+gToRow :: (Code a ~ '[xs], Data a, Generic a, All AV.ToValue xs) =>
           [T.Text]
        -> a
-       -> m (Row T.Text AV.Value)
-gToRow constrs d = pure $ fromKVs $ zip constrs (AVG.npToValue d)
+       -> Row T.Text AV.Value
+gToRow constrs d = fromKVs $ zip constrs (AVG.npToValue d)
 
 
 check :: (Data a, MonadThrow m) => a -> m [T.Text]

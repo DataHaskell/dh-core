@@ -106,7 +106,7 @@ withNumAlt k = fromIntegral <$> AD.requireWhereA k AV.int <|> AD.requireWhereA k
 m00 = Moo 0.3 0.5 10.2
 
 progMoo = do
-  m <- gToRow ["m1", "m2", "m3"] m00
+  let m = gToRow ["m1", "m2", "m3"] m00
   let dec = withDoubles (+) "m1" "m3"
   -- print $ AD.decoderKeys dec
   decodeRow dec m

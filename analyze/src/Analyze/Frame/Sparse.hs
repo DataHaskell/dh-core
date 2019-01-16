@@ -1,7 +1,7 @@
 {-# language OverloadedStrings #-}
 {-# language FlexibleInstances #-}
 {-# language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
-{-# language DeriveGeneric, DeriveDataTypeable #-}
+-- {-# language DeriveGeneric, DeriveDataTypeable #-}
 module Analyze.Frame.Sparse (
   -- * Table
   Table,
@@ -32,21 +32,14 @@ module Analyze.Frame.Sparse (
   -- * Relational operations
   groupBy, innerJoin) where
 
--- import Analyze.RFrame
--- import Analyze.Common
--- import Analyze.Values
-
 import Control.Applicative (Alternative(..))
 import qualified Data.Foldable as F
 -- import qualified Data.Vector as V
-import qualified Data.Text as T
+-- import qualified Data.Text as T
 import qualified Data.HashMap.Strict as HM
 import qualified Data.List.NonEmpty as NE
 import Data.Hashable (Hashable(..))
 
--- import qualified GHC.Generics as G
--- import Data.Data
--- import Generics.SOP (Generic(..))
 
 import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head)
 
