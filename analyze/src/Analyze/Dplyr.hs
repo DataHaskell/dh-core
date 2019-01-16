@@ -207,13 +207,18 @@ scanl f z tt = Table $ NE.scanl f z (tableRows tt)
 scanr :: (a -> b -> b) -> b -> Table a -> Table b
 scanr f z tt = Table $ NE.scanr f z (tableRows tt)
 
-
+-- | /O(n)/ Count the number of rows in the table
+numRows :: Table row -> Int 
+numRows = length . tableRows
      
 
 
 -- * Relational operations
 
 -- | GROUP BY : given a key and a table that uses it, split the table in multiple tables, one per value taken by the key.
+--
+-- >>> numRows <$> (groupBy "id.0" t0 >>= HM.lookup "129")
+-- Just 2
 groupBy :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
            k  -- ^ Key to group by
         -> t (Row k v) -- ^ A Foldable of rows (e.g. a 'Table')
