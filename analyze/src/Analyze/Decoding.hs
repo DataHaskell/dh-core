@@ -27,7 +27,9 @@ import           Control.Applicative.Free (Ap(..), liftAp)
 import qualified Control.Alternative.Free as L (Alt(..), liftAlt, AltF(..)) 
 -- import           Data.Maybe               (fromMaybe)
 
-
+-- | Composable row lookup, based on the free /alternative/ functor.
+--
+-- The idea is that 'DecAlt' decoders can be composed with <|>, so multiple ones can be tried in sequence until one succeeds (or the list is exhausted).
 newtype DecAlt m k v a = DecAlt (L.Alt (Arg m k v) a) deriving (Functor, Applicative, Alternative)
 
 fromArgA :: Arg m k v a -> DecAlt m k v a
@@ -51,7 +53,7 @@ requireWhereA k e = fromArgA $ Arg k (e k)
 -- | Pair of key and an extraction function.
 data Arg m k v a = Arg k (v -> m a) deriving (Functor)
 
--- | Composable row lookup
+-- | Composable row lookup, based on the free applicative
 newtype Decoder m k v a = Decoder (Ap (Arg m k v) a) deriving (Functor, Applicative)
 
 -- instance Monad (Decoder m k v)

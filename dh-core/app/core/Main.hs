@@ -11,8 +11,8 @@ import qualified Analyze.Values as AV
 import qualified Analyze.Decoding as AD
 -- import qualified Analyze.Values.Generic as AVG
 -- import qualified Analyze.RFrame.Generic as ARG
-import Analyze.Dplyr 
-import Analyze.Dplyr.Generic (gToTable, gToRow)
+import Analyze.Frame.Sparse 
+import Analyze.Frame.Sparse.Generic (gToTable, gToRow)
 
 import qualified GHC.Generics as G (Generic(..))
 
