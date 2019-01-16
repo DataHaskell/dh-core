@@ -10,7 +10,7 @@ module Analyze.Dplyr (
   -- ** Access
   head, zipWith, unionRowsWith,
   -- ** Filtering 
-  filter, filterByElem,
+  filter, filterByKey,
   -- ** Scans (row-wise cumulative operations)
   scanl, scanr, 
   -- * Row
@@ -157,25 +157,6 @@ rowBool :: (Eq k, Hashable k) => (a -> Bool) -> k -> Row k a -> Bool
 rowBool f k row = maybe False f (lookup k row)
 
 
-
--- | "Lift" a binary function to act on two elements of a Row, indexed by two keys.
-liftRow2 :: (Eq k, Hashable k) =>
-            (a -> a -> b)
-         -> k
-         -> k
-         -> Row k a
-         -> Maybe b
-liftRow2 f k1 k2 row = f <$> lookup k1 row <*> lookup k2 row
-
-liftRowM2 :: (Eq k, Hashable k) =>
-             (t -> t -> Maybe b) -> k -> k -> Row k t -> Maybe b
-liftRowM2 f k1 k2 row = do
-  v1 <- lookup k1 row
-  v2 <- lookup k2 row
-  f v1 v2
-
-
-
 -- | Creates or updates a column with a function of the whole row
 insertRowFun :: (Eq k, Hashable k) => (Row k v -> v) -> k -> Row k v -> Row k v
 insertRowFun f knew row = insert knew (f row) row
@@ -226,13 +207,14 @@ filter ff = fromNEList . NE.filter ff . tableRows
 
 -- | Filter a table according to predicate applied to an element pointed to by a given key.
 --
--- This function is called 'filterByKey' in Analyze.RFrame
---
--- >>> head <$> filterByElem (/= "book") "item" t0
--- Just [("id.0","234"),("qty","1"),("item","ball")]
-filterByElem :: (Eq k, Hashable k) =>
-                (v -> Bool) -> k -> Table (Row k v) -> Maybe (Table (Row k v))
-filterByElem ff k = filter (rowBool ff k)
+-- >>> numRows <$> filterByKey (/= "book") "item" t0
+-- Just 2
+filterByKey :: (Eq k, Hashable k) =>
+               (v -> Bool)  -- ^ Predicate to be applied to the element
+            -> k            -- ^ Key
+            -> Table (Row k v)
+            -> Maybe (Table (Row k v))
+filterByKey ff k = filter (rowBool ff k)
 
 -- | Left-associative scan
 scanl :: (b -> a -> b) -> b -> Table a -> Table b
