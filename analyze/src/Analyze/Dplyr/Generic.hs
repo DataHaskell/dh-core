@@ -1,7 +1,7 @@
 {-# language DataKinds #-}
 {-# language FlexibleContexts #-}
 {-# language GADTs #-}
-module Analyze.Dplyr.Generic (gToTable) where
+module Analyze.Dplyr.Generic (gToTable, gToRow) where
 
 
 import Generics.SOP (Generic(..), All, Code)
@@ -37,7 +37,7 @@ import Analyze.RFrame.Generic (DataException(..))
 -- >>> data P2 = P2 { p2i :: Int, p2c :: Char } deriving (Eq, Show, Data, G.Generic)
 -- >>> instance Generic P2
 
--- | Populates a 'Table' using the rows' 'Data', 'G.Generic' and 'Generic' instances and throws a 'DataException' if the input data is malformed.
+-- | Populate a 'Table' using the rows' 'Data', 'G.Generic' and 'Generic' instances and throws a 'DataException' if the input data is malformed.
 --
 -- For example, a list of records having two fields each will produce a table with two columns, having the record field names as column labels.
 --
@@ -62,11 +62,15 @@ gToTable :: (Code a ~ '[xs], All AV.ToValue xs, Data a, Generic a, MonadThrow m)
           -> m (Table (Row T.Text AV.Value))
 gToTable ds
   | null ds = throwM NoDataE
-  | null constrs = throwM AnonRecordE
-  | otherwise = pure $ fromList $ mkRow <$> ds
+  | otherwise = fromList <$> traverse gToRow ds 
+
+-- | Populate a 'Row' using the rows' 'Data', 'G.Generic' and 'Generic' instances and throws a 'DataException' if the input data is malformed.
+gToRow :: (MonadThrow m, Code a ~ '[xs], Data a, Generic a, All AV.ToValue xs) =>
+          a
+       -> m (Row T.Text AV.Value)
+gToRow d | null constrs = throwM AnonRecordE
+         | otherwise = pure $ fromListR $ zip constrs (AVG.npToValue d)
   where
-    d = head ds
-    mkRow x = fromListR $ zip constrs (AVG.npToValue x)
-    constrs = T.pack `map` constrFields (toConstr d)
+    constrs = T.pack `map` constrFields (toConstr d) 
 
 

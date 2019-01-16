@@ -8,7 +8,7 @@ import qualified Analyze.Values as AV
 -- import qualified Analyze.Values.Generic as AVG
 -- import qualified Analyze.RFrame.Generic as ARG
 import Analyze.Dplyr 
-import Analyze.Dplyr.Generic (gToTable)
+import Analyze.Dplyr.Generic (gToTable, gToRow)
 
 import qualified GHC.Generics as G (Generic(..))
 
@@ -50,17 +50,21 @@ purchases_ = [
   , Purchase 1 "bob" "computer" 1
             ]
 
+
+
 pricesTable, purchasesTable :: MonadThrow m => m (Table (Row T.Text AV.Value)) 
 pricesTable = gToTable prices_
 purchasesTable = gToTable purchases_
 
 
+row0 = Purchase 1 "bob" "computer" 1
+
+
 prog = do
-  -- prices <- pricesTable
+  prices <- pricesTable
   purchases <- purchasesTable
-  p1 <- filterByElem (/= AV.VText "legal fees") "item" purchases
-  pure p1
-  -- innerJoin "item" "itemBought" prices p1
+  p1 <- filterByElem (/= AV.VText "legal fees") "itemBought" purchases
+  innerJoin "item" "itemBought" prices p1
 
 
 main = putStrLn "hello!"

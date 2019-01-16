@@ -106,6 +106,8 @@ lookup k = HM.lookup k . unRow
 lookupDefault :: (Eq k, Hashable k) => v -> k -> Row k v -> v
 lookupDefault v k = HM.lookupDefault v k . unRow
 
+-- | Insert a key-value pair into a row and return the updated one
+-- 
 -- >>> keys $ insert 2 'y' row0
 -- [0,2,3]
 insert :: (Eq k, Hashable k) => k -> v -> Row k v -> Row k v
@@ -173,6 +175,7 @@ head = NE.head . tableRows
 fromNEList :: [row] -> Maybe (Table row)
 fromNEList l = Table <$> NE.nonEmpty l
 
+-- | Construct a table given a list of rows. Crashes if the input list is empty
 fromList :: [row] -> Table row
 fromList = Table . NE.fromList 
 
@@ -221,7 +224,7 @@ numRows = length . tableRows
 -- Just 2
 groupBy :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
            k  -- ^ Key to group by
-        -> t (Row k v) -- ^ A Foldable of rows (e.g. a 'Table')
+        -> t (Row k v) -- ^ A @Table (Row k v)@ can be used here
         -> Maybe (HM.HashMap v (Table (Row k v)))
 groupBy k tab = do
   groups <- groupL k tab
