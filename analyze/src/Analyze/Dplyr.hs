@@ -18,11 +18,13 @@ module Analyze.Dplyr (
   -- ** Construction 
   fromListR,
   -- ** Access
-  keys, elems, 
+  keys, elems,
+  -- ** Traversal
+  traverseWithKey, 
   -- ** Lookup 
   lookup, lookupDefault,
   -- ** Insertion 
-  insert, insertRowFun,
+  insert, insertRowFun, insertRowFunM, 
   -- ** Set-like row operations
   union, unionWith,
   -- ** Row functions
@@ -75,7 +77,7 @@ t1 = fromList [ r1, r2, r3, r4 ] :: Table (Row String String)
 -- * /O(log n)/ random access
 -- * /O(n log n)/ set operations
 -- * Supports missing elements
-newtype Row k v = Row { unRow :: HM.HashMap k v } deriving (Eq)
+newtype Row k v = Row { unRow :: HM.HashMap k v } deriving (Eq, Functor, Foldable, Traversable)
 instance (Show k, Show v) => Show (Row k v) where
   show = show . HM.toList . unRow
 
@@ -127,6 +129,10 @@ keys = HM.keys . unRow
 elems :: Row k v -> [v]
 elems = HM.elems . unRow
 
+-- | Traverse a 'Row' using a function of both the key and the element.
+traverseWithKey :: Applicative f => (k -> a -> f b) -> Row k a -> f (Row k b)
+traverseWithKey f r = Row <$> HM.traverseWithKey f (unRow r)
+
 -- | Set union of two rows
 --
 -- >>> keys $ union row0 row1
@@ -150,9 +156,35 @@ unionWith f r1 r2 = Row $ HM.unionWith f (unRow r1) (unRow r2)
 rowBool :: (Eq k, Hashable k) => (a -> Bool) -> k -> Row k a -> Bool
 rowBool f k row = maybe False f (lookup k row)
 
+
+
+-- | "Lift" a binary function to act on two elements of a Row, indexed by two keys.
+liftRow2 :: (Eq k, Hashable k) =>
+            (a -> a -> b)
+         -> k
+         -> k
+         -> Row k a
+         -> Maybe b
+liftRow2 f k1 k2 row = f <$> lookup k1 row <*> lookup k2 row
+
+liftRowM2 :: (Eq k, Hashable k) =>
+             (t -> t -> Maybe b) -> k -> k -> Row k t -> Maybe b
+liftRowM2 f k1 k2 row = do
+  v1 <- lookup k1 row
+  v2 <- lookup k2 row
+  f v1 v2
+
+
+
 -- | Creates or updates a column with a function of the whole row
 insertRowFun :: (Eq k, Hashable k) => (Row k v -> v) -> k -> Row k v -> Row k v
 insertRowFun f knew row = insert knew (f row) row
+
+-- | Monadic version of 'insertRowFun'
+insertRowFunM :: (Eq k, Hashable k, Monad m) => (Row k v -> m v) -> k -> Row k v -> m (Row k v)
+insertRowFunM fm knew row = do
+  y <- fm row
+  pure $ insert knew y row
 
 -- | A 'Table' is a non-empty list of rows.
 newtype Table row = Table {

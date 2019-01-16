@@ -34,6 +34,8 @@ instance Generic Price
 data Purchase = Purchase { date :: Int, person :: T.Text, itemBought :: T.Text, qtyBought :: Int } deriving (Eq, Show, G.Generic, Data)
 instance Generic Purchase
 
+-- https://github.com/DataHaskell/dh-core/issues/17
+
 prices_ :: [Price]
 prices_ = [
     Price "computer" 1000
