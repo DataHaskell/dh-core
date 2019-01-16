@@ -1,7 +1,9 @@
 {-# language DataKinds #-}
 {-# language FlexibleContexts #-}
 {-# language GADTs #-}
-module Analyze.Dplyr.Generic (gToTable, gToRow) where
+module Analyze.Dplyr.Generic (
+  gToTable, gToRow
+  ) where
 
 
 import Generics.SOP (Generic(..), All, Code)
@@ -61,16 +63,22 @@ gToTable :: (Code a ~ '[xs], All AV.ToValue xs, Data a, Generic a, MonadThrow m)
              [a]
           -> m (Table (Row T.Text AV.Value))
 gToTable ds
-  | null ds = throwM NoDataE
-  | otherwise = fromList <$> traverse gToRow ds 
+  | null ds = throwM NoDataE 
+  | otherwise = do
+      constrs <- check (head ds)
+      fromList <$> traverse (gToRow constrs) ds 
 
 -- | Populate a 'Row' using the rows' 'Data', 'G.Generic' and 'Generic' instances and throws a 'DataException' if the input data is malformed.
 gToRow :: (MonadThrow m, Code a ~ '[xs], Data a, Generic a, All AV.ToValue xs) =>
-          a
+          [T.Text]
+       -> a
        -> m (Row T.Text AV.Value)
-gToRow d | null constrs = throwM AnonRecordE
-         | otherwise = pure $ fromListR $ zip constrs (AVG.npToValue d)
-  where
-    constrs = T.pack `map` constrFields (toConstr d) 
+gToRow constrs d = pure $ fromListR $ zip constrs (AVG.npToValue d)
+
+
+check :: (Data a, MonadThrow m) => a -> m [T.Text]
+check d | null constrs = throwM AnonRecordE
+        | otherwise = pure constrs where
+  constrs = T.pack `map` constrFields (toConstr d)
 
 

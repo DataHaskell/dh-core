@@ -21,17 +21,6 @@ import qualified Data.HashSet        as HS
 import           Data.Vector         (Vector)
 import qualified Data.Vector         as V
 
--- data Table k v = Table {
---     tableColLookup :: HashMap k Int
---   , tableRows      :: [Vector v]
---                        } deriving (Eq, Show, Functor, Foldable, Traversable)
-
--- foldrRows :: (Vector v -> a -> a) -> a -> Table k v -> a
--- foldrRows f z (Table _ rows) = foldr f z rows
-
--- foldlRows' :: (a -> Vector v -> a) -> a -> Table k v -> a
--- foldlRows' f z (Table _ rows) = F.foldl' f z rows
-
 -- | In-memory row-oriented frame with columns named by `k` and values by `v`
 data RFrame k v = RFrame
   { -- | Ordered vector of column names
