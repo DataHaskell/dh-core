@@ -19,7 +19,7 @@ import qualified Data.Text as T
 -- import qualified Data.Vector as V
 -- import qualified Data.HashMap.Strict as HM
 
-import Analyze.Dplyr (Row, Table, fromListR, fromList)
+import Analyze.Dplyr (Row, Table, fromKVs, fromList)
 import qualified Analyze.Values as AV
 import qualified Analyze.Values.Generic as AVG
 import Analyze.RFrame.Generic (DataException(..))
@@ -73,7 +73,7 @@ gToRow :: (MonadThrow m, Code a ~ '[xs], Data a, Generic a, All AV.ToValue xs) =
           [T.Text]
        -> a
        -> m (Row T.Text AV.Value)
-gToRow constrs d = pure $ fromListR $ zip constrs (AVG.npToValue d)
+gToRow constrs d = pure $ fromKVs $ zip constrs (AVG.npToValue d)
 
 
 check :: (Data a, MonadThrow m) => a -> m [T.Text]

@@ -16,7 +16,7 @@ module Analyze.Dplyr (
   -- * Row
   Row,
   -- ** Construction 
-  fromListR,
+  fromKVs,
   -- ** Access
   keys, elems,
   -- ** Traversal
@@ -51,24 +51,24 @@ import Data.Hashable (Hashable(..))
 import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head)
 
 -- $setup
--- >>> let row0 = fromListR [(0, 'a'), (3, 'b')] :: Row Int Char
--- >>> let row1 = fromListR [(0, 'x'), (1, 'b'), (666, 'z')] :: Row Int Char 
+-- >>> let row0 = fromKVs [(0, 'a'), (3, 'b')] :: Row Int Char
+-- >>> let row1 = fromKVs [(0, 'x'), (1, 'b'), (666, 'z')] :: Row Int Char 
 
 t0 :: Table (Row String String)
 t0 = fromList [ book1, ball, bike, book2 ] 
            where
-             book1 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "1")]
-             book2 = fromListR [("item", "book"), ("id.0", "129"), ("qty", "5")]  
-             ball = fromListR [("item", "ball"), ("id.0", "234"), ("qty", "1")]  
-             bike = fromListR [("item", "bike"), ("id.0", "410"), ("qty", "1")]
+             book1 = fromKVs [("item", "book"), ("id.0", "129"), ("qty", "1")]
+             book2 = fromKVs [("item", "book"), ("id.0", "129"), ("qty", "5")]  
+             ball = fromKVs [("item", "ball"), ("id.0", "234"), ("qty", "1")]  
+             bike = fromKVs [("item", "bike"), ("id.0", "410"), ("qty", "1")]
 
 t1 :: Table (Row String String)
 t1 = fromList [ r1, r2, r3, r4 ] :: Table (Row String String)
            where
-             r1 = fromListR [("id.1", "129"), ("price", "100")]
-             r2 = fromListR [("id.1", "234"), ("price", "50")]  
-             r3 = fromListR [("id.1", "3"), ("price", "150")]
-             r4 = fromListR [("id.1", "99"), ("price", "30")]
+             r1 = fromKVs [("id.1", "129"), ("price", "100")]
+             r2 = fromKVs [("id.1", "234"), ("price", "50")]  
+             r3 = fromKVs [("id.1", "3"), ("price", "150")]
+             r4 = fromKVs [("id.1", "99"), ("price", "30")]
 
 
 
@@ -83,12 +83,12 @@ instance (Show k, Show v) => Show (Row k v) where
 
 -- | Construct a 'Row' from a list of key-element pairs.
 --
--- >>> lookup 3 (fromListR [(3,'a'),(4,'b')])
+-- >>> lookup 3 (fromKVs [(3,'a'),(4,'b')])
 -- Just 'a'
--- >>> lookup 6 (fromListR [(3,'a'),(4,'b')])
+-- >>> lookup 6 (fromKVs [(3,'a'),(4,'b')])
 -- Nothing
-fromListR :: (Eq k, Hashable k) => [(k, v)] -> Row k v
-fromListR = Row . HM.fromList
+fromKVs :: (Eq k, Hashable k) => [(k, v)] -> Row k v
+fromKVs = Row . HM.fromList
 
 -- | Lookup the value stored at a given key in a row
 --
