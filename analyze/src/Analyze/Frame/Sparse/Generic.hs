@@ -112,3 +112,4 @@ insertsMaybe xs = F.foldl insf HM.empty xs where
   insf acc (k, vmay) = case vmay of
     Just v  -> HM.insert k v acc
     Nothing -> acc
+

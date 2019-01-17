@@ -48,6 +48,7 @@ library
         hashable ,
         lucid ,
         text ,
+        transformers ,
         unordered-containers ,
         vector ,
         -- DEBUG                

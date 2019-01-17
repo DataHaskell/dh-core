@@ -78,6 +78,10 @@ prog = do
 
 
 
+
+
+
+
 -- | Applicative decoding of row types
 
 
@@ -90,20 +94,25 @@ decodeRow :: Key k => AD.Decoder Maybe k v a -> Row k v -> Maybe a
 decodeRow dec row = AD.runDecoder dec (`lookup` row)
 
 withDouble :: (Key k, MonadThrow m) => k -> AD.Decoder m k AV.Value Double
-withDouble k = AD.requireWhere k AV.double
+withDouble = require AV.double
+
+require :: (k -> v -> m a) -> k -> AD.Decoder m k v a
+require = flip AD.requireWhere 
 
 withInt k = fromIntegral <$> AD.requireWhere k AV.int
 
 
+num f k = f <$> require AV.int k <*> require AV.double k
 
--- | /alternative/-based decoding of row types (missing a decoder)
 
-withNum2 :: (Key k, MonadThrow m) =>
-            (Double -> Double -> b) -> k -> k -> AD.DecAlt m k AV.Value b
-withNum2 f k1 k2 = f <$> withNumAlt k1 <*> withNumAlt k2
 
-withNumAlt :: (Key k, MonadThrow m) => k -> AD.DecAlt m k AV.Value Double
-withNumAlt k = fromIntegral <$> AD.requireWhereA k AV.int <|> AD.requireWhereA k AV.double
+
+-- -- | /alternative/-based decoding of row types (missing a decoder)
+-- withNum2 :: (Key k, MonadThrow m) =>
+--             (Double -> Double -> b) -> k -> k -> AD.DecAlt m k AV.Value b
+-- withNum2 f k1 k2 = f <$> withNumAlt k1 <*> withNumAlt k2
+-- withNumAlt :: (Key k, MonadThrow m) => k -> AD.DecAlt m k AV.Value Double
+-- withNumAlt k = fromIntegral <$> AD.requireWhereA k AV.int <|> AD.requireWhereA k AV.double
 
 -- test data
 

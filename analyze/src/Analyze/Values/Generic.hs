@@ -63,9 +63,3 @@ gMapToValueM = hcmap (Proxy :: Proxy AV.ToValueM) (mapIK AV.toValueM)
 gToList :: (Generic a, Code a ~ '[x]) => a -> NP I x
 gToList d = unZ $ unSOP (from d)
 
-
-
-
-
-data Q = Q (Maybe Int) Char deriving (Eq, Show, G.Generic)
-instance Generic Q
