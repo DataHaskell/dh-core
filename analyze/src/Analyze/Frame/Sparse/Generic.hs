@@ -93,7 +93,7 @@ gToRow constrs d = fromKVs $ zip constrs (AVG.npToValue d)
 
 -- | Populate a 'Row' using the rows' 'Data', 'G.Generic' and 'Generic' instances
 --
--- Optional data types 
+-- NB The ToValueM currently supports only "shallow" Maybe and Either record fields, i.e. their fields must be concrete types (as in, @Either Int String@ or @Maybe Char@).
 gToRowMaybe :: (Code a ~ '[xs], Data a, Generic a, All AV.ToValueM xs) =>
                [T.Text]
             -> a
