@@ -13,6 +13,7 @@ import qualified GHC.Generics as G
 import Data.Hashable (Hashable(..))
 import Prelude hiding (getChar)
 
+
 -- | Interpret a 'Value' as a primitive type
 class FromValue v where
   fromValue :: Value -> Maybe v

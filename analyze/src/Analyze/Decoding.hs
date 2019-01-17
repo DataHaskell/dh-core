@@ -41,6 +41,14 @@ requireA k = fromArgA $ Arg k pure
 requireWhereA :: k -> (k -> v -> m a) -> DecAlt m k v a
 requireWhereA k e = fromArgA $ Arg k (e k)
 
+-- altRow (L.Pure a) _ = pure a
+-- altRow (L.Ap (Arg k f) rest) row = do
+--   v <- row k
+--   z <- f v
+--   fz <- altRow rest row
+--   return (fz z)
+
+
 -- altRow (L.Alt (L.Pure f : as)) = undefined
 
 -- altRow (L.Alt alt) rowf = case alt of
@@ -48,6 +56,10 @@ requireWhereA k e = fromArgA $ Arg k (e k)
 --   L.Pure f   : rest -> f rowf
 
 -- runDecAlt (DecAlt da) = altRow da
+
+
+
+
 
 
 -- | Pair of key and an extraction function.

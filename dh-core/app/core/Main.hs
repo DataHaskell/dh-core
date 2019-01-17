@@ -31,6 +31,8 @@ import qualified Data.Text as T
 -- import qualified Data.Vector as V
 import qualified Data.HashMap.Lazy as HM
 
+import Data.Monoid (Alt(..))
+
 import Prelude hiding (filter, scanl, scanr, lookup)
 
 
@@ -64,7 +66,6 @@ pricesTable = gToTable prices_
 purchasesTable = gToTable purchases_
 
 
-
 prog = do
   prices <- pricesTable
   purchases <- purchasesTable
@@ -76,8 +77,9 @@ prog = do
 
 
 
-data Moo = Moo { m1 :: Double, m2 :: Double, m3 :: Double} deriving (Eq, Show, G.Generic, Data)
-instance Generic Moo
+
+-- | Applicative decoding of row types
+
 
 -- withDoubles :: (Key k, MonadThrow m) =>
 --                (Double -> Double -> b) -> k -> k -> AD.Decoder m k AV.Value b
@@ -94,7 +96,8 @@ withInt k = fromIntegral <$> AD.requireWhere k AV.int
 
 
 
--- experiments with the /free alternative/ form 
+-- | /alternative/-based decoding of row types (missing a decoder)
+
 withNum2 :: (Key k, MonadThrow m) =>
             (Double -> Double -> b) -> k -> k -> AD.DecAlt m k AV.Value b
 withNum2 f k1 k2 = f <$> withNumAlt k1 <*> withNumAlt k2
@@ -102,22 +105,19 @@ withNum2 f k1 k2 = f <$> withNumAlt k1 <*> withNumAlt k2
 withNumAlt :: (Key k, MonadThrow m) => k -> AD.DecAlt m k AV.Value Double
 withNumAlt k = fromIntegral <$> AD.requireWhereA k AV.int <|> AD.requireWhereA k AV.double
 
+-- test data
 
+data Moo = Moo { m1 :: Double, m2 :: Double, m3 :: Double} deriving (Eq, Show, G.Generic, Data)
+instance Generic Moo
 
 m00 = Moo 0.3 0.5 10.2
 
+-- row decoding test
+progMoo :: Maybe Double
 progMoo = do
   let m = gToRow ["m1", "m2", "m3"] m00
   let dec = withDoubles (+) "m1" "m3"
-  -- print $ AD.decoderKeys dec
   decodeRow dec m
-
-
-
-
-data Moo2 = Moo2 { unM2 :: Maybe Double } deriving (Eq, Show, Data, G.Generic)
-instance Generic Moo2
-
 
 
 
