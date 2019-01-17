@@ -17,8 +17,10 @@ module Analyze.Frame.Sparse (
   Row,
   -- ** Construction 
   fromKVs,
+  -- *** (unsafe)
+  mkRow, 
   -- ** Access
-  keys, elems,
+  keys, elems, toList, 
   -- ** Traversal
   traverseWithKey, 
   -- ** Lookup 
@@ -82,6 +84,16 @@ instance (Show k, Show v) => Show (Row k v) where
 -- Nothing
 fromKVs :: (Eq k, Hashable k) => [(k, v)] -> Row k v
 fromKVs = Row . HM.fromList
+
+-- | Wrap a HashMap into a Row constructor.
+--
+-- NB : This function is for internal use only. Do not use this function in application code, since it may break invariants such as key uniqueness.
+mkRow :: HM.HashMap k v -> Row k v
+mkRow = Row
+
+-- | Access the key-value pairs contained in the 'Row'
+toList :: Row k v -> [(k, v)]
+toList = HM.toList . unRow
 
 -- | Lookup the value stored at a given key in a row
 --
@@ -203,14 +215,15 @@ filter ff = fromNEList . NE.filter ff . tableRows
 
 -- | Filter a table according to predicate applied to an element pointed to by a given key.
 --
--- >>> numRows <$> filterByKey (/= "book") "item" t0
+-- >>> numRows <$> filterByKey "item" (/= "book") t0
 -- Just 2
 filterByKey :: (Eq k, Hashable k) =>
-               (v -> Bool)  -- ^ Predicate to be applied to the element
-            -> k            -- ^ Key
+               k            -- ^ Key
+            -> (v -> Bool)  -- ^ Predicate to be applied to the element
             -> Table (Row k v)
             -> Maybe (Table (Row k v))
-filterByKey ff k = filter (k !: ff)
+filterByKey k ff = filter (k !: ff)
+
 
 -- | Left-associative scan
 scanl :: (b -> a -> b) -> b -> Table a -> Table b
@@ -221,6 +234,9 @@ scanr :: (a -> b -> b) -> b -> Table a -> Table b
 scanr f z tt = Table $ NE.scanr f z (tableRows tt)
 
 -- | /O(n)/ Count the number of rows in the table
+--
+-- >>> numRows t0
+-- 4
 numRows :: Table row -> Int 
 numRows = length . tableRows
      

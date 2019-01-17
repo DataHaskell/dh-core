@@ -1,5 +1,5 @@
 {-# language DeriveGeneric #-}
-module Analyze.Values (Value(..), ToValue(..), FromValue(..), valueToType, ValueType(..),
+module Analyze.Values ( Value(..), ToValue(..), ToValueM(..), FromValue(..), valueToType, ValueType(..),
                       -- * Require functions
                       text, integer, int, double, bool,
                       -- ** Value type exceptions
@@ -23,6 +23,31 @@ instance FromValue Double where fromValue = getDouble
 instance FromValue Char where fromValue = getChar
 instance FromValue Text where fromValue = getText
 instance FromValue Bool where fromValue = getBool
+
+
+-- | Wrap a primitive type into a 'Maybe Value'
+-- 
+-- This encodes the possibility of missing features
+class ToValueM v where
+  toValueM :: v -> Maybe Value
+
+
+instance ToValueM Int where toValueM = pure . VInt
+instance ToValueM Integer where toValueM = pure . VInteger
+instance ToValueM Double where toValueM = pure . VDouble
+instance ToValueM Char where toValueM = pure . VChar
+instance ToValueM Text where toValueM = pure . VText
+instance ToValueM Bool where toValueM = pure . VBool
+
+instance ToValue a => ToValueM (Maybe a) where
+  toValueM Nothing = Nothing
+  toValueM (Just x) = Just $ toValue x
+
+instance (ToValue l, ToValue r) => ToValueM (Either l r) where
+  toValueM (Left x) = Just $ toValue x
+  toValueM (Right y) = Just $ toValue y
+
+
 
 -- | Wrap a primitive type into a 'Value'
 class ToValue v where

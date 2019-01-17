@@ -4,6 +4,7 @@
 module Main where
 
 import Control.Applicative (Alternative(..))
+import qualified Data.Foldable as F
 
 -- import qualified Analyze.RFrame as AR
 import Analyze.Common (Key(..))
@@ -67,7 +68,7 @@ purchasesTable = gToTable purchases_
 prog = do
   prices <- pricesTable
   purchases <- purchasesTable
-  p1 <- filterByKey (/= AV.VText "legal fees") "itemBought" purchases
+  p1 <- filterByKey "itemBought" (/= AV.VText "legal fees") purchases
   innerJoin "item" "itemBought" prices p1
 
 
@@ -93,7 +94,7 @@ withInt k = fromIntegral <$> AD.requireWhere k AV.int
 
 
 
-
+-- experiments with the /free alternative/ form 
 withNum2 :: (Key k, MonadThrow m) =>
             (Double -> Double -> b) -> k -> k -> AD.DecAlt m k AV.Value b
 withNum2 f k1 k2 = f <$> withNumAlt k1 <*> withNumAlt k2
@@ -116,6 +117,11 @@ progMoo = do
 
 data Moo2 = Moo2 { unM2 :: Maybe Double } deriving (Eq, Show, Data, G.Generic)
 instance Generic Moo2
+
+
+
+
+
 
 
 
