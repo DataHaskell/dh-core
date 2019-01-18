@@ -181,9 +181,15 @@ altT (T p) (T q) = T $ \v -> p v <|> q v
 requireT :: t -> (t -> v -> m a) -> T v m a
 requireT k look = T (look k)
 
+reqWithDefault :: Alternative m => a -> k -> (k -> v -> m a) -> T v m a 
+reqWithDefault d k look = requireT k look <|> pure d
 
 
--- | [NOTE Key lookup + value conversion ]
+
+
+
+
+-- | [NOTE Key lookup + value conversion, behaviour of row functions ]
 --
 -- If the key is not found /or/ the conversion fails, use a default; the first exception thrown by the lookup-and-convert function will be rethrown.
 -- We'd like instead to try many different decoders, and only throw if /all/ have failed
@@ -196,17 +202,18 @@ requireT k look = T (look k)
 -- -- * skip rows that have any missing value
 -- 
 -- row function: decoding behaviour should be defined for all function arguments
-
-
-
-reqWithDefault :: Alternative m => a -> k -> (k -> v -> m a) -> T v m a 
-reqWithDefault d k look = requireT k look <|> pure d
-
-
-
-
-
-
+--
+-- example : 
+--
+-- λ> bool (2 :: Int) (VBool False) <|> bool (2 :: Int) (VBool True)
+-- False
+-- λ> bool (2 :: Int) (VDouble 32) <|> bool (2 :: Int) (VBool True)
+-- *** Exception: ValueTypeError 2 VTypeBool (VDouble 32.0)
+--
+-- λ> Nothing <|> pure 32.0
+-- Just 32.0
+--
+-- ^ throwM : strict, Maybe : lazy
 
 
 

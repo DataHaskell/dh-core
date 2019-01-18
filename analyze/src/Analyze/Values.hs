@@ -6,6 +6,8 @@ module Analyze.Values ( Value(..), ToValue(..), ToValueM(..), FromValue(..), val
                       ValueTypeError(..)) where
 
 import           Analyze.Common      (Key)
+import Control.Applicative (Alternative(..))
+import qualified Data.Foldable as F (asum)
 import           Control.Monad.Catch (Exception, MonadThrow (..))
 import           Data.Text           (Text)
 import           Data.Typeable       (Typeable)
