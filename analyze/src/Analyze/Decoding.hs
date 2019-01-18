@@ -213,7 +213,7 @@ reqWithDefault d k look = requireT k look <|> pure d
 -- λ> Nothing <|> pure 32.0
 -- Just 32.0
 --
--- ^ throwM : strict, Maybe : lazy
+-- ^ throwM : strict (the first failing decoder throws an exception), Maybe : lazy (keeps trying decoders and returns the first successful one)
 
 
 
