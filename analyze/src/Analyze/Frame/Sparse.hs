@@ -175,6 +175,20 @@ insertRowFunM fm knew row = do
   y <- fm row
   pure $ insert knew y row
 
+
+
+
+-- [NOTE : Alternative table instance] 
+-- 
+-- https://github.com/Gabriel439/Haskell-Bears-Library/blob/master/src/Bears.hs
+--
+-- 'Table' has Applicative and Alternative instances
+-- -- *  for Alternative, we need the possibility of an empty table (to implement `empty`). Currently this is impossible due to the 'NonEmpty' list implementation.
+
+
+
+
+
 -- | A 'Table' is a non-empty list of rows.
 newtype Table row = Table {
     -- nTableRows :: Maybe Int  -- ^ Nothing means unknown
