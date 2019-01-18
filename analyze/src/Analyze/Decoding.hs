@@ -181,22 +181,26 @@ emptyT :: Alternative m => T v m a
 emptyT = T $ const empty
 
 altT :: Alternative f =>  T v f a -> T v f a -> T v f a
-altT (T p) (T q) = T $ \k -> p k <|> q k
+altT (T p) (T q) = T $ \v -> p v <|> q v
 
 requireT :: t -> (t -> v -> m a) -> T v m a
 requireT k look = T (look k)
 
 
 
+-- [NOTE Key lookup + value conversion ]
+--
 -- if the key is not found /or/ the conversion fails, use a default
 --
--- is this the right behaviour ?
-reqWithDefault
-  :: Alternative m => a -> t -> (t -> v -> m a) -> T v m a
-reqWithDefault d k look = T (look k) <|> pure d
+-- the first exception thrown by the lookup-and-convert function will be rethrown.
+--
+-- we'd like instead to try many different decoders, and only throw if /all/ have failed
+reqWithDefault :: Alternative m => a -> k -> (k -> v -> m a) -> T v m a 
+reqWithDefault d k look = requireT k look <|> pure d
 
 
 -- how should Alternative behave for lookup-and-convert that both might fail?
+
 
 
 
