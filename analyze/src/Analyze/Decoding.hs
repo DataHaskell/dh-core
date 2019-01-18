@@ -72,6 +72,10 @@ altP (P p) (P q) = P $ \k ->
 
 
 
+
+
+
+
 --
 
 newtype R k v m a = R { runR :: k -> v -> m a } deriving Functor
@@ -101,27 +105,6 @@ altR (R r1) (R r2) = R $ \ k v -> r1 k v <|> r2 k v
 
 
 
-
-
--- newtype S k v m a = S { runS :: v -> m a } deriving Functor
-
-
-
--- -- pureR :: Applicative m => a -> R k v m a
--- pureS x = R $ \ _ -> pure x
-
--- -- apR :: Applicative f => R k v f (t -> a) -> R k v f t -> R k v f a
--- apS (S af) (S aa) = S $ \ k v -> af k <*> aa k
-
--- -- instance Alternative f => Alternative (S k v f) where
--- --   empty = emptyS
--- --   (<|>) = altS
-
--- -- emptyR :: Alternative f => R k v f a
--- -- emptyS = S $ \ _ -> empty
-
--- -- altR :: Alternative f => R k v f a -> R k v f a -> R k v f a
--- altS (S r1) (S r2) = S $ \ k -> r1 k <|> r2 k  
 
 
 
@@ -163,7 +146,59 @@ runS (S mk fun) row = do
   fun v
 
 
+-- | the 'text', 'double' etc. functions in Analyze.Values can be used as the first two arguments here
+liftS2 :: Applicative m =>
+          (k -> v -> m a1)
+       -> (k -> v -> m a2)
+       -> (a1 -> a2 -> b) -> k -> k -> S k v m b
 liftS2 d1 d2 f k1 k2 = f <$> decodeS d1 k1 <*> decodeS d2 k2
+
+
+
+
+
+-- | We can decouple lookup and value conversion.
+--
+-- In the 'T' case, multiple value conversions can be combined via the Alternative instance. The lookup key is not mentioned in T, which relieves us from thinking what does "absence of a lookup key" (which is not the same as "key not found"), as required my Alternative 'empty', mean.
+
+newtype T v m a = T { runT :: v -> m a } deriving Functor
+
+instance Applicative m => Applicative (T v m) where
+  pure = pureT
+  (<*>) = apT
+
+pureT :: Applicative f => a -> T v f a
+pureT x = T $ \ _ -> pure x
+
+apT :: Applicative f => T v f (t -> a) -> T v f t -> T v f a
+apT (T af) (T aa) = T $ \ v -> af v <*> aa v
+
+instance Alternative m => Alternative (T v m) where
+  empty = emptyT
+  (<|>) = altT
+
+emptyT :: Alternative m => T v m a
+emptyT = T $ const empty
+
+altT :: Alternative f =>  T v f a -> T v f a -> T v f a
+altT (T p) (T q) = T $ \k -> p k <|> q k
+
+requireT :: t -> (t -> v -> m a) -> T v m a
+requireT k look = T (look k)
+
+
+
+-- if the key is not found /or/ the conversion fails, use a default
+--
+-- is this the right behaviour ?
+reqWithDefault
+  :: Alternative m => a -> t -> (t -> v -> m a) -> T v m a
+reqWithDefault d k look = T (look k) <|> pure d
+
+
+-- how should Alternative behave for lookup-and-convert that both might fail?
+
+
 
 
 

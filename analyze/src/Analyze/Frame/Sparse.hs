@@ -178,14 +178,17 @@ insertRowFunM fm knew row = do
 
 
 
--- [NOTE : Alternative table instance] 
+-- [NOTE : table Alternative instance] 
 -- 
 -- https://github.com/Gabriel439/Haskell-Bears-Library/blob/master/src/Bears.hs
 --
 -- 'Table' has Applicative and Alternative instances
 -- -- *  for Alternative, we need the possibility of an empty table (to implement `empty`). Currently this is impossible due to the 'NonEmpty' list implementation.
 
-
+-- [NOTE : column universe and table pretty printing]
+--
+-- Currently this 'Table' implementation doesn't know anything of its row type, including the type of its keys and values.
+-- To pretty-print our tables, we'd like instead to know the "universe of columns", i.e. all possible columns used in every row (or at least in the first N rows)
 
 
 
