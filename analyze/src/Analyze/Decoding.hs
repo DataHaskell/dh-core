@@ -30,12 +30,7 @@ import           Control.Applicative.Free (Ap(..), liftAp)
 import qualified Control.Alternative.Free as L (Alt(..), liftAlt, AltF(..)) 
 -- import           Data.Maybe               (fromMaybe)
 
-
-import Control.Monad.Trans.Reader
-import Control.Monad.Trans.State
-import Control.Monad.Trans.Class
   
-
 
 
 
@@ -146,12 +141,12 @@ runS (S mk fun) row = do
   fun v
 
 
--- | the 'text', 'double' etc. functions in Analyze.Values can be used as the first two arguments here
-liftS2 :: Applicative m =>
-          (k -> v -> m a1)
-       -> (k -> v -> m a2)
-       -> (a1 -> a2 -> b) -> k -> k -> S k v m b
-liftS2 d1 d2 f k1 k2 = f <$> decodeS d1 k1 <*> decodeS d2 k2
+-- -- | the 'text', 'double' etc. functions in Analyze.Values can be used as the first two arguments here
+-- liftS2 :: Applicative m =>
+--           (k -> v -> m a1)
+--        -> (k -> v -> m a2)
+--        -> (a1 -> a2 -> b) -> k -> k -> S k v m b
+-- liftS2 d1 d2 f k1 k2 = f <$> decodeS d1 k1 <*> decodeS d2 k2
 
 
 
@@ -188,18 +183,26 @@ requireT k look = T (look k)
 
 
 
--- [NOTE Key lookup + value conversion ]
+-- | [NOTE Key lookup + value conversion ]
 --
--- if the key is not found /or/ the conversion fails, use a default
---
--- the first exception thrown by the lookup-and-convert function will be rethrown.
---
--- we'd like instead to try many different decoders, and only throw if /all/ have failed
+-- If the key is not found /or/ the conversion fails, use a default; the first exception thrown by the lookup-and-convert function will be rethrown.
+-- We'd like instead to try many different decoders, and only throw if /all/ have failed
+-- 
+-- How should Alternative behave for lookup-and-convert that both might fail?
+-- 
+-- value decoding : try all decoders, return first successful (== Alternative)
+-- decoding missing values : should be configurable
+-- -- * use default value
+-- -- * skip rows that have any missing value
+-- 
+-- row function: decoding behaviour should be defined for all function arguments
+
+
+
 reqWithDefault :: Alternative m => a -> k -> (k -> v -> m a) -> T v m a 
 reqWithDefault d k look = requireT k look <|> pure d
 
 
--- how should Alternative behave for lookup-and-convert that both might fail?
 
 
 

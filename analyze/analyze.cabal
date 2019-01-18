@@ -48,7 +48,6 @@ library
         hashable ,
         lucid ,
         text ,
-        transformers ,
         unordered-containers ,
         vector ,
         -- DEBUG                
@@ -97,7 +96,6 @@ test-suite spec
         tasty-hunit ,
         tasty-quickcheck ,
         text ,
-        transformers ,
         unordered-containers ,
         vector 
   default-language: Haskell2010
