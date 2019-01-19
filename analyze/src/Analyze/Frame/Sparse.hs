@@ -154,6 +154,8 @@ real :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k Value) Double
 real k = decodeCol k >>> decodeReal
 
 
+
+
 -- | Insert a key-value pair into a row and return the updated one
 -- 
 -- >>> keys $ insert 2 'y' row0

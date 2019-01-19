@@ -32,7 +32,7 @@ import Prelude hiding (lookup, (.), id)
 -- | We can decouple lookup and value conversion and have distinct error behaviour.
 -- Multiple value decoding functions can be combined via the Alternative instance.
 --
--- | Note : 'Decode' is called Kleisli in base.Control.Arrow
+-- | Note : 'Decode' is called Kleisli in base.Control.Arrow .Among other things it has a Profunctor instance.
 
 newtype Decode m i o = Decode { runDecode :: i -> m o } deriving (Functor)
 
@@ -49,11 +49,12 @@ instance Alternative m => Alternative (Decode m i) where
   empty = Decode $ const empty
   Decode p <|> Decode q = Decode $ \v -> p v <|> q v
 
+-- | This instance is copied from 'Kleisli' (defined in Control.Arrow)
 instance Monad m => Category (Decode m) where
   id = Decode return
   (Decode f) . (Decode g) = Decode (g >=> f)
 
-
+-- | Left-to-right composition 
 (>>>) :: Monad m => Decode m i a -> Decode m a b -> Decode m i b 
 (>>>) = flip (.)
 
@@ -63,28 +64,6 @@ instance Monad m => Category (Decode m) where
 
 
 
--- class Profunctor p where
---   {-# MINIMAL dimap | (lmap, rmap) #-}  
---   -- | Map over both arguments at the same time.
---   dimap :: (a -> b) -> (c -> d) -> p b c -> p a d
---   dimap f g = lmap f . rmap g
---   {-# INLINE dimap #-}
-
---   -- | Map the first argument contravariantly.
---   lmap :: (a -> b) -> p b c -> p a c
---   lmap f = dimap f id
---   {-# INLINE lmap #-}
-
---   -- | Map the second argument covariantly.
---   rmap :: (b -> c) -> p a b -> p a c
---   rmap = dimap id
---   {-# INLINE rmap #-}  
-
-
-
--- instance Functor m => Profunctor (Decode m) where
---   dimap f g (Decode h) = Decode (fmap g . h . f)
---   {-# INLINE dimap #-}  
 
 
 
