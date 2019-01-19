@@ -2,6 +2,7 @@
 module Analyze.Values ( Value(..), ToValue(..), ToValueM(..), FromValue(..), valueToType, ValueType(..),
                       -- * Require functions
                       text, integer, int, double, bool,
+                      getText, getInteger, getInt, getDouble, getChar, getBool, 
                       -- ** Value type exceptions
                       ValueTypeError(..)) where
 

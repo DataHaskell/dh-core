@@ -47,6 +47,7 @@ library
         generics-sop ,        
         hashable ,
         lucid ,
+        streaming ,
         text ,
         unordered-containers ,
         vector ,

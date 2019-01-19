@@ -24,7 +24,7 @@ module Analyze.Frame.Sparse (
   -- ** Traversal
   traverseWithKey, 
   -- ** Lookup 
-  lookup, lookupDefault,
+  lookup, lookupThrowM, lookupDefault,
   -- ** Insertion 
   insert, insertRowFun, insertRowFunM, 
   -- ** Set-like row operations
@@ -34,6 +34,7 @@ module Analyze.Frame.Sparse (
   -- * Relational operations
   groupBy, innerJoin) where
 
+import Data.Maybe (fromMaybe)
 import Control.Applicative (Alternative(..))
 import qualified Data.Foldable as F
 -- import qualified Data.Vector as V
@@ -41,9 +42,14 @@ import qualified Data.Foldable as F
 import qualified Data.HashMap.Strict as HM
 import qualified Data.List.NonEmpty as NE
 import Data.Hashable (Hashable(..))
+import Control.Monad.Catch(MonadThrow(..))
+
+import qualified Analyze.Decoding as D (Decode(..), mkDecode)
+import Analyze.Common (Key, MissingKeyError(..))
+import Analyze.Values
 
 
-import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head)
+import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head, getChar)
 
 -- $setup
 -- >>> let row0 = fromKVs [(0, 'a'), (3, 'b')] :: Row Int Char
@@ -104,6 +110,11 @@ toList = HM.toList . unRow
 lookup :: (Eq k, Hashable k) => k -> Row k v -> Maybe v
 lookup k = HM.lookup k . unRow
 
+-- | Like 'lookup', but throws a 'MissingKeyError' if the lookup is unsuccessful
+lookupThrowM :: (MonadThrow m, Key k) =>
+                k -> Row k v -> m v
+lookupThrowM k r = maybe (throwM $ MissingKeyError k) pure (lookup k r)
+
 -- | Lookup a key using a default value for non-existing keys
 --
 -- >>> lookupDefault 'x' 0 row0
@@ -112,6 +123,26 @@ lookup k = HM.lookup k . unRow
 -- 'x'
 lookupDefault :: (Eq k, Hashable k) => v -> k -> Row k v -> v
 lookupDefault v k = HM.lookupDefault v k . unRow
+
+decodeRow :: (MonadThrow m, Key k) => Row k o -> D.Decode k m o
+decodeRow r = D.mkDecode (`lookupThrowM` r)
+
+decodeKey :: (MonadThrow m, Key k) => k -> D.Decode (Row k o) m o
+decodeKey k = D.mkDecode (lookupThrowM k)
+
+decInt = D.mkDecode getInt
+decInteger = D.mkDecode getInteger
+decDouble = D.mkDecode getDouble
+decChar = D.mkDecode getChar
+decText = D.mkDecode getText
+
+-- | Decode any numerical value into a real number
+decodeReal :: D.Decode Value Maybe Double
+decodeReal =
+  (fromIntegral <$> decInt)     <|>
+  decDouble                     <|>
+  (fromIntegral <$> decInteger)
+
 
 -- | Insert a key-value pair into a row and return the updated one
 -- 
