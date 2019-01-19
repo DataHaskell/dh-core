@@ -17,80 +17,74 @@ module Analyze.Decoding
   -- )
   where
 
-import           Analyze.Common           (Key)
+import Analyze.Common           (Key)
 
-import           Control.Applicative      (Alternative(..))
+import Control.Applicative      (Alternative(..))
+import Control.Category (Category(..)) 
 import Data.Foldable (Foldable(..), asum)
-import           Control.Applicative.Free (Ap(..), liftAp)
+import Control.Monad ((>=>))
+import Control.Applicative.Free (Ap(..), liftAp)
 -- import           Data.Maybe               (fromMaybe)
 
--- import Prelude hiding (lookup)
+import Prelude hiding (lookup, (.), id)
 
 
 -- | We can decouple lookup and value conversion and have distinct error behaviour.
--- Multiple value decoding functions can be combined via the Alternative instance. 
+-- Multiple value decoding functions can be combined via the Alternative instance.
+--
+-- | Note : 'Decode' is called Kleisli in base.Control.Arrow
 
-newtype Decode i m o = Decode { runDecode :: i -> m o } deriving (Functor)
+newtype Decode m i o = Decode { runDecode :: i -> m o } deriving (Functor)
 
-mkDecode :: (i -> m o) -> Decode i m o
+mkDecode :: (i -> m o) -> Decode m i o
 mkDecode = Decode
 
-instance Applicative m => Applicative (Decode i m) where
+
+
+instance Applicative m => Applicative (Decode m i) where
   pure x = Decode $ \ _ -> pure x
   Decode af <*> Decode aa = Decode $ \ v -> af v <*> aa v
 
-instance Alternative m => Alternative (Decode i m) where
+instance Alternative m => Alternative (Decode m i) where
   empty = Decode $ const empty
   Decode p <|> Decode q = Decode $ \v -> p v <|> q v
 
--- Decode i m a -> (a -> Decode i m b) -> Decode i m b
--- (i -> m a)   -> (a -> (i -> m b)  ) -> (i -> m b)
+instance Monad m => Category (Decode m) where
+  id = Decode return
+  (Decode f) . (Decode g) = Decode (g >=> f)
 
--- spork :: Monad m => Decode i m a -> (a -> Decode i m b) -> Decode i m b
--- spork m k = Decode $ \ i -> do
---   a <- runDecode m i
---   _ a
 
--- instance Monad m => Monad (Decode i m) where
+(>>>) :: Monad m => Decode m i a -> Decode m a b -> Decode m i b 
+(>>>) = flip (.)
 
 
 
 
--- | 'Decode' is called Kleisli in base.Control.Arrow
-newtype Kleisli m a b = Kleisli { runKleisli :: a -> m b } deriving Functor
-
-instance Applicative m => Applicative (Kleisli m a) where
-  pure x = Kleisli $ \ _ -> pure x
-  Kleisli af <*> Kleisli aa = Kleisli $ \ v -> af v <*> aa v
- 
-instance Alternative m => Alternative (Kleisli m a) where
-  empty = Kleisli $ const empty
-  Kleisli p <|> Kleisli q = Kleisli $ \v -> p v <|> q v
-
-instance Monad m => Profunctor (Kleisli m) where
-  dimap f g (Kleisli h) = Kleisli (fmap g . h . f)
-  {-# INLINE dimap #-}
 
 
 
-class Profunctor p where
-  {-# MINIMAL dimap | (lmap, rmap) #-}  
-  -- | Map over both arguments at the same time.
-  dimap :: (a -> b) -> (c -> d) -> p b c -> p a d
-  dimap f g = lmap f . rmap g
-  {-# INLINE dimap #-}
+-- class Profunctor p where
+--   {-# MINIMAL dimap | (lmap, rmap) #-}  
+--   -- | Map over both arguments at the same time.
+--   dimap :: (a -> b) -> (c -> d) -> p b c -> p a d
+--   dimap f g = lmap f . rmap g
+--   {-# INLINE dimap #-}
 
-  -- | Map the first argument contravariantly.
-  lmap :: (a -> b) -> p b c -> p a c
-  lmap f = dimap f id
-  {-# INLINE lmap #-}
+--   -- | Map the first argument contravariantly.
+--   lmap :: (a -> b) -> p b c -> p a c
+--   lmap f = dimap f id
+--   {-# INLINE lmap #-}
 
-  -- | Map the second argument covariantly.
-  rmap :: (b -> c) -> p a b -> p a c
-  rmap = dimap id
-  {-# INLINE rmap #-}  
+--   -- | Map the second argument covariantly.
+--   rmap :: (b -> c) -> p a b -> p a c
+--   rmap = dimap id
+--   {-# INLINE rmap #-}  
 
-  
+
+
+-- instance Functor m => Profunctor (Decode m) where
+--   dimap f g (Decode h) = Decode (fmap g . h . f)
+--   {-# INLINE dimap #-}  
 
 
 

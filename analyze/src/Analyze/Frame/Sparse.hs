@@ -24,7 +24,7 @@ module Analyze.Frame.Sparse (
   -- ** Traversal
   traverseWithKey, 
   -- ** Lookup 
-  lookup, lookupThrowM, lookupDefault,
+  lookup, -- lookupDefault,
   -- ** Insertion 
   insert, insertRowFun, insertRowFunM, 
   -- ** Set-like row operations
@@ -44,7 +44,8 @@ import qualified Data.List.NonEmpty as NE
 import Data.Hashable (Hashable(..))
 import Control.Monad.Catch(MonadThrow(..))
 
-import qualified Analyze.Decoding as D (Decode(..), mkDecode)
+import qualified Analyze.Decoding as D (Decode(..), mkDecode, (>>>))
+import Analyze.Decoding ((>>>))
 import Analyze.Common (Key, MissingKeyError(..))
 import Analyze.Values
 
@@ -110,25 +111,31 @@ toList = HM.toList . unRow
 lookup :: (Eq k, Hashable k) => k -> Row k v -> Maybe v
 lookup k = HM.lookup k . unRow
 
--- | Like 'lookup', but throws a 'MissingKeyError' if the lookup is unsuccessful
-lookupThrowM :: (MonadThrow m, Key k) =>
-                k -> Row k v -> m v
-lookupThrowM k r = maybe (throwM $ MissingKeyError k) pure (lookup k r)
+-- -- | Like 'lookup', but throws a 'MissingKeyError' if the lookup is unsuccessful
+-- lookupThrowM :: (MonadThrow m, Key k) =>
+--                 k -> Row k v -> m v
+-- lookupThrowM k r = maybe (throwM $ MissingKeyError k) pure (lookup k r)
 
--- | Lookup a key using a default value for non-existing keys
---
--- >>> lookupDefault 'x' 0 row0
--- 'a'
--- >>> lookupDefault 'x' 2 row0
--- 'x'
-lookupDefault :: (Eq k, Hashable k) => v -> k -> Row k v -> v
-lookupDefault v k = HM.lookupDefault v k . unRow
+-- withLookupThrowM :: (MonadThrow m, Key k) =>
+--                     (v -> m a)
+--                  -> k
+--                  -> Row k v -> m a
+-- withLookupThrowM fwith k r = maybe (throwM $ MissingKeyError k) fwith (lookup k r)
 
-decodeRow :: (MonadThrow m, Key k) => Row k o -> D.Decode k m o
-decodeRow r = D.mkDecode (`lookupThrowM` r)
+-- -- | Lookup a key using a default value for non-existing keys
+-- --
+-- -- >>> lookupDefault 'x' 0 row0
+-- -- 'a'
+-- -- >>> lookupDefault 'x' 2 row0
+-- -- 'x'
+-- lookupDefault :: (Eq k, Hashable k) => v -> k -> Row k v -> v
+-- lookupDefault v k = HM.lookupDefault v k . unRow
 
-decodeKey :: (MonadThrow m, Key k) => k -> D.Decode (Row k o) m o
-decodeKey k = D.mkDecode (lookupThrowM k)
+decodeRow :: (Eq k, Hashable k) => Row k o -> D.Decode Maybe k o
+decodeRow r = D.mkDecode (`lookup` r)
+
+decodeCol :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k o) o
+decodeCol k = D.mkDecode (lookup k)
 
 decInt = D.mkDecode getInt
 decInteger = D.mkDecode getInteger
@@ -137,11 +144,14 @@ decChar = D.mkDecode getChar
 decText = D.mkDecode getText
 
 -- | Decode any numerical value into a real number
-decodeReal :: D.Decode Value Maybe Double
+decodeReal :: D.Decode Maybe Value Double
 decodeReal =
   (fromIntegral <$> decInt)     <|>
   decDouble                     <|>
   (fromIntegral <$> decInteger)
+
+real :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k Value) Double
+real k = decodeCol k >>> decodeReal
 
 
 -- | Insert a key-value pair into a row and return the updated one
