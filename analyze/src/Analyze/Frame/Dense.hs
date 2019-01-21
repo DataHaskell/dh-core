@@ -97,6 +97,23 @@ flatDecode decoder rframe = join $ sequence <$> decode decoder rframe
 --   where
 --     vs' = V.ifilter (p ks look) vs
 
+
+-- -- | Filter the RFrame rows according to a predicate applied to a column value
+-- filterByKey :: Key k =>
+--                (v -> Bool) -- ^ Predicate 
+--             -> k           -- ^ Column key
+--             -> RFrame k v  
+--             -> Maybe (RFrame k v)
+-- filterByKey qv k (RFrame ks hm vs) = do
+--   vsf <- V.filterM ff vs
+--   pure $ RFrame ks hm vsf
+--   where 
+--     ff vrow = do
+--       i <- HM.lookup k hm
+--       v <- vrow V.!? i
+--       pure $ qv v
+
+
 -- | Update row-wise, adding or replacing values per-column.
 --   Retains the existing column order, appending new columns.
 --   Throws on row length mismatch or duplicate columns in the update.

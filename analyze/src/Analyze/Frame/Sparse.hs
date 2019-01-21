@@ -1,6 +1,6 @@
 {-# language OverloadedStrings #-}
 {-# language FlexibleInstances #-}
-{-# language DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
+{-# language DeriveFunctor, DeriveFoldable, DeriveTraversable, GeneralizedNewtypeDeriving #-}
 -- {-# language DeriveGeneric, DeriveDataTypeable #-}
 module Analyze.Frame.Sparse (
   -- * Table
@@ -150,11 +150,21 @@ decodeReal =
   decDouble                     <|>
   (fromIntegral <$> decInteger)
 
+
 real :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k Value) Double
 real k = decodeCol k >>> decodeReal
 
 
+-- test data
 
+ro0 :: Row Int Value
+ro0 = fromKVs [(0, VInt 32), (1, VChar 'z'), (2, VDouble pi)]
+
+
+
+newtype Dec k v a = Dec { unDec :: D.Decode Maybe (Row k v) a } deriving (Functor, Applicative, Alternative)
+
+unD = D.runDecode . unDec
 
 -- | Insert a key-value pair into a row and return the updated one
 -- 
@@ -365,48 +375,3 @@ hjBuild k = F.foldlM insf HM.empty where
     v <- lookup k row
     let hm' = HM.insertWith mappend v [row] hmAcc
     pure hm'
-
-
-
-
-
--- -- | Filter the RFrame rows according to a predicate applied to a column value
--- filterByKey :: Key k =>
---                (v -> Bool) -- ^ Predicate 
---             -> k           -- ^ Column key
---             -> RFrame k v  
---             -> Maybe (RFrame k v)
--- filterByKey qv k (RFrame ks hm vs) = do
---   vsf <- V.filterM ff vs
---   pure $ RFrame ks hm vsf
---   where 
---     ff vrow = do
---       i <- HM.lookup k hm
---       v <- vrow V.!? i
---       pure $ qv v
-
-
-
-
-
-
-
--- | Polymorphic representation. A bit verbose
-
--- newtype GTable f k v = GTable { gTableRows :: f (HM.HashMap k v) }
-
--- instance (Show k, Show v) => Show (GTable U k v) where
---   show (GTable rows) = show rows
--- instance (Eq k, Eq v) => Eq (GTable U k v) where
---   GTable rows1 == GTable rows2 = rows1 == rows2
--- instance (Show k, Show v) => Show (GTable B k v) where
---   show (GTable rows) = show rows
--- instance (Eq k, Eq v) => Eq (GTable B k v) where
---   GTable rows1 == GTable rows2 = rows1 == rows2  
-
--- newtype B rows = B (NE.NonEmpty rows) deriving (Eq, Show)
-
--- newtype U rows = U [rows] deriving (Eq, Show)
-
--- newtype BTable k v = BTable { unBTable :: GTable B k v } -- deriving (Eq, Show)
--- newtype UTable k v = UTable { unUTable :: GTable U k v }

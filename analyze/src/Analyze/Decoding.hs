@@ -32,7 +32,7 @@ import Prelude hiding (lookup, (.), id)
 -- | We can decouple lookup and value conversion and have distinct error behaviour.
 -- Multiple value decoding functions can be combined via the Alternative instance.
 --
--- | Note : 'Decode' is called Kleisli in base.Control.Arrow .Among other things it has a Profunctor instance.
+-- Note : 'Decode' is called Kleisli in base.Control.Arrow; among other things it has a Profunctor instance.
 
 newtype Decode m i o = Decode { runDecode :: i -> m o } deriving (Functor)
 
@@ -55,7 +55,7 @@ instance Monad m => Category (Decode m) where
   (Decode f) . (Decode g) = Decode (g >=> f)
 
 -- | Left-to-right composition 
-(>>>) :: Monad m => Decode m i a -> Decode m a b -> Decode m i b 
+(>>>) :: Monad m => Decode m a b -> Decode m b c -> Decode m a c
 (>>>) = flip (.)
 
 
