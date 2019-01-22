@@ -1,11 +1,10 @@
-cabal-version:  1.12
 name:           analyze
 version:        0.2.0
 synopsis:       Haskell data analysis and manipulation library
 description:    Haskell data analysis and manipulation library, please see README.md
 category:       Data Science
 homepage:       https://github.com/DataHaskell/dh-core/analyze
-author:         Eric Conlon <ejconlon@gmail.com>, Nikita Tchayka <nikitatchayka@gmail.com>
+author:         Eric Conlon <ejconlon@gmail.com>, Marco Zocca <ocramz fripost org>, Nikita Tchayka <nikitatchayka@gmail.com>
 maintainer:     Marco Zocca <ocramz fripost org>
 copyright:      2017-2018 Analyze contributors
 license:        BSD3
@@ -14,6 +13,7 @@ build-type:     Simple
 extra-source-files:  README.md
                      CHANGELOG.md
 tested-with:    GHC == 8.2.2, GHC == 8.4.3
+cabal-version:  1.12
 
 library
   exposed-modules:

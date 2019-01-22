@@ -162,9 +162,13 @@ ro0 = fromKVs [(0, VInt 32), (1, VChar 'z'), (2, VDouble pi)]
 
 
 
-newtype Dec k v a = Dec { unDec :: D.Decode Maybe (Row k v) a } deriving (Functor, Applicative, Alternative)
+newtype Dec k v m a = Dec { unDec :: D.Decode m (Row k v) a } deriving (Functor, Applicative, Alternative)
 
-unD = D.runDecode . unDec
+runDec :: Dec k v m a -> Row k v -> m a
+runDec = D.runDecode . unDec
+
+
+
 
 -- | Insert a key-value pair into a row and return the updated one
 -- 

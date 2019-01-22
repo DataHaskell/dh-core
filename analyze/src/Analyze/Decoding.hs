@@ -39,11 +39,12 @@ newtype Decode m i o = Decode { runDecode :: i -> m o } deriving (Functor)
 mkDecode :: (i -> m o) -> Decode m i o
 mkDecode = Decode
 
-
-
 instance Applicative m => Applicative (Decode m i) where
   pure x = Decode $ \ _ -> pure x
   Decode af <*> Decode aa = Decode $ \ v -> af v <*> aa v
+
+
+  
 
 instance Alternative m => Alternative (Decode m i) where
   empty = Decode $ const empty
@@ -57,6 +58,7 @@ instance Monad m => Category (Decode m) where
 -- | Left-to-right composition 
 (>>>) :: Monad m => Decode m a b -> Decode m b c -> Decode m a c
 (>>>) = flip (.)
+{-# inline (>>>) #-}
 
 
 
