@@ -36,6 +36,7 @@ library
                 containers >=0.5.7.1,
                 data-fix >= 0.2,
                 exceptions >=0.8.3,
+                logging-effect >= 1.2.6, 
                 mwc-random >= 0.13.6.0,
                 primitive >= 0.6.3.0,
                 text >=1.2.2.2,
