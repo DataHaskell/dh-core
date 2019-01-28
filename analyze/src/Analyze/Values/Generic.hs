@@ -1,10 +1,12 @@
 {-# language DataKinds, FlexibleContexts, GADTs #-}
-{-# language DeriveGeneric #-}
+{-# language DeriveGeneric, DeriveDataTypeable #-}
 module Analyze.Values.Generic (npToValue, npToValueM) where
 
 import Generics.SOP
 import Generics.SOP.NP
+import Generics.SOP.NS
 import qualified GHC.Generics as G
+import Data.Data (Data(..), DataType, Constr, isAlgType, dataTypeConstrs, indexConstr, constrFields, constrIndex, constrType, maxConstrIndex, readConstr)
 
 import qualified Analyze.Values as AV
 
@@ -36,7 +38,7 @@ import qualified Analyze.Values as AV
 -- >>> npToValue $ P 132 'x'
 -- [VInt 132,VChar 'x']
 npToValue :: (Generic a, All AV.ToValue xs, Code a ~ '[xs]) => a -> [AV.Value]
-npToValue = collapse_NP . gMapToValue . gToList
+npToValue = collapse_NP . gMapToValue . gToNP
 
 gMapToValue :: All AV.ToValue xs => NP I xs -> NP (K AV.Value) xs
 gMapToValue = hcmap (Proxy :: Proxy AV.ToValue) (mapIK AV.toValue)
@@ -55,11 +57,29 @@ gMapToValue = hcmap (Proxy :: Proxy AV.ToValue) (mapIK AV.toValue)
 -- >>> npToValueM $ Q Nothing (Left 13.2)
 -- [Nothing,Just (VDouble 13.2)]
 npToValueM :: (Generic a, All AV.ToValueM xs, Code a ~ '[xs]) => a -> [Maybe AV.Value]
-npToValueM = collapse_NP . gMapToValueM . gToList
+npToValueM = collapse_NP . gMapToValueM . gToNP
 
 gMapToValueM :: All AV.ToValueM xs => NP I xs -> NP (K (Maybe AV.Value)) xs
 gMapToValueM = hcmap (Proxy :: Proxy AV.ToValueM) (mapIK AV.toValueM)
 
-gToList :: (Generic a, Code a ~ '[x]) => a -> NP I x
-gToList d = unZ $ unSOP (from d)
+gToNP :: (Generic a, Code a ~ '[x]) => a -> NP I x
+gToNP d = unZ $ unSOP (from d)
+
+
+
+
+data X = A | B | C deriving (Eq, Show, Data, G.Generic)
+instance Generic X
+data W = W { w1 :: X, w2 :: Either Int Char} deriving (Eq, Show, Data, G.Generic)
+instance Generic W
+
+w0 = W A (Left 42)
+
+
+-- data NRep a = NRep {
+--     nrConstr :: Maybe String
+--   , nrCode :: SOP I (Code a)
+--   } 
+
+
 

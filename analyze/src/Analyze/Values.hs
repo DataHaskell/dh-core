@@ -1,4 +1,5 @@
 {-# language DeriveGeneric #-}
+{-# language LambdaCase #-}
 module Analyze.Values ( Value(..), ToValue(..), ToValueM(..), FromValue(..), valueToType, ValueType(..),
                       -- * Require functions
                       text, integer, int, double, bool,
@@ -14,6 +15,7 @@ import           Data.Text           (Text)
 import           Data.Typeable       (Typeable)
 import qualified GHC.Generics as G
 import Data.Hashable (Hashable(..))
+import Control.Monad.Log (MonadLog(..), Handler, WithSeverity(..), Severity, logDebug, logInfo, logWarning, logError, runLoggingT, PureLoggingT(..), runPureLoggingT)
 import Prelude hiding (getChar)
 
 
@@ -27,6 +29,24 @@ instance FromValue Double where fromValue = getDouble
 instance FromValue Char where fromValue = getChar
 instance FromValue Text where fromValue = getText
 instance FromValue Bool where fromValue = getBool
+
+
+class Tvm v where
+  tvm :: v -> Maybe Value
+
+instance Tvm Int where tvm = pure . VInt
+instance Tvm Double where tvm = pure . VDouble
+instance Tvm a => Tvm (Maybe a) where
+  tvm = \case
+    Just x -> tvm x
+    _      -> Nothing
+instance (Tvm l, Tvm r) => Tvm (Either l r) where
+  tvm = \case
+    Left x  -> tvm x
+    Right y -> tvm y
+
+
+    
 
 
 -- | Wrap a primitive type into a 'Maybe Value'

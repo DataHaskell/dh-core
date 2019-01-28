@@ -25,6 +25,7 @@ import Data.Foldable (Foldable(..), asum)
 import Control.Monad ((>=>))
 import Control.Applicative.Free (Ap(..), liftAp)
 -- import           Data.Maybe               (fromMaybe)
+import Control.Monad.Log (MonadLog(..), Handler, WithSeverity(..), Severity, logDebug, logInfo, logWarning, logError, runLoggingT, PureLoggingT(..), runPureLoggingT)
 
 import Prelude hiding (lookup, (.), id)
 

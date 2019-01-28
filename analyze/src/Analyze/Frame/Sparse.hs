@@ -111,10 +111,10 @@ toList = HM.toList . unRow
 lookup :: (Eq k, Hashable k) => k -> Row k v -> Maybe v
 lookup k = HM.lookup k . unRow
 
--- -- | Like 'lookup', but throws a 'MissingKeyError' if the lookup is unsuccessful
--- lookupThrowM :: (MonadThrow m, Key k) =>
---                 k -> Row k v -> m v
--- lookupThrowM k r = maybe (throwM $ MissingKeyError k) pure (lookup k r)
+-- | Like 'lookup', but throws a 'MissingKeyError' if the lookup is unsuccessful
+lookupThrowM :: (MonadThrow m, Key k) =>
+                k -> Row k v -> m v
+lookupThrowM k r = maybe (throwM $ MissingKeyError k) pure (lookup k r)
 
 -- withLookupThrowM :: (MonadThrow m, Key k) =>
 --                     (v -> m a)
@@ -131,11 +131,11 @@ lookup k = HM.lookup k . unRow
 -- lookupDefault :: (Eq k, Hashable k) => v -> k -> Row k v -> v
 -- lookupDefault v k = HM.lookupDefault v k . unRow
 
-decodeRow :: (Eq k, Hashable k) => Row k o -> D.Decode Maybe k o
-decodeRow r = D.mkDecode (`lookup` r)
+-- decodeRow :: (Eq k, Hashable k) => Row k o -> D.Decode Maybe k o
+decodeRow r = D.mkDecode (`lookupThrowM` r)
 
-decodeCol :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k o) o
-decodeCol k = D.mkDecode (lookup k)
+-- decodeCol :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k o) o
+decodeCol k = D.mkDecode (lookupThrowM k)
 
 decInt = D.mkDecode getInt
 decInteger = D.mkDecode getInteger
@@ -144,14 +144,14 @@ decChar = D.mkDecode getChar
 decText = D.mkDecode getText
 
 -- | Decode any numerical value into a real number
-decodeReal :: D.Decode Maybe Value Double
+-- decodeReal :: D.Decode Maybe Value Double
 decodeReal =
   (fromIntegral <$> decInt)     <|>
   decDouble                     <|>
   (fromIntegral <$> decInteger)
 
 
-real :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k Value) Double
+-- real :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k Value) Double
 real k = decodeCol k >>> decodeReal
 
 
