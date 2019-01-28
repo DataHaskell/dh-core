@@ -1,6 +1,6 @@
 {-# language DataKinds, FlexibleContexts, GADTs #-}
 {-# language LambdaCase #-}
-{-# language DeriveDataTypeable, DeriveGeneric#-}
+{-# language DeriveDataTypeable #-}
 module Core.Data.Frame.Generic (
   gToTable,
   -- * DEBUG
@@ -13,7 +13,7 @@ import Generics.SOP (Generic(..), All, Code)
 import Control.Exception (Exception(..))
 import Control.Monad.Catch (MonadThrow(..))
 import Data.Data (Data(..), constrFields)
-import Data.Typeable (Typeable(..))
+import Data.Typeable (Typeable)
 
 import qualified Data.Foldable as F (Foldable(..)) 
 import qualified Data.Text as T

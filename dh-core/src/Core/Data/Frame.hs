@@ -2,6 +2,7 @@
 {-# language FlexibleInstances #-}
 {-# language DeriveFunctor, DeriveFoldable, DeriveTraversable, GeneralizedNewtypeDeriving #-}
 -- {-# language DeriveGeneric, DeriveDataTypeable #-}
+{-# OPTIONS_GHC -Wno-unused-top-binds #-}
 module Core.Data.Frame (
   -- * Table
   Table,
