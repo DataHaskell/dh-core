@@ -15,7 +15,7 @@ import           Data.Text           (Text)
 import           Data.Typeable       (Typeable)
 import qualified GHC.Generics as G
 import Data.Hashable (Hashable(..))
-import Control.Monad.Log (MonadLog(..), Handler, WithSeverity(..), Severity, logDebug, logInfo, logWarning, logError, runLoggingT, PureLoggingT(..), runPureLoggingT)
+-- import Control.Monad.Log (MonadLog(..), Handler, WithSeverity(..), Severity, logDebug, logInfo, logWarning, logError, runLoggingT, PureLoggingT(..), runPureLoggingT)
 import Prelude hiding (getChar)
 
 

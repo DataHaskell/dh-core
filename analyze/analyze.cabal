@@ -46,7 +46,7 @@ library
         free ,
         generics-sop ,        
         hashable ,
-        logging-effect ,         
+        -- logging-effect ,         
         lucid ,
         streaming ,
         text ,
