@@ -31,19 +31,19 @@ instance FromValue Text where fromValue = getText
 instance FromValue Bool where fromValue = getBool
 
 
-class Tvm v where
-  tvm :: v -> Maybe Value
+-- class Tvm v where
+--   tvm :: v -> Maybe Value
 
-instance Tvm Int where tvm = pure . VInt
-instance Tvm Double where tvm = pure . VDouble
-instance Tvm a => Tvm (Maybe a) where
-  tvm = \case
-    Just x -> tvm x
-    _      -> Nothing
-instance (Tvm l, Tvm r) => Tvm (Either l r) where
-  tvm = \case
-    Left x  -> tvm x
-    Right y -> tvm y
+-- instance Tvm Int where tvm = pure . VInt
+-- instance Tvm Double where tvm = pure . VDouble
+-- instance Tvm a => Tvm (Maybe a) where
+--   tvm = \case
+--     Just x -> tvm x
+--     _      -> Nothing
+-- instance (Tvm l, Tvm r) => Tvm (Either l r) where
+--   tvm = \case
+--     Left x  -> tvm x
+--     Right y -> tvm y
 
 
     

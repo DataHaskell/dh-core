@@ -29,6 +29,11 @@ library
                        Core.Data.Dataset
                        Core.Data.Datum.Vector
                        Core.Data.Trie
+                       Core.Data.Frame
+                       Core.Data.Frame.Generic
+                       Core.Data.Frame.Decode
+                       Core.Data.Frame.Value
+                       Core.Data.Frame.Value.Generic
                        
   build-depends:
                 base >=4.10 && <5,
@@ -36,10 +41,13 @@ library
                 containers >=0.5.7.1,
                 data-fix >= 0.2,
                 exceptions >=0.8.3,
+                generics-sop,
+                hashable, 
                 logging-effect >= 1.2.6, 
                 mwc-random >= 0.13.6.0,
                 primitive >= 0.6.3.0,
                 text >=1.2.2.2,
+                unordered-containers, 
                 vector >=0.12.0.1,
                 vector-algorithms >=0.7.0.1,
                        -- DEBUG                
@@ -74,6 +82,17 @@ test-suite spec
                        core -any,
                        hspec >=2.4.8 
                        -- QuickCheck >=2.10.1
+
+test-suite doctest
+  type: exitcode-stdio-1.0
+  main-is: DocTest.hs
+  hs-source-dirs:
+        test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+       base , 
+       doctest ,
+       generics-sop
 
 source-repository head
   type:     git

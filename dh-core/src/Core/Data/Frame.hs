@@ -2,13 +2,13 @@
 {-# language FlexibleInstances #-}
 {-# language DeriveFunctor, DeriveFoldable, DeriveTraversable, GeneralizedNewtypeDeriving #-}
 -- {-# language DeriveGeneric, DeriveDataTypeable #-}
-module Analyze.Frame.Sparse (
+module Core.Data.Frame (
   -- * Table
   Table,
   -- ** Construction
   fromNEList, fromList,
   -- ** Access
-  head, zipWith, unionRowsWith,
+  head, zipWith, unionRowsWith, numRows, 
   -- ** Filtering 
   filter, filterByKey,
   -- ** Scans (row-wise cumulative operations)
@@ -34,7 +34,7 @@ module Analyze.Frame.Sparse (
   -- * Relational operations
   groupBy, innerJoin) where
 
-import Data.Maybe (fromMaybe)
+-- import Data.Maybe (fromMaybe)
 import Control.Applicative (Alternative(..))
 import qualified Data.Foldable as F
 -- import qualified Data.Vector as V
@@ -44,10 +44,10 @@ import qualified Data.List.NonEmpty as NE
 import Data.Hashable (Hashable(..))
 import Control.Monad.Catch(MonadThrow(..))
 
-import qualified Analyze.Decoding as D (Decode(..), mkDecode, (>>>))
-import Analyze.Decoding ((>>>))
-import Analyze.Common (Key, MissingKeyError(..))
-import Analyze.Values
+import qualified Core.Data.Frame.Decode as D (Decode(..), mkDecode)
+import Core.Data.Frame.Decode ((>>>))
+-- import Analyze.Common (Key, MissingKeyError(..))
+import Core.Data.Frame.Value
 
 
 import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head, getChar)
@@ -111,10 +111,10 @@ toList = HM.toList . unRow
 lookup :: (Eq k, Hashable k) => k -> Row k v -> Maybe v
 lookup k = HM.lookup k . unRow
 
--- | Like 'lookup', but throws a 'MissingKeyError' if the lookup is unsuccessful
-lookupThrowM :: (MonadThrow m, Key k) =>
-                k -> Row k v -> m v
-lookupThrowM k r = maybe (throwM $ MissingKeyError k) pure (lookup k r)
+-- -- | Like 'lookup', but throws a 'MissingKeyError' if the lookup is unsuccessful
+-- lookupThrowM :: (MonadThrow m, Key k) =>
+--                 k -> Row k v -> m v
+-- lookupThrowM k r = maybe (throwM $ MissingKeyError k) pure (lookup k r)
 
 -- withLookupThrowM :: (MonadThrow m, Key k) =>
 --                     (v -> m a)
@@ -131,34 +131,34 @@ lookupThrowM k r = maybe (throwM $ MissingKeyError k) pure (lookup k r)
 -- lookupDefault :: (Eq k, Hashable k) => v -> k -> Row k v -> v
 -- lookupDefault v k = HM.lookupDefault v k . unRow
 
--- decodeRow :: (Eq k, Hashable k) => Row k o -> D.Decode Maybe k o
-decodeRow r = D.mkDecode (`lookupThrowM` r)
+-- -- decodeRow :: (Eq k, Hashable k) => Row k o -> D.Decode Maybe k o
+-- decodeRow r = D.mkDecode (`lookupThrowM` r)
 
--- decodeCol :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k o) o
-decodeCol k = D.mkDecode (lookupThrowM k)
+-- -- decodeCol :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k o) o
+-- decodeCol k = D.mkDecode (lookupThrowM k)
 
-decInt = D.mkDecode getInt
-decInteger = D.mkDecode getInteger
-decDouble = D.mkDecode getDouble
-decChar = D.mkDecode getChar
-decText = D.mkDecode getText
+-- decInt = D.mkDecode getInt
+-- decInteger = D.mkDecode getInteger
+-- decDouble = D.mkDecode getDouble
+-- decChar = D.mkDecode getChar
+-- decText = D.mkDecode getText
 
--- | Decode any numerical value into a real number
--- decodeReal :: D.Decode Maybe Value Double
-decodeReal =
-  (fromIntegral <$> decInt)     <|>
-  decDouble                     <|>
-  (fromIntegral <$> decInteger)
+-- -- | Decode any numerical value into a real number
+-- -- decodeReal :: D.Decode Maybe Value Double
+-- decodeReal =
+--   (fromIntegral <$> decInt)     <|>
+--   decDouble                     <|>
+--   (fromIntegral <$> decInteger)
 
 
--- real :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k Value) Double
-real k = decodeCol k >>> decodeReal
+-- -- real :: (Eq k, Hashable k) => k -> D.Decode Maybe (Row k Value) Double
+-- real k = decodeCol k >>> decodeReal
 
 
 -- test data
 
-ro0 :: Row Int Value
-ro0 = fromKVs [(0, VInt 32), (1, VChar 'z'), (2, VDouble pi)]
+-- ro0 :: Row Int Value
+-- ro0 = fromKVs [(0, VInt 32), (1, VChar 'z'), (2, VDouble pi)]
 
 
 

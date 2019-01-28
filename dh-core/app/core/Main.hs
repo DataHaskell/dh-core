@@ -8,12 +8,12 @@ import qualified Data.Foldable as F
 
 -- import qualified Analyze.RFrame as AR
 import Analyze.Common (Key(..))
-import qualified Analyze.Values as AV
-import qualified Analyze.Decoding as AD
+import qualified Core.Data.Frame.Value as AV
+import qualified Core.Data.Frame.Decode as AD
 -- import qualified Analyze.Values.Generic as AVG
 -- import qualified Analyze.RFrame.Generic as ARG
-import Analyze.Frame.Sparse 
-import Analyze.Frame.Sparse.Generic (gToTable, gToRow)
+import Core.Data.Frame
+import Core.Data.Frame.Generic (gToTable, gToRow)
 
 import qualified GHC.Generics as G (Generic(..))
 
@@ -82,51 +82,51 @@ prog = do
 
 
 
--- | Applicative decoding of row types
+-- -- | Applicative decoding of row types
 
 
--- withDoubles :: (Key k, MonadThrow m) =>
---                (Double -> Double -> b) -> k -> k -> AD.Decoder m k AV.Value b
-withDoubles f k1 k2 =
-  f <$> withDouble k1 <*> withInt k2 
+-- -- withDoubles :: (Key k, MonadThrow m) =>
+-- --                (Double -> Double -> b) -> k -> k -> AD.Decoder m k AV.Value b
+-- withDoubles f k1 k2 =
+--   f <$> withDouble k1 <*> withInt k2 
 
-decodeRow :: Key k => AD.Decoder Maybe k v a -> Row k v -> Maybe a
-decodeRow dec row = AD.runDecoder dec (`lookup` row)
+-- decodeRow :: Key k => AD.Decoder Maybe k v a -> Row k v -> Maybe a
+-- decodeRow dec row = AD.runDecoder dec (`lookup` row)
 
-withDouble :: (Key k, MonadThrow m) => k -> AD.Decoder m k AV.Value Double
-withDouble = require AV.double
+-- withDouble :: (Key k, MonadThrow m) => k -> AD.Decoder m k AV.Value Double
+-- withDouble = require AV.double
 
-require :: (k -> v -> m a) -> k -> AD.Decoder m k v a
-require = flip AD.requireWhere 
+-- require :: (k -> v -> m a) -> k -> AD.Decoder m k v a
+-- require = flip AD.requireWhere 
 
-withInt k = fromIntegral <$> AD.requireWhere k AV.int
-
-
-num f k = f <$> require AV.int k <*> require AV.double k
+-- withInt k = fromIntegral <$> AD.requireWhere k AV.int
 
 
+-- num f k = f <$> require AV.int k <*> require AV.double k
 
 
--- -- | /alternative/-based decoding of row types (missing a decoder)
--- withNum2 :: (Key k, MonadThrow m) =>
---             (Double -> Double -> b) -> k -> k -> AD.DecAlt m k AV.Value b
--- withNum2 f k1 k2 = f <$> withNumAlt k1 <*> withNumAlt k2
--- withNumAlt :: (Key k, MonadThrow m) => k -> AD.DecAlt m k AV.Value Double
--- withNumAlt k = fromIntegral <$> AD.requireWhereA k AV.int <|> AD.requireWhereA k AV.double
 
--- test data
 
-data Moo = Moo { m1 :: Double, m2 :: Double, m3 :: Double} deriving (Eq, Show, G.Generic, Data)
-instance Generic Moo
+-- -- -- | /alternative/-based decoding of row types (missing a decoder)
+-- -- withNum2 :: (Key k, MonadThrow m) =>
+-- --             (Double -> Double -> b) -> k -> k -> AD.DecAlt m k AV.Value b
+-- -- withNum2 f k1 k2 = f <$> withNumAlt k1 <*> withNumAlt k2
+-- -- withNumAlt :: (Key k, MonadThrow m) => k -> AD.DecAlt m k AV.Value Double
+-- -- withNumAlt k = fromIntegral <$> AD.requireWhereA k AV.int <|> AD.requireWhereA k AV.double
 
-m00 = Moo 0.3 0.5 10.2
+-- -- test data
 
--- row decoding test
-progMoo :: Maybe Double
-progMoo = do
-  let m = gToRow ["m1", "m2", "m3"] m00
-  let dec = withDoubles (+) "m1" "m3"
-  decodeRow dec m
+-- data Moo = Moo { m1 :: Double, m2 :: Double, m3 :: Double} deriving (Eq, Show, G.Generic, Data)
+-- instance Generic Moo
+
+-- m00 = Moo 0.3 0.5 10.2
+
+-- -- row decoding test
+-- progMoo :: Maybe Double
+-- progMoo = do
+--   let m = gToRow ["m1", "m2", "m3"] m00
+--   let dec = withDoubles (+) "m1" "m3"
+--   decodeRow dec m
 
 
 
