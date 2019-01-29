@@ -1,6 +1,11 @@
-{-# language DataKinds, FlexibleContexts, GADTs #-}
-{-# language LambdaCase #-}
-{-# language DeriveDataTypeable #-}
+{-# language
+    DataKinds
+  , FlexibleContexts
+  , GADTs 
+  , LambdaCase 
+  , DeriveDataTypeable
+#-}
+{-# OPTIONS_GHC -Wall #-}
 module Core.Data.Frame.Generic (
   gToTable,
   -- * DEBUG
@@ -110,7 +115,7 @@ gToRowMaybe constrs d = mkRow (insertsMaybe kvs) where
 insertsMaybe :: (Foldable t, Eq k, Hashable k) =>
                 t (k, Maybe v)
              -> HM.HashMap k v
-insertsMaybe xs = F.foldl insf HM.empty xs where
+insertsMaybe = F.foldl insf HM.empty where
   insf acc (k, vmay) = case vmay of
     Just v  -> HM.insert k v acc
     Nothing -> acc

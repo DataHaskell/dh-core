@@ -1,12 +1,29 @@
-{-# language DeriveFunctor #-}
+{-# language DeriveFunctor, DeriveFoldable #-}
 module Core.Data.Trie where
 
 import Data.Maybe (isJust)
-
+import Data.Foldable (foldlM)
 import Data.Fix (Fix(..), cata, cataM, ana, anaM, hylo, hyloM)
 import qualified Data.Map as M
 
 import Prelude hiding (lookup)
+
+
+
+data T k v = T (Maybe v) (M.Map k (T k v)) deriving (Eq, Show, Functor, Foldable)
+
+emptyT = T Nothing M.empty
+
+-- insertT
+
+-- matchPrefix (k:ks) tt@(T vm mm) = foldlM ins emptyT tt where
+--   ins acc t = case M.lookup k mm of
+--     Nothing -> Nothing
+--     Just t' -> do
+--       let t'' = M.insert
+
+
+
 
 
 data TrieF k v x = TF (Maybe v) (M.Map k x) deriving (Functor, Show)

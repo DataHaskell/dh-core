@@ -20,8 +20,6 @@ module Analyze.Decoding
 import Analyze.Common           (Key)
 import Control.Applicative.Free (Ap(..), liftAp)
 
-
-
 -- | Pair of key and an extraction function.
 data Arg m k v a = Arg k (v -> m a) deriving (Functor)
 
