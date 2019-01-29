@@ -13,10 +13,15 @@ addons:
 # The different configurations we want to test. You could also do things like
 # change flags or use --stack-yaml to point to a different file.
 env:
-- ARGS="--resolver lts-11.22"  
-- ARGS="--resolver lts-12.14"
-- ARGS="--resolver lts-12.26"
-- ARGS="--resolver lts-13.5"
+  global:
+    - ANALYZE_V=0.2.0
+    - DENSE_LINEAR_ALGEBRA_V=0.1.0.0
+    - DATASETS_V=0.3.0
+  matrix:
+    - ARGS="--resolver lts-11.22"  
+    - ARGS="--resolver lts-12.14"
+    - ARGS="--resolver lts-12.26"
+    - ARGS="--resolver lts-13.5"
 
 
 before_install:
