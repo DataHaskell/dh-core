@@ -14,8 +14,9 @@ addons:
 # change flags or use --stack-yaml to point to a different file.
 env:
 - ARGS="--resolver lts-11.22"  
-- ARGS="--resolver lts-12.13"
-- ARGS="--resolver lts-13.0"
+- ARGS="--resolver lts-12.14"
+- ARGS="--resolver lts-12.26"
+- ARGS="--resolver lts-13.5"
 
 
 before_install:
