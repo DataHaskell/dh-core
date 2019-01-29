@@ -1,13 +1,14 @@
 {-# language DeriveDataTypeable, DeriveGeneric #-}
 {-# language OverloadedStrings #-}
-{-# OPTIONS_GHC -Wall #-}
+-- {-# OPTIONS_GHC -Wall #-}
+{-# OPTIONS_GHC -Wno-unused-imports #-}
 module Main where
 
-import Control.Applicative (Alternative(..))
-import qualified Data.Foldable as F
+-- import Control.Applicative (Alternative(..))
+-- import qualified Data.Foldable as F
 
 -- import qualified Analyze.RFrame as AR
-import Analyze.Common (Key(..))
+-- import Analyze.Common (Key(..))
 import qualified Core.Data.Frame.Value as AV
 import qualified Core.Data.Frame.Decode as AD
 -- import qualified Analyze.Values.Generic as AVG
@@ -21,19 +22,19 @@ import qualified GHC.Generics as G (Generic(..))
 import Generics.SOP (Generic(..))
 
 -- | typeable
-import Data.Data (Typeable, Data(..))
+import Data.Data (Data(..))
 
-import Data.Hashable (Hashable(..))
+-- import Data.Hashable (Hashable(..))
 -- import Control.Exception (Exception(..))
 import Control.Monad.Catch (MonadThrow(..))
 
 import qualified Data.Text as T
 -- import qualified Data.Vector as V
-import qualified Data.HashMap.Lazy as HM
+-- import qualified Data.HashMap.Lazy as HM
 
-import Data.Monoid (Alt(..))
+-- import Data.Monoid (Alt(..))
 
-import Prelude hiding (filter, scanl, scanr, lookup)
+import Prelude -- hiding (filter, scanl, scanr, lookup)
 
 
 data Price = Price { item :: T.Text, price :: Double } deriving (Eq, Show, G.Generic, Data)
@@ -66,11 +67,11 @@ pricesTable = gToTable prices_
 purchasesTable = gToTable purchases_
 
 
-prog = do
-  prices <- pricesTable
-  purchases <- purchasesTable
-  p1 <- filterByKey "itemBought" (/= AV.VText "legal fees") purchases
-  innerJoin "item" "itemBought" prices p1
+-- prog = do
+--   prices <- pricesTable
+--   purchases <- purchasesTable
+--   p1 <- filterByKey "itemBought" (/= AV.VText "legal fees") purchases
+--   innerJoin "item" "itemBought" prices p1
 
 
 
@@ -135,7 +136,7 @@ prog = do
 
 
 
-
+main :: IO () 
 main = putStrLn "hello!"
 
 

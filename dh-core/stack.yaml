@@ -4,7 +4,7 @@ resolver: lts-13.0 # GHC 8.6.3
 
 packages:
 - .
-- ../analyze
+# - ../analyze
 - ../dense-linear-algebra
 - ../datasets
 

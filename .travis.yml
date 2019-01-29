@@ -29,7 +29,7 @@ before_install:
 # around some quirks in Travis's terminal implementation.
 script:
 - cd dh-core
-- stack $ARGS --no-terminal --install-ghc test --haddock
+- stack $ARGS --no-terminal --install-ghc test core:spec core:doctest dense-linear-algebra:spec --haddock
 
 # Caching so the next build will be fast too.
 cache:
