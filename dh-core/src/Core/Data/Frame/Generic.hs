@@ -194,7 +194,14 @@ instance HasDatatypeInfo H
 
 
 
-
+-- λ> sopToVal (datatypeInfo (Proxy :: Proxy C)) (from C2)
+-- Constr "C2" []
+-- λ> sopToVal (datatypeInfo (Proxy :: Proxy B)) (from $ B 42 'x')
+-- Rec (fromList [("b1",VInt 42),("b2",VChar 'x')])
+-- λ> sopToVal (datatypeInfo (Proxy :: Proxy A)) (from $ A 42 'x')
+-- Constr "A" [VInt 42,VChar 'x']
+-- λ> sopToVal (datatypeInfo (Proxy :: Proxy (Maybe Int))) (from $ Just 42)
+-- Constr "Just" [VInt 42]
 
 sopToVal :: (All2 ToVal xss) => DatatypeInfo xss -> SOP I xss -> Val
 sopToVal di (SOP xss) = hcollapse $ hcliftA2
