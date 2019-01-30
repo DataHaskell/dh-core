@@ -214,6 +214,8 @@ baz (Record _ fi) xs = Rec $ M.fromList $ hcollapse $ hcliftA2 (Proxy :: Proxy T
 data Val =
     Constr FieldName [Val]
   | Rec (M.Map FieldName Val)
+  | VInt Int
+  | VChar Char
   deriving (Eq, Show)
 
 class ToVal a where
@@ -223,3 +225,9 @@ class ToVal a where
   toVal x = sopToVal (gdatatypeInfo (Proxy :: Proxy a)) (gfrom x)  
 
 instance ToVal a => ToVal (Maybe a)
+
+-- instance ToVal Val where
+--     toVal = id
+
+instance ToVal Int where toVal = VInt
+instance ToVal Char where toVal = VChar
