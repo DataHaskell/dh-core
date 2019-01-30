@@ -9,18 +9,31 @@ import qualified Data.Map as M
 import Prelude hiding (lookup)
 
 
+unfoldL :: (t -> Maybe a) -> t -> [a]
+unfoldL insf x = case
+  insf x of Nothing -> []
+            Just y  -> y : unfoldL insf x
 
-data T k v = T (Maybe v) (M.Map k (T k v)) deriving (Eq, Show, Functor, Foldable)
+data BF a x = BLeaf a | BBranch x x deriving (Eq, Show, Functor)
 
-emptyT = T Nothing M.empty
+newtype B a = B (Fix (BF a)) deriving (Eq, Show)
 
--- insertT
+cataB :: (BF a x -> x) -> B a -> x
+cataB phi (B t) = cata phi t
 
--- matchPrefix (k:ks) tt@(T vm mm) = foldlM ins emptyT tt where
---   ins acc t = case M.lookup k mm of
---     Nothing -> Nothing
---     Just t' -> do
---       let t'' = M.insert
+anaB :: (x -> BF a x) -> x -> B a
+anaB psi z = B $ ana psi z
+
+
+data SF k v x = SF { sV :: Maybe v, sRest :: M.Map k x } deriving (Eq, Show, Functor)
+newtype S k v = S (Fix (SF k v)) deriving (Eq, Show)
+
+cataS :: (SF k v a -> a) -> S k v -> a
+cataS phi (S m) = cata phi m
+
+anaS :: (x -> SF k v x) -> x -> S k v
+anaS psi z = S $ ana psi z
+
 
 
 
@@ -55,7 +68,7 @@ t0 = fromList [("mo", 1), ("ma", 2)]
 lookup :: Ord k => [k] -> Trie k v -> Maybe v
 lookup ks t = cataTrie lookupAlg t ks
 
-lookupAlg :: Ord k => TrieF k v ([k] -> Maybe v) -> [k] -> Maybe v
+lookupAlg :: Ord k => TrieF k v ([k] -> Maybe v) -> ([k] -> Maybe v)
 lookupAlg (TF v looks) kss = case kss of
   [] -> v
   k:ks -> case M.lookup k looks of

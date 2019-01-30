@@ -3,13 +3,33 @@
 {-# language DeriveFunctor, DeriveFoldable, DeriveTraversable, GeneralizedNewtypeDeriving #-}
 -- {-# language DeriveGeneric, DeriveDataTypeable #-}
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
+-- {-# OPTIONS_HADDOCK show-extensions #-}
+-----------------------------------------------------------------------------
+-- |
+-- Module      :  Core.Data.Frame
+-- Description :  A sparse dataframe
+-- Copyright   :  (c) Marco Zocca (2018-2019)
+-- License     :  BSD-style
+-- Maintainer  :  ocramz fripost org
+-- Stability   :  experimental
+-- Portability :  GHC
+--
+-- A general-purpose, row-oriented data frame.
+--
+-- As it is common in the sciences, the dataframe should be taken to contain
+-- experimental datapoints as its rows, each being defined by a number of /features/.
+--
+-- Since the rows are internally represented with HashMaps, this format
+-- supports the possibility of missing features in the dataset.
+--
+-----------------------------------------------------------------------------
 module Core.Data.Frame (
-  -- * Table
-  Table,
+  -- * Frame
+  Frame,
   -- ** Construction
   fromNEList, fromList,
   -- ** Access
-  head, zipWith, unionRowsWith, numRows, 
+  head, take, drop, zipWith, unionRowsWith, numRows, 
   -- ** Filtering 
   filter, filterByKey,
   -- ** Scans (row-wise cumulative operations)
@@ -51,13 +71,13 @@ import Core.Data.Frame.Decode ((>>>))
 import Core.Data.Frame.Value
 
 
-import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head, getChar)
+import Prelude hiding (filter, zipWith, lookup, scanl, scanr, head, getChar, take, drop)
 
 -- $setup
 -- >>> let row0 = fromKVs [(0, 'a'), (3, 'b')] :: Row Int Char
 -- >>> let row1 = fromKVs [(0, 'x'), (1, 'b'), (666, 'z')] :: Row Int Char 
 
-t0 :: Table (Row String String)
+t0 :: Frame (Row String String)
 t0 = fromList [ book1, ball, bike, book2 ] 
            where
              book1 = fromKVs [("item", "book"), ("id.0", "129"), ("qty", "1")]
@@ -65,8 +85,8 @@ t0 = fromList [ book1, ball, bike, book2 ]
              ball = fromKVs [("item", "ball"), ("id.0", "234"), ("qty", "1")]  
              bike = fromKVs [("item", "bike"), ("id.0", "410"), ("qty", "1")]
 
-t1 :: Table (Row String String)
-t1 = fromList [ r1, r2, r3, r4 ] :: Table (Row String String)
+t1 :: Frame (Row String String)
+t1 = fromList [ r1, r2, r3, r4 ] :: Frame (Row String String)
            where
              r1 = fromKVs [("id.1", "129"), ("price", "100")]
              r2 = fromKVs [("id.1", "234"), ("price", "50")]  
@@ -250,69 +270,77 @@ insertRowFunM fm knew row = do
 
 
 
--- | A 'Table' is a non-empty list of rows.
-newtype Table row = Table {
-    -- nTableRows :: Maybe Int  -- ^ Nothing means unknown
+-- | A 'Frame' is a non-empty list of rows.
+newtype Frame row = Frame {
+    -- nFrameRows :: Maybe Int  -- ^ Nothing means unknown
     tableRows :: NE.NonEmpty row } deriving (Eq, Show, Functor, Foldable, Traversable)
 
--- | Take the first row of a 'Table'
+-- | Take the first row of a 'Frame'
 --
 -- >>> head (fromList [row0, row1]) == row0
 -- True
-head :: Table row -> row
+head :: Frame row -> row
 head = NE.head . tableRows
+
+-- | Take the first @n@ rows of a Frame
+take :: Int -> Frame r -> [r]
+take n = NE.take n . tableRows
+
+-- | Drop the first @n@ rows of a Frame
+drop :: Int -> Frame r -> [r]
+drop n = NE.drop n . tableRows
 
 -- | Construct a table given a non-empty list of rows
 --
 -- >>> (head <$> fromNEList [row0, row1]) == Just row0
 -- True
--- >>> (head <$> fromNEList []) == Nothing
--- True
-fromNEList :: [row] -> Maybe (Table row)
-fromNEList l = Table <$> NE.nonEmpty l
+-- >>> fromNEList []
+-- Nothing
+fromNEList :: [row] -> Maybe (Frame row)
+fromNEList l = Frame <$> NE.nonEmpty l
 
 -- | Construct a table given a list of rows. Crashes if the input list is empty
-fromList :: [row] -> Table row
-fromList = Table . NE.fromList 
+fromList :: [row] -> Frame row
+fromList = Frame . NE.fromList 
 
 zipWith :: (a -> b -> row)
-        -> Table a -> Table b -> Table row
-zipWith f tt1 tt2 = Table $ NE.zipWith f (tableRows tt1) (tableRows tt2)
+        -> Frame a -> Frame b -> Frame row
+zipWith f tt1 tt2 = Frame $ NE.zipWith f (tableRows tt1) (tableRows tt2)
 
 unionRowsWith :: (Eq k, Hashable k) =>
-                 (v -> v -> v) -> Table (Row k v) -> Table (Row k v) -> Table (Row k v)
+                 (v -> v -> v) -> Frame (Row k v) -> Frame (Row k v) -> Frame (Row k v)
 unionRowsWith f = zipWith (unionWith f)
 
--- | Filters a 'Table' according to a predicate. Returns Nothing only if the resulting table is empty (i.e. if no rows satisfy the predicate).
+-- | Filters a 'Frame' according to a predicate. Returns Nothing only if the resulting table is empty (i.e. if no rows satisfy the predicate).
 --
-filter :: (row -> Bool) -> Table row -> Maybe (Table row)
+filter :: (row -> Bool) -> Frame row -> Maybe (Frame row)
 filter ff = fromNEList . NE.filter ff . tableRows
 
--- | Filter a table according to predicate applied to an element pointed to by a given key.
+-- | Filter a 'Frame' according to predicate applied to an element pointed to by a given key.
 --
 -- >>> numRows <$> filterByKey "item" (/= "book") t0
 -- Just 2
 filterByKey :: (Eq k, Hashable k) =>
                k            -- ^ Key
             -> (v -> Bool)  -- ^ Predicate to be applied to the element
-            -> Table (Row k v)
-            -> Maybe (Table (Row k v))
+            -> Frame (Row k v)
+            -> Maybe (Frame (Row k v))
 filterByKey k ff = filter (k !: ff)
 
 
 -- | Left-associative scan
-scanl :: (b -> a -> b) -> b -> Table a -> Table b
-scanl f z tt = Table $ NE.scanl f z (tableRows tt)
+scanl :: (b -> a -> b) -> b -> Frame a -> Frame b
+scanl f z tt = Frame $ NE.scanl f z (tableRows tt)
 
 -- | Right-associative scan
-scanr :: (a -> b -> b) -> b -> Table a -> Table b
-scanr f z tt = Table $ NE.scanr f z (tableRows tt)
+scanr :: (a -> b -> b) -> b -> Frame a -> Frame b
+scanr f z tt = Frame $ NE.scanr f z (tableRows tt)
 
 -- | /O(n)/ Count the number of rows in the table
 --
 -- >>> numRows t0
 -- 4
-numRows :: Table row -> Int 
+numRows :: Frame row -> Int 
 numRows = length . tableRows
      
 
@@ -325,8 +353,8 @@ numRows = length . tableRows
 -- Just 2
 groupBy :: (Foldable t, Hashable k, Hashable v, Eq k, Eq v) =>
            k  -- ^ Key to group by
-        -> t (Row k v) -- ^ A @Table (Row k v)@ can be used here
-        -> Maybe (HM.HashMap v (Table (Row k v)))
+        -> t (Row k v) -- ^ A @Frame (Row k v)@ can be used here
+        -> Maybe (HM.HashMap v (Frame (Row k v)))
 groupBy k tab = do
   groups <- groupL k tab
   pure $ fromList <$> groups
@@ -339,7 +367,7 @@ groupL k tab = F.foldlM insf HM.empty tab where
     pure $ HM.insertWith (++) v [row] acc
 
 
--- | INNER JOIN : given two tables and one key from each, compute the tables' inner join using the keys as relations.
+-- | INNER JOIN : given two dataframes and one key from each, compute the inner join using the keys as relations.
 --
 -- >>> head t0
 -- [("id.0","129"),("qty","1"),("item","book")]
@@ -352,9 +380,9 @@ groupL k tab = F.foldlM insf HM.empty tab where
 innerJoin :: (Foldable t, Hashable v, Hashable k, Eq v, Eq k) =>
              k  -- ^ Key into the first table
           -> k  -- ^ Key into the second table
-          -> t (Row k v)  -- ^ First table
-          -> t (Row k v)  -- ^ Second table
-          -> Maybe (Table (Row k v))
+          -> t (Row k v)  -- ^ First dataframe
+          -> t (Row k v)  -- ^ Second dataframe
+          -> Maybe (Frame (Row k v))
 innerJoin k1 k2 table1 table2 = fromList <$> F.foldlM insf [] table1 where
   insf acc row1 = do
     v <- lookup k1 row1

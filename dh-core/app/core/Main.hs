@@ -62,7 +62,7 @@ purchases_ = [
 
 
 
-pricesTable, purchasesTable :: MonadThrow m => m (Table (Row T.Text AV.Value)) 
+pricesTable, purchasesTable :: MonadThrow m => m (Frame (Row T.Text AV.Value)) 
 pricesTable = gToTable prices_
 purchasesTable = gToTable purchases_
 
