@@ -21,7 +21,11 @@ import Data.Maybe (fromMaybe)
 
 import Data.Fix (Fix(..), cata, ana)
 
+import Control.Arrow (second)
+
 import Generics.SOP hiding (fromList) -- (Generic(..), All, Code)
+import Generics.SOP.NP (cpure_NP)
+import Generics.SOP.Constraint (SListIN)
 import Generics.SOP.GGP   (GCode, GDatatypeInfo, GFrom, gdatatypeInfo, gfrom)
 -- import Generics.SOP.NP
 import qualified GHC.Generics as G
@@ -178,30 +182,35 @@ sopToVal di (SOP xss) = hcollapse $ hcliftA2
 baz :: All ToVal xs => ConstructorInfo xs -> NP I xs -> Val
 baz (Infix cn _ _) xs = Con cn $ hcollapse $
     hcmap (Proxy :: Proxy ToVal) (mapIK toVal) xs
-baz (Constructor cn) xs = Con cn $ hcollapse $
-    hcmap (Proxy :: Proxy ToVal) (mapIK toVal) xs
+baz (Constructor cn) xs -- Con cn cns
+  | null cns = Enum cn
+  | otherwise = Con cn cns
+  where
+    cns = hcollapse $ hcmap (Proxy :: Proxy ToVal) (mapIK toVal) xs
 baz (Record _ fi) xs = Rec $ M.fromList $ hcollapse $ hcliftA2 (Proxy :: Proxy ToVal) mk fi xs
   where
     mk :: ToVal v => FieldInfo v -> I v -> K (FieldName, Val) v
     mk (FieldInfo n) (I x) = K (n, toVal x)
 
 -- -- where in the recursion should we relabel the AST?
--- c2r (Con n vs) = Rec $ M.fromList $ zip labels vs where
---   labels = map (\i -> map toLower n ++ "_" ++ show i) ([0 ..] :: [Int])
-
-
+-- | Convert 'Con'structors into labeled 'Rec'ords
+c2r :: Val -> Val
+c2r (Con n vs) = Rec $ M.fromList $ zip labels vs where
+  labels = map (\i -> map toLower n ++ "_" ++ show i) ([0 ..] :: [Int])
+c2r x = x
 
 
 data Val =
-    Con FieldName [Val]
-  | Rec (M.Map FieldName Val)
-  | VInt Int
+    Con FieldName [Val]  -- ^ Constructor (1 or more anonymous fields)
+  | Enum FieldName       -- ^ Enum (Constructor with 0 fields)
+  | Rec (M.Map FieldName Val) -- ^ Record (1 or more named fields)
+  | VInt Int  
   | VChar Char
-  | VMaybe (Maybe Val)
+  -- | VMaybe (Maybe Val)
   deriving (Eq, Show)
 
 class ToVal a where
-  toVal :: a -> Val
+  toVal :: a -> Val 
   default toVal :: (G.Generic a, All2 ToVal (GCode a), GFrom a, GDatatypeInfo a)
                 => a -> Val
   toVal x = sopToVal (gdatatypeInfo (Proxy :: Proxy a)) (gfrom x)  
@@ -213,30 +222,15 @@ instance ToVal a => ToVal (Maybe a) where
 instance (ToVal l, ToVal r) => ToVal (Either l r)
 instance (ToVal l, ToVal r) => ToVal (l, r)
 
--- instance ToVal Val where
---     toVal = id
-
 instance ToVal Int where toVal = VInt
 instance ToVal Char where toVal = VChar
 
+-- instance ToVal Val where
+--     toVal = id
 
 
-
--- | AST in fixpoint form
-data ValF x =
-    ConF FieldName [x]
-  | RecF (M.Map FieldName x)
-  | VIntF Int
-  | VCharF Char
-  deriving (Eq, Show, Functor)
-
-newtype Val' = Val' (Fix ValF)
-
-cataVal' :: (ValF a -> a) -> Val' -> a
-cataVal' phi (Val' v) = cata phi v
-
-anaVal' :: (a -> ValF a) -> a -> Val'
-anaVal' psi v = Val' $ ana psi v
+-- blorp :: SOP I xs -> NP K xs
+-- blorp = hmap (mapIK id) . unSOP
 
 
 
@@ -285,3 +279,44 @@ instance ToVal J
 
 
 
+
+
+
+
+   
+
+ 
+-- | AST in fixpoint form
+data ValF x =
+    ConF FieldName [x]
+  | RecF (M.Map FieldName x)
+  | VIntF Int
+  | VCharF Char
+  deriving (Eq, Show, Functor)
+
+newtype Val' = Val' (Fix ValF) deriving Show
+
+cataVal' :: (ValF a -> a) -> Val' -> a
+cataVal' phi (Val' v) = cata phi v
+
+anaVal' :: (a -> ValF a) -> a -> Val'
+anaVal' psi v = Val' $ ana psi v
+
+
+-- -- bazF :: All ToValF xs => ConstructorInfo xs -> NP I xs -> ValF x
+-- bazF (Infix cn _ _) xs = ConF cn $ hcollapse $
+--     hcmap (Proxy :: Proxy ToValF) (mapIK toValF) xs
+
+class ToValF v where
+  toValF :: v -> ValF a
+  -- default toValF :: (G.Generic a, All2 ToVal (GCode a), GFrom a, GDatatypeInfo a)
+  --               => a -> Val
+  -- toValF x = sopToVal (gdatatypeInfo (Proxy :: Proxy a)) (gfrom x) 
+
+
+-- instance ToVal a => ToVal (Maybe a) where
+--   -- toVal mx = case mx of
+--   --   Nothing -> VMaybe Nothing
+--   --   Just x  -> VMaybe (Just $ toVal x)
+-- instance (ToVal l, ToVal r) => ToVal (Either l r)
+-- instance (ToVal l, ToVal r) => ToVal (l, r)
