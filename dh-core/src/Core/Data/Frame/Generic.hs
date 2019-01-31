@@ -1,13 +1,13 @@
 {-# language
     DeriveGeneric
+  , DeriveFunctor
   , DataKinds
   , FlexibleContexts
   , GADTs 
   , LambdaCase 
-  , DeriveDataTypeable
   , TypeOperators
   , DefaultSignatures
-  , ScopedTypeVariables 
+  , ScopedTypeVariables
 #-}
 {-# OPTIONS_GHC -Wall #-}
 module Core.Data.Frame.Generic (
@@ -17,14 +17,22 @@ module Core.Data.Frame.Generic (
   ) where
 
 import Data.Char (toLower)
+import Data.Maybe (fromMaybe)
+
+import Data.Fix (Fix(..), cata, ana)
+
 import Generics.SOP hiding (fromList) -- (Generic(..), All, Code)
 import Generics.SOP.GGP   (GCode, GDatatypeInfo, GFrom, gdatatypeInfo, gfrom)
 -- import Generics.SOP.NP
 import qualified GHC.Generics as G
-import Control.Exception (Exception(..))
-import Control.Monad.Catch (MonadThrow(..))
+
 import Data.Data (Data(..), constrFields)
 import Data.Typeable (Typeable)
+-- import Data.Dynamic
+
+import Control.Exception (Exception(..))
+import Control.Monad.Catch (MonadThrow(..))
+import Control.Monad.State (State(..), runState, get, put, modify)
 
 import qualified Data.Foldable as F (Foldable(..)) 
 import qualified Data.Text as T
@@ -145,52 +153,7 @@ insertsMaybe = F.foldl insf HM.empty where
 
 
 
--- test data
 
--- λ> datatypeInfo (Proxy :: Proxy A)
--- ADT "Core.Data.Frame.Generic" "A" (Constructor "A" :* Nil)
-data A = A Int Char deriving (Eq, Show, G.Generic)
-instance Generic A
-instance HasDatatypeInfo A
-
--- ADT "Core.Data.Frame.Generic" "B" (Record "B" (FieldInfo "b1" :* FieldInfo "b2" :* Nil) :* Nil)
-data B = B { b1 :: Int, b2 :: Char } deriving (Eq, Show, G.Generic)
-instance Generic B
-instance HasDatatypeInfo B
-
--- ADT "Core.Data.Frame.Generic" "C" (Constructor "C1" :* Constructor "C2" :* Constructor "C3" :* Nil)
-data C = C1 | C2 | C3 deriving (Eq, Show, G.Generic)
-instance Generic C
-instance HasDatatypeInfo C
-
--- ADT "Core.Data.Frame.Generic" "D" (Constructor "D1" :* Constructor "D2" :* Constructor "D3" :* Nil)
-data D = D1 Int | D2 Char | D3 (Maybe Int) deriving (Eq, Show, G.Generic)
-instance Generic D
-instance HasDatatypeInfo D
-
--- ADT "Core.Data.Frame.Generic" "E" (Record "E1" (FieldInfo "e1" :* Nil) :* Record "E2" (FieldInfo "e2" :* Nil) :* Record "E3" (FieldInfo "e3" :* Nil) :* Nil)
-data E = E1 { e1 :: Int } | E2 { e2 :: Char } | E3 { e3 :: Maybe Int } deriving (Eq, Show, G.Generic)
-instance Generic E
-instance HasDatatypeInfo E
-
--- Newtype "Core.Data.Frame.Generic" "F" (Constructor "F")
-newtype F = F (Either Int Char) deriving (Eq, Show, G.Generic)
-instance Generic F
-instance HasDatatypeInfo F
-
--- Newtype "Core.Data.Frame.Generic" "G" (Record "G" (FieldInfo "g" :* Nil))
-newtype G = G { g :: Either Int (Maybe Char) } deriving (Eq, Show, G.Generic)
-instance Generic G
-instance HasDatatypeInfo G
-
--- ADT "Core.Data.Frame.Generic" ":@" (Infix ":+" LeftAssociative 9 :* Infix ":-" LeftAssociative 9 :* Nil)
-data a :@ b = a :+ b | a :- b deriving (Eq, Show, G.Generic)
-instance Generic (a :@ b)
-instance HasDatatypeInfo (a :@ b)
-
-data H = H1 C deriving (Eq, Show, G.Generic)
-instance Generic H
-instance HasDatatypeInfo H
 
 
 
@@ -202,6 +165,8 @@ instance HasDatatypeInfo H
 -- Constr "A" [VInt 42,VChar 'x']
 -- λ> sopToVal (datatypeInfo (Proxy :: Proxy (Maybe Int))) (from $ Just 42)
 -- Constr "Just" [VInt 42]
+-- λ> sopToVal (datatypeInfo (Proxy :: Proxy (Either Int Char))) (from $ Right 'z')
+-- Constr "Right" [VChar 'z']
 
 sopToVal :: (All2 ToVal xss) => DatatypeInfo xss -> SOP I xss -> Val
 sopToVal di (SOP xss) = hcollapse $ hcliftA2
@@ -211,18 +176,28 @@ sopToVal di (SOP xss) = hcollapse $ hcliftA2
     xss
 
 baz :: All ToVal xs => ConstructorInfo xs -> NP I xs -> Val
-baz (Constructor cn) xs = Constr cn $ hcollapse $
+baz (Infix cn _ _) xs = Con cn $ hcollapse $
+    hcmap (Proxy :: Proxy ToVal) (mapIK toVal) xs
+baz (Constructor cn) xs = Con cn $ hcollapse $
     hcmap (Proxy :: Proxy ToVal) (mapIK toVal) xs
 baz (Record _ fi) xs = Rec $ M.fromList $ hcollapse $ hcliftA2 (Proxy :: Proxy ToVal) mk fi xs
   where
     mk :: ToVal v => FieldInfo v -> I v -> K (FieldName, Val) v
     mk (FieldInfo n) (I x) = K (n, toVal x)
 
+-- -- where in the recursion should we relabel the AST?
+-- c2r (Con n vs) = Rec $ M.fromList $ zip labels vs where
+--   labels = map (\i -> map toLower n ++ "_" ++ show i) ([0 ..] :: [Int])
+
+
+
+
 data Val =
-    Constr FieldName [Val]
+    Con FieldName [Val]
   | Rec (M.Map FieldName Val)
   | VInt Int
   | VChar Char
+  | VMaybe (Maybe Val)
   deriving (Eq, Show)
 
 class ToVal a where
@@ -231,10 +206,82 @@ class ToVal a where
                 => a -> Val
   toVal x = sopToVal (gdatatypeInfo (Proxy :: Proxy a)) (gfrom x)  
 
-instance ToVal a => ToVal (Maybe a)
+instance ToVal a => ToVal (Maybe a) where
+  -- toVal mx = case mx of
+  --   Nothing -> VMaybe Nothing
+  --   Just x  -> VMaybe (Just $ toVal x)
+instance (ToVal l, ToVal r) => ToVal (Either l r)
+instance (ToVal l, ToVal r) => ToVal (l, r)
 
 -- instance ToVal Val where
 --     toVal = id
 
 instance ToVal Int where toVal = VInt
 instance ToVal Char where toVal = VChar
+
+
+
+
+-- | AST in fixpoint form
+data ValF x =
+    ConF FieldName [x]
+  | RecF (M.Map FieldName x)
+  | VIntF Int
+  | VCharF Char
+  deriving (Eq, Show, Functor)
+
+newtype Val' = Val' (Fix ValF)
+
+cataVal' :: (ValF a -> a) -> Val' -> a
+cataVal' phi (Val' v) = cata phi v
+
+anaVal' :: (a -> ValF a) -> a -> Val'
+anaVal' psi v = Val' $ ana psi v
+
+
+
+
+-- test data
+-- pretty cool that the Generic and HasDatatypeInfo instances are computed from the G.Generic instance by Generics.SOP.GGP (see default implementation of 'toVal')
+
+-- λ> gdatatypeInfo (Proxy :: Proxy A)
+-- ADT "Core.Data.Frame.Generic" "A" (Constructor "A" :* Nil)
+data A = A Int Char deriving (Eq, Show, G.Generic)
+instance ToVal A
+
+-- ADT "Core.Data.Frame.Generic" "B" (Record "B" (FieldInfo "b1" :* FieldInfo "b2" :* Nil) :* Nil)
+data B = B { b1 :: Int, b2 :: Char } deriving (Eq, Show, G.Generic)
+instance ToVal B
+
+-- ADT "Core.Data.Frame.Generic" "C" (Constructor "C1" :* Constructor "C2" :* Constructor "C3" :* Nil)
+data C = C1 | C2 | C3 deriving (Eq, Show, G.Generic)
+instance ToVal C
+
+-- ADT "Core.Data.Frame.Generic" "D" (Constructor "D1" :* Constructor "D2" :* Constructor "D3" :* Nil)
+data D = D1 Int | D2 Char | D3 (Maybe Int) deriving (Eq, Show, G.Generic)
+instance ToVal D
+
+-- ADT "Core.Data.Frame.Generic" "E" (Record "E1" (FieldInfo "e1" :* Nil) :* Record "E2" (FieldInfo "e2" :* Nil) :* Record "E3" (FieldInfo "e3" :* Nil) :* Nil)
+data E = E1 { e1 :: Int } | E2 { e2 :: Char } | E3 { e3 :: Maybe Int } deriving (Eq, Show, G.Generic)
+instance ToVal E
+
+-- Newtype "Core.Data.Frame.Generic" "F" (Constructor "F")
+newtype F = F (Either Int Char) deriving (Eq, Show, G.Generic)
+instance ToVal F
+
+-- Newtype "Core.Data.Frame.Generic" "G" (Record "G" (FieldInfo "g" :* Nil))
+newtype G = G { g :: Either Int (Maybe Char) } deriving (Eq, Show, G.Generic)
+instance ToVal G
+
+-- ADT "Core.Data.Frame.Generic" ":@" (Infix ":+" LeftAssociative 9 :* Infix ":-" LeftAssociative 9 :* Nil)
+data a :@ b = a :+ b | a :- b deriving (Eq, Show, G.Generic)
+instance (ToVal a, ToVal b) => ToVal (a :@ b)
+
+data H = H1 C deriving (Eq, Show, G.Generic)
+instance ToVal H
+
+data J = J1 A | J2 D deriving (Eq, Show, G.Generic)
+instance ToVal J
+
+
+
