@@ -182,7 +182,7 @@ sopToVal di (SOP xss) = hcollapse $ hcliftA2
 baz :: All ToVal xs => ConstructorInfo xs -> NP I xs -> Val
 baz (Infix cn _ _) xs = Con cn $ hcollapse $
     hcmap (Proxy :: Proxy ToVal) (mapIK toVal) xs
-baz (Constructor cn) xs -- Con cn cns
+baz (Constructor cn) xs 
   | null cns = Enum cn
   | otherwise = Con cn cns
   where
@@ -206,7 +206,7 @@ data Val =
   | Rec (M.Map FieldName Val) -- ^ Record (1 or more named fields)
   | VInt Int  
   | VChar Char
-  -- | VMaybe (Maybe Val)
+  | VMaybe (Maybe Val)  -- ^ Maybe 
   deriving (Eq, Show)
 
 class ToVal a where
@@ -216,9 +216,9 @@ class ToVal a where
   toVal x = sopToVal (gdatatypeInfo (Proxy :: Proxy a)) (gfrom x)  
 
 instance ToVal a => ToVal (Maybe a) where
-  -- toVal mx = case mx of
-  --   Nothing -> VMaybe Nothing
-  --   Just x  -> VMaybe (Just $ toVal x)
+  toVal mx = case mx of
+    Nothing -> VMaybe Nothing
+    Just x  -> VMaybe (Just $ toVal x)
 instance (ToVal l, ToVal r) => ToVal (Either l r)
 instance (ToVal l, ToVal r) => ToVal (l, r)
 
@@ -274,7 +274,7 @@ instance (ToVal a, ToVal b) => ToVal (a :@ b)
 data H = H1 C deriving (Eq, Show, G.Generic)
 instance ToVal H
 
-data J = J1 A | J2 D deriving (Eq, Show, G.Generic)
+data J = J1 A | J2 { j21 :: D, j22 :: C } deriving (Eq, Show, G.Generic)
 instance ToVal J
 
 
