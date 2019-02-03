@@ -26,7 +26,7 @@ import Control.Arrow (second)
 import Generics.SOP hiding (fromList) -- (Generic(..), All, Code)
 import Generics.SOP.NP (cpure_NP)
 import Generics.SOP.Constraint (SListIN)
-import Generics.SOP.GGP   (GCode, GDatatypeInfo, GFrom, gdatatypeInfo, gfrom)
+import Generics.SOP.GGP   -- (GCode, GDatatypeInfo, GFrom, gdatatypeInfo, gfrom)
 -- import Generics.SOP.NP
 import qualified GHC.Generics as G
 
@@ -157,6 +157,96 @@ insertsMaybe = F.foldl insf HM.empty where
 
 
 
+-- baz2 :: (GFrom a, G.Generic a,
+--       All SListI (GCode a),
+--       All (All ToVal) (GCode a)) =>
+--      a -> [Val]
+baz2 :: (All2 ToVal (GCode a), All SListI (GCode a), GFrom a, G.Generic a) => a -> Either Int [Val]
+baz2 x | null cns = Left ii
+       | otherwise = Right cns where
+  sop = gfrom x
+  ii = hindex sop
+  cns = hcollapse $ hcmap (Proxy :: Proxy ToVal) (mapIK toVal) sop
+
+
+-- nconstructors = length $ hcollapse $ hcmap (Proxy :: Proxy Bang) (mapCK bang) $ constructorInfo $ gdatatypeInfo (Proxy :: Proxy a) where
+  
+
+class Bang x where
+  bang :: x -> ()
+
+blah :: All Bang xs => NP I xs -> Int  
+blah xs = length $ hcollapse $ hcmap (Proxy :: Proxy Bang) ff xs where
+  ff :: Bang x => I x -> K () a
+  ff (I _) = K ()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+gshow :: forall a . (Generic a, HasDatatypeInfo a, All2 Show (Code a))
+      => a -> String
+gshow a = case datatypeInfo (Proxy :: Proxy a) of
+            ADT     _ _ cs -> gshow' cs         (from a)
+            Newtype _ _ c  -> gshow' (c :* Nil) (from a)
+
+gshow' :: (All2 Show xss, SListI xss) => NP ConstructorInfo xss -> SOP I xss -> String
+gshow' cs (SOP sop) =
+  hcollapse $ hcliftA2 (Proxy :: Proxy (All Show)) goConstructor cs sop
+
+goConstructor :: All Show xs => ConstructorInfo xs -> NP I xs -> K String xs
+goConstructor (Constructor n) args =
+    K $ unwords (n : args')
+  where
+    args' :: [String]
+    args' = hcollapse $ hcliftA (Proxy :: Proxy Show) (K . show . unI) args
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -175,22 +265,24 @@ insertsMaybe = F.foldl insf HM.empty where
 sopToVal :: (All2 ToVal xss) => DatatypeInfo xss -> SOP I xss -> Val
 sopToVal di (SOP xss) = hcollapse $ hcliftA2
     (Proxy :: Proxy (All ToVal))
-    (\ci xs -> K (baz ci xs))
+    (\ci xs -> K (mkVal ci xs))
     (constructorInfo di)
     xss
-
-baz :: All ToVal xs => ConstructorInfo xs -> NP I xs -> Val
-baz (Infix cn _ _) xs = Con cn $ hcollapse $
-    hcmap (Proxy :: Proxy ToVal) (mapIK toVal) xs
-baz (Constructor cn) xs 
+    
+mkVal :: All ToVal xs => ConstructorInfo xs -> NP I xs -> Val
+mkVal (Infix cn _ _) xs = Con cn $ npToVals xs
+mkVal (Constructor cn) xs 
   | null cns = Enum cn
   | otherwise = Con cn cns
   where
-    cns = hcollapse $ hcmap (Proxy :: Proxy ToVal) (mapIK toVal) xs
-baz (Record _ fi) xs = Rec $ M.fromList $ hcollapse $ hcliftA2 (Proxy :: Proxy ToVal) mk fi xs
+    cns = npToVals xs
+mkVal (Record _ fi) xs = Rec $ M.fromList $ hcollapse $ hcliftA2 (Proxy :: Proxy ToVal) mk fi xs
   where
     mk :: ToVal v => FieldInfo v -> I v -> K (FieldName, Val) v
     mk (FieldInfo n) (I x) = K (n, toVal x)
+
+npToVals :: (All ToVal xs) => NP I xs -> [Val]
+npToVals xs = hcollapse $ hcmap (Proxy :: Proxy ToVal) (mapIK toVal) xs    
 
 -- -- where in the recursion should we relabel the AST?
 -- | Convert 'Con'structors into labeled 'Rec'ords
@@ -199,6 +291,7 @@ c2r (Con n vs) = Rec $ M.fromList $ zip labels vs where
   labels = map (\i -> map toLower n ++ "_" ++ show i) ([0 ..] :: [Int])
 c2r x = x
 
+data OH i = OH { ohDim :: i, ohIx :: i } deriving (Eq, Show)
 
 data Val =
     Con FieldName [Val]  -- ^ Constructor (1 or more anonymous fields)
