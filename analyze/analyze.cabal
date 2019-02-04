@@ -19,8 +19,8 @@ library
   exposed-modules:
       Analyze
       Analyze.Common
-      Analyze.Frame.Dense            
-      Analyze.Frame.Dense.Generic
+      Analyze.RFrame         
+      Analyze.RFrame.Generic
       Analyze.IO.CSV
       Analyze.IO.HTML
       Analyze.Decoding
@@ -70,7 +70,7 @@ test-suite spec
       Analyze.Datasets
       Analyze.Decoding
       Analyze.Ops
-      Analyze.Frame.Dense
+      Analyze.RFrame
       Analyze.Values
       Paths_analyze
   hs-source-dirs:

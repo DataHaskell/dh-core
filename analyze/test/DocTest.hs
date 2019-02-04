@@ -5,6 +5,6 @@ import Test.DocTest (doctest)
 
 main :: IO ()
 main = doctest [
-  "src/Analyze/Frame/Dense/Generic.hs",
+  "src/Analyze/RFrame/Generic.hs",
   "src/Analyze/Values/Generic.hs"
   ]

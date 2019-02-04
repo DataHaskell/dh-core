@@ -1,6 +1,6 @@
 module Fixtures where
 
-import           Analyze.Frame.Dense (RFrame (..), RFrameUpdate (..))
+import           Analyze.RFrame (RFrame (..), RFrameUpdate (..))
 import           Analyze.Values
 import qualified Control.Foldl       as F
 import           Data.HashMap.Strict (HashMap)
