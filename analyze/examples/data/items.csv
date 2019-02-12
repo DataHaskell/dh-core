@@ -1,0 +1,6 @@
+date , person , item-bought         , units-bought
+7    , bob    , car                 , 1
+5    , alice  , car                 , 1
+4    , bob    , legal fees (1 hour) , 20
+3    , alice  , computer            , 2
+1    , bob    , computer            , 1
