@@ -1,3 +1,7 @@
+0.4
+	* Get rid of dependency on 'data-default' (introduced by previous versions of 'req')
+	
+	* Bump 'req' dependency to 2.0.0 
 0.3
 	* 'datasets' hosted within the DataHaskell/dh-core project
 

@@ -58,8 +58,7 @@ import qualified Data.ByteString.Lazy as BL
 import Data.Aeson as JSON
 import Control.Applicative
 import Data.Time
-import Data.Default.Class (Default(..))
-import Network.HTTP.Req (req, runReq, Url, (/:), http, https, Scheme(..), LbsResponse, lbsResponse, responseBody, GET(..), NoReqBody(..), HttpMethod(..))
+import Network.HTTP.Req (req, runReq, Url, (/:), http, https, Scheme(..), LbsResponse, lbsResponse, responseBody, GET(..), NoReqBody(..), HttpMethod(..), defaultHttpConfig)
 -- import Lens.Micro ((^.))
 
 import Control.Exception.Safe
@@ -102,7 +101,7 @@ getFileFromSource cacheDir (URL url) = do
   if ex
      then (:|[]) <$> BL.readFile fnm
      else do
-       rsp <- runReq def $ req GET url NoReqBody lbsResponse mempty
+       rsp <- runReq defaultHttpConfig $ req GET url NoReqBody lbsResponse mempty
        let bs = responseBody rsp
        BL.writeFile fnm bs
        return (bs:|[])
