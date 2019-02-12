@@ -1,5 +1,5 @@
 Name:                datasets
-Version:             0.3.0
+Version:             0.4.0
 Synopsis:            Classical data sets for statistics and machine learning
 Description:         Classical machine learning and statistics datasets from
                      the UCI Machine Learning Repository and other sources.
@@ -98,7 +98,6 @@ Library
                , attoparsec    >= 0.13
                , bytestring
                , cassava
-               , data-default-class
                , deepseq
                , directory
                , exceptions
@@ -110,12 +109,12 @@ Library
                , mtl
                , mwc-random
                , parallel
-               , req            >= 1.0.0
+               , req            >= 2.0.0
                , safe-exceptions
                , streaming
                , streaming-attoparsec
                , streaming-bytestring
-               , streaming-cassava
+               , streaming-cassava >= 0.1.0.1
                , streaming-commons
                , stringsearch
                , tar
