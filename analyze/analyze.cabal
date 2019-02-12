@@ -66,7 +66,7 @@ test-suite spec
       Analyze
       Analyze.Common
       Analyze.IO.CSV
-      Analyze.IO.HTML                      
+      Analyze.IO.HTML
       Analyze.Datasets
       Analyze.Decoding
       Analyze.Ops
