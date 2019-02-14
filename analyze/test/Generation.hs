@@ -52,6 +52,7 @@ valueGen :: ValueType -> Gen Value
 valueGen ValueTypeText    = ValueText <$> nameGen
 valueGen ValueTypeInteger = ValueInteger <$> arbitrary
 valueGen ValueTypeDouble  = ValueDouble <$> arbitrary
+valueGen ValueTypeBool    = ValueBool <$> arbitrary
 
 valueTypeGen :: Gen ValueType
 valueTypeGen = arbitraryBoundedEnum
