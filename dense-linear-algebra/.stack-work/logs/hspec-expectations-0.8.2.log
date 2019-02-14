@@ -1,0 +1,9 @@
+Configuring hspec-expectations-0.8.2...
+Preprocessing library for hspec-expectations-0.8.2..
+Building library for hspec-expectations-0.8.2..
+[1 of 4] Compiling Paths_hspec_expectations ( .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/autogen/Paths_hspec_expectations.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Paths_hspec_expectations.o )
+[2 of 4] Compiling Test.Hspec.Expectations.Contrib ( src/Test/Hspec/Expectations/Contrib.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/Expectations/Contrib.o )
+[3 of 4] Compiling Test.Hspec.Expectations.Matcher ( src/Test/Hspec/Expectations/Matcher.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/Expectations/Matcher.o )
+[4 of 4] Compiling Test.Hspec.Expectations ( src/Test/Hspec/Expectations.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/Expectations.o )
+Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/hspec-expectations-0.8.2-xEhsaJyqHC4OUn6v2CIJJ
+Registering library for hspec-expectations-0.8.2..

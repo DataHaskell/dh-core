@@ -1,0 +1,11 @@
+Configuring HUnit-1.6.0.0...
+Preprocessing library for HUnit-1.6.0.0..
+Building library for HUnit-1.6.0.0..
+[1 of 6] Compiling Paths_HUnit      ( .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/autogen/Paths_HUnit.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Paths_HUnit.o )
+[2 of 6] Compiling Test.HUnit.Lang  ( src/Test/HUnit/Lang.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/HUnit/Lang.o )
+[3 of 6] Compiling Test.HUnit.Base  ( src/Test/HUnit/Base.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/HUnit/Base.o )
+[4 of 6] Compiling Test.HUnit.Terminal ( src/Test/HUnit/Terminal.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/HUnit/Terminal.o )
+[5 of 6] Compiling Test.HUnit.Text  ( src/Test/HUnit/Text.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/HUnit/Text.o )
+[6 of 6] Compiling Test.HUnit       ( src/Test/HUnit.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/HUnit.o )
+Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/HUnit-1.6.0.0-C6N9GX1vz2Z4nPL5JbE3ac
+Registering library for HUnit-1.6.0.0..

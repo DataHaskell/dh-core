@@ -1,0 +1,15 @@
+Configuring vector-algorithms-0.8.0.1...
+Preprocessing library for vector-algorithms-0.8.0.1..
+Building library for vector-algorithms-0.8.0.1..
+[ 1 of 10] Compiling Data.Vector.Algorithms.Common ( src/Data/Vector/Algorithms/Common.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Common.o )
+[ 2 of 10] Compiling Data.Vector.Algorithms.Optimal ( src/Data/Vector/Algorithms/Optimal.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Optimal.o )
+[ 3 of 10] Compiling Data.Vector.Algorithms.Insertion ( src/Data/Vector/Algorithms/Insertion.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Insertion.o )
+[ 4 of 10] Compiling Data.Vector.Algorithms.Merge ( src/Data/Vector/Algorithms/Merge.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Merge.o )
+[ 5 of 10] Compiling Data.Vector.Algorithms.AmericanFlag ( src/Data/Vector/Algorithms/AmericanFlag.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/AmericanFlag.o )
+[ 6 of 10] Compiling Data.Vector.Algorithms.Heap ( src/Data/Vector/Algorithms/Heap.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Heap.o )
+[ 7 of 10] Compiling Data.Vector.Algorithms.Intro ( src/Data/Vector/Algorithms/Intro.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Intro.o )
+[ 8 of 10] Compiling Data.Vector.Algorithms.Radix ( src/Data/Vector/Algorithms/Radix.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Radix.o )
+[ 9 of 10] Compiling Data.Vector.Algorithms.Search ( src/Data/Vector/Algorithms/Search.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Search.o )
+[10 of 10] Compiling Data.Vector.Algorithms.Tim ( src/Data/Vector/Algorithms/Tim.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Tim.o )
+Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/vector-algorithms-0.8.0.1-l02fj2Jj9pCux4dolCIMf
+Registering library for vector-algorithms-0.8.0.1..

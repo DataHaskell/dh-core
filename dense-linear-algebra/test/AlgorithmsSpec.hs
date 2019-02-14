@@ -7,24 +7,23 @@ import qualified Statistics.Matrix.Algorithms as Alg
 import qualified Statistics.Matrix.Function as Func
 import qualified Statistics.Matrix.Mutable as Mut
 
-import Fixtures as F
 import Utils
 
-qrDecompositionInvariant :: Bool
-qrDecompositionInvariant =
-  (M.multiply (fst res) (snd res)) == F.matA
+qrDecompositionInvariant :: T.Matrix -> Bool
+qrDecompositionInvariant mat =
+  (M.multiply (fst res) (snd res)) == mat
   where
-    res = Alg.qr F.matA
+    res = Alg.qr mat
 
 
-qrFirstOrthoInvariant :: Bool
-qrFirstOrthoInvariant = Utils.isOrtho (fst res)
+qrFirstOrthoInvariant :: T.Matrix -> Bool
+qrFirstOrthoInvariant mat = Utils.isOrtho (fst res)
   where
-    res = Alg.qr F.matA
+    res = Alg.qr mat
 
-qrSecondTriInvariant :: Bool
-qrSecondTriInvariant = Utils.isUpperTri (snd res)
+qrSecondTriInvariant :: T.Matrix -> Bool
+qrSecondTriInvariant mat = Utils.isUpperTri (snd res)
   where
-    res = Alg.qr F.matA
+    res = Alg.qr mat
 
 

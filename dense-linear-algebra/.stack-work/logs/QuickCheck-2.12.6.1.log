@@ -1,0 +1,21 @@
+Configuring QuickCheck-2.12.6.1...
+Preprocessing library for QuickCheck-2.12.6.1..
+Building library for QuickCheck-2.12.6.1..
+[ 1 of 16] Compiling Test.QuickCheck.Exception ( Test/QuickCheck/Exception.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Exception.o )
+[ 2 of 16] Compiling Test.QuickCheck.Random ( Test/QuickCheck/Random.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Random.o )
+[ 3 of 16] Compiling Test.QuickCheck.Gen ( Test/QuickCheck/Gen.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Gen.o )
+[ 4 of 16] Compiling Test.QuickCheck.Gen.Unsafe ( Test/QuickCheck/Gen/Unsafe.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Gen/Unsafe.o )
+[ 5 of 16] Compiling Test.QuickCheck.Arbitrary ( Test/QuickCheck/Arbitrary.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Arbitrary.o )
+[ 6 of 16] Compiling Test.QuickCheck.Poly ( Test/QuickCheck/Poly.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Poly.o )
+[ 7 of 16] Compiling Test.QuickCheck.Modifiers ( Test/QuickCheck/Modifiers.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Modifiers.o )
+[ 8 of 16] Compiling Test.QuickCheck.Function ( Test/QuickCheck/Function.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Function.o )
+[ 9 of 16] Compiling Test.QuickCheck.Text ( Test/QuickCheck/Text.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Text.o )
+[10 of 16] Compiling Test.QuickCheck.State ( Test/QuickCheck/State.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/State.o )
+[11 of 16] Compiling Test.QuickCheck.Property ( Test/QuickCheck/Property.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Property.o )
+[12 of 16] Compiling Test.QuickCheck.Test ( Test/QuickCheck/Test.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Test.o )
+[13 of 16] Compiling Test.QuickCheck.Monadic ( Test/QuickCheck/Monadic.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Monadic.o )
+[14 of 16] Compiling Test.QuickCheck.All ( Test/QuickCheck/All.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/All.o )
+[15 of 16] Compiling Test.QuickCheck.Features ( Test/QuickCheck/Features.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck/Features.o )
+[16 of 16] Compiling Test.QuickCheck  ( Test/QuickCheck.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/QuickCheck.o )
+Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/QuickCheck-2.12.6.1-DGJppTkvkJH851oWd3mp4K
+Registering library for QuickCheck-2.12.6.1..

@@ -1,0 +1,98 @@
+
+==================== FINAL INTERFACE ====================
+2018-12-28 12:05:00.987761462 UTC
+
+interface dense-linear-algebra-0.1.0.0-I9JzV95TllBKiQtN73frLt:Statistics.Matrix.Function 8063
+  interface hash: 1978426608d157b0aa61c776d2cd4297
+  ABI hash: 5e9111b9fb15b63d2daf6848503b78e4
+  export-list hash: 0754802f7ab1fdeafcd66ea70e04ddcf
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 342713f7ad012e1211b28f6756077a2b
+  opt_hash: 6faf2de08de32d19db9870899d88e59a
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Statistics.Matrix.Function.for
+  Statistics.Matrix.Function.square
+module dependencies:
+package dependencies: base-4.12.0.0* ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity base-4.12.0.0:Data.Monoid
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:GHC.Generics
+                         base-4.12.0.0:GHC.IO.Exception
+import  -/  base-4.12.0.0:GHC.Base cc906f98291a1b830546e99a96674547
+import  -/  base-4.12.0.0:GHC.Num 847723f2584d989dac1eada133ac3fb8
+import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
+import  -/  ghc-prim-0.5.3:GHC.Classes e0d9c979f6368701f34fa421754d2cce
+e0bde6d2fd3b89f1ad87973c71b42db3
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   Statistics.Matrix.Function.$trModule3
+                   Statistics.Matrix.Function.$trModule1) -}
+3e5a3788de84fed48b87796208997bdb
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS
+                   Statistics.Matrix.Function.$trModule2) -}
+7208fc95f76fa705b7442662638cf748
+  $trModule2 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("Statistics.Matrix.Function"#) -}
+fe1d8ddb687b9a458dd3a4adf8d35a30
+  $trModule3 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS
+                   Statistics.Matrix.Function.$trModule4) -}
+b8f0400451aeda9873de243d9787d610
+  $trModule4 :: GHC.Prim.Addr#
+  {- HasNoCafRefs,
+     Unfolding: ("dense-linear-algebra-0.1.0.0-I9JzV95TllBKiQtN73frLt"#) -}
+6da42d46dad7d34b9277e8670584d532
+  for ::
+    GHC.Base.Monad m =>
+    GHC.Types.Int -> GHC.Types.Int -> (GHC.Types.Int -> m ()) -> m ()
+  {- Arity: 4, HasNoCafRefs,
+     Strictness: <L,U(A,A,C(C1(U)),1*C1(U),A)><S(S),1*U(U)><S(S),1*U(U)><L,C(U)>,
+     Inline: (sat-args=3),
+     Unfolding: InlineRule (4, False, False)
+                (\ @ m :: * -> *
+                   ($dMonad :: GHC.Base.Monad m)
+                   (n0 :: GHC.Types.Int)
+                   (n :: GHC.Types.Int)
+                   (f :: GHC.Types.Int -> m ()) ->
+                 case n of n1 { GHC.Types.I# ipv ->
+                 letrec {
+                   loop :: GHC.Types.Int -> m () {- Arity: 1 -}
+                   = \ (i :: GHC.Types.Int) ->
+                     case GHC.Classes.eqInt i n1 of wild {
+                       GHC.Types.False
+                       -> GHC.Base.>>
+                            @ m
+                            $dMonad
+                            @ ()
+                            @ ()
+                            (f i)
+                            (loop
+                               (case i of wild1 { GHC.Types.I# x ->
+                                GHC.Types.I# (GHC.Prim.+# x 1#) }))
+                       GHC.Types.True -> GHC.Base.return @ m $dMonad @ () GHC.Tuple.() }
+                 } in
+                 loop n0 }) -}
+336f665cf15b1c7ef5a8f1cbc979cc90
+  square :: GHC.Types.Double -> GHC.Types.Double
+  {- Arity: 1, HasNoCafRefs, Strictness: <S(S),U(U)>m,
+     Unfolding: InlineRule (1, True, False)
+                (\ (x :: GHC.Types.Double) -> GHC.Float.timesDouble x x) -}
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+

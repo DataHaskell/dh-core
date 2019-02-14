@@ -1,0 +1,416 @@
+
+==================== FINAL INTERFACE ====================
+2019-02-12 13:32:18.612421805 UTC
+
+interface main:Utils 8063
+  interface hash: c15351037bc8bffd51766eb5b40b9cf2
+  ABI hash: 0a462bcc2a68ea8f3378f747b30748ad
+  export-list hash: 5f45e3539a8f468d90cd9d1ffc87b60c
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 6e53648eade1ec3ffa724212f94d04d6
+  opt_hash: 6faf2de08de32d19db9870899d88e59a
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Utils.hasLeadingZeros
+  Utils.isIdentity
+  Utils.isOrtho
+  Utils.isRowFromTriMatrix
+  Utils.isUpperTri
+  Utils.upperTriHelper
+module dependencies: Fixtures
+package dependencies: array-0.5.3.0 base-4.12.0.0 deepseq-1.4.4.0
+                      dense-linear-algebra-0.1.0.0 ghc-boot-th-8.6.3 ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0 math-functions-0.3.1.0 pretty-1.1.3.6
+                      primitive-0.6.4.0 template-haskell-2.14.0.0 transformers-0.5.5.0
+                      vector-0.12.0.2 vector-th-unbox-0.2.1.6
+orphans: vector-0.12.0.2:Data.Vector.Unboxed
+         vector-0.12.0.2:Data.Vector.Fusion.Bundle
+         transformers-0.5.5.0:Control.Monad.Trans.Error
+         base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Complex base-4.12.0.0:Data.Functor.Compose
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity
+                         base-4.12.0.0:Data.Functor.Product base-4.12.0.0:Data.Functor.Sum
+                         base-4.12.0.0:Data.Monoid base-4.12.0.0:Data.Semigroup
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:Data.Version
+                         base-4.12.0.0:Data.Void base-4.12.0.0:GHC.Exts
+                         base-4.12.0.0:GHC.Generics base-4.12.0.0:GHC.IO.Exception
+                         ghc-boot-th-8.6.3:GHC.ForeignSrcLang.Type
+                         ghc-boot-th-8.6.3:GHC.LanguageExtensions.Type
+                         math-functions-0.3.1.0:Numeric.Sum
+                         pretty-1.1.3.6:Text.PrettyPrint.Annotated.HughesPJ
+                         pretty-1.1.3.6:Text.PrettyPrint.HughesPJ
+                         primitive-0.6.4.0:Control.Monad.Primitive
+                         primitive-0.6.4.0:Data.Primitive.Array
+                         primitive-0.6.4.0:Data.Primitive.ByteArray
+                         primitive-0.6.4.0:Data.Primitive.PrimArray
+                         primitive-0.6.4.0:Data.Primitive.SmallArray
+                         primitive-0.6.4.0:Data.Primitive.UnliftedArray
+                         template-haskell-2.14.0.0:Language.Haskell.TH.Syntax
+                         vector-0.12.0.2:Data.Vector vector-0.12.0.2:Data.Vector.Primitive
+                         vector-0.12.0.2:Data.Vector.Unboxed
+                         vector-0.12.0.2:Data.Vector.Unboxed.Base
+import  -/  base-4.12.0.0:Data.Foldable 00188ddf89c975fee76bdfad479443c1
+import  -/  base-4.12.0.0:Data.Tuple c92a835d04b6c075a7031d4e28e53c71
+import  -/  base-4.12.0.0:GHC.Base cc906f98291a1b830546e99a96674547
+import  -/  base-4.12.0.0:GHC.Num 847723f2584d989dac1eada133ac3fb8
+import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix db2abea351d90487a23769bcf0b47eee
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Algorithms a402081cd264358fc08a82d22c3b9778
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Function 5e9111b9fb15b63d2daf6848503b78e4
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Mutable d23739a582a7d3be90c5cce57b1e877f
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Types a6bfaf21f466658cd9bda172814a6d15
+import  -/  ghc-prim-0.5.3:GHC.Classes e0d9c979f6368701f34fa421754d2cce
+import  -/  Fixtures 45eea32227d4055515554b57ba2e7b7c
+  exports: 5f6f1b03711dc03dac56863d47fa129a
+  matId ef37014f07e509bb9260bd6d5a936350
+import  -/  vector-0.12.0.2:Data.Vector.Unboxed 3ec9008297a7b27b6fe569e181327338
+6e4cfbbe250611482ac08c6d558f4dce
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module Utils.$trModule3 Utils.$trModule1) -}
+6ea2ae0a946ba28d3e9a92ae079dc36e
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS Utils.$trModule2) -}
+c81636fcbf58b412e558c29d269dd105
+  $trModule2 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("Utils"#) -}
+48e9693c199df8b405168bfddb9c283b
+  $trModule3 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS Utils.$trModule4) -}
+be56da26131302c822ff452d3bc5ec6f
+  $trModule4 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("main"#) -}
+189c7737a76f07e50d3270b62648e711
+  $whasLeadingZeros ::
+    GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.ByteArray#
+    -> Data.Vector.Fusion.Util.Id GHC.Types.Bool
+  {- Arity: 4, HasNoCafRefs, Strictness: <S,U><L,U><S,U><L,U>,
+     Inline: [2],
+     Unfolding: (\ (ww :: GHC.Prim.Int#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (ww3 :: GHC.Prim.ByteArray#) ->
+                 let {
+                   $w$j :: GHC.Prim.Int# -> Data.Vector.Fusion.Util.Id GHC.Types.Bool
+                     <join 1> {- Arity: 1, Strictness: <S,U>, Inline: [2] -}
+                   = \ (w :: GHC.Prim.Int#)[OneShot] ->
+                     let {
+                       $j :: GHC.Prim.Int# -> Data.Vector.Fusion.Util.Id GHC.Types.Bool
+                         <join 1> {- Arity: 1, Strictness: <S,U> -}
+                       = \ (dt :: GHC.Prim.Int#)[OneShot] ->
+                         letrec {
+                           $wfoldlM_loop :: GHC.Types.SPEC
+                                            -> GHC.Types.Bool
+                                            -> GHC.Prim.Int#
+                                            -> Data.Vector.Fusion.Util.Id GHC.Types.Bool
+                             <join 3> {- Arity: 3, Strictness: <S,1*U><S,1*U><S,U>,
+                                         Inline: [2] -}
+                           = \ (w1 :: GHC.Types.SPEC)
+                               (w2 :: GHC.Types.Bool)
+                               (ww4 :: GHC.Prim.Int#) ->
+                             case w1 of ds5 { DEFAULT ->
+                             case GHC.Prim.>=# ww4 dt of lwild {
+                               DEFAULT
+                               -> case GHC.Prim.indexDoubleArray#
+                                         ww3
+                                         (GHC.Prim.+# ww1 ww4) of wild2 { DEFAULT ->
+                                  case w2 of wild {
+                                    GHC.Types.False
+                                    -> $wfoldlM_loop
+                                         GHC.Types.SPEC
+                                         GHC.Types.False
+                                         (GHC.Prim.+# ww4 1#)
+                                    GHC.Types.True
+                                    -> $wfoldlM_loop
+                                         GHC.Types.SPEC
+                                         (GHC.Prim.tagToEnum#
+                                            @ GHC.Types.Bool
+                                            (GHC.Prim.==## wild2 0.0##))
+                                         (GHC.Prim.+# ww4 1#) } }
+                               1#
+                               -> w2
+                                    `cast`
+                                  (Sym (Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Bool>_R)) } }
+                         } in
+                         $wfoldlM_loop GHC.Types.SPEC GHC.Types.True 0#
+                     } in
+                     case GHC.Prim.<=# w ww2 of lwild { DEFAULT -> $j ww2 1# -> $j w }
+                 } in
+                 case GHC.Prim.<=# ww 0# of lwild {
+                   DEFAULT -> $w$j ww 1# -> $w$j 0# }) -}
+177013ce5dc5dfaab4f00cb7a60e651f
+  $wisIdentity ::
+    GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.ByteArray#
+    -> GHC.Types.Bool
+  {- Arity: 5, Strictness: <S,U><S,U><S,U><S,U><S,U>, Inline: [2],
+     Unfolding: (\ (ww :: GHC.Prim.Int#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (ww3 :: GHC.Prim.Int#)
+                   (ww4 :: GHC.Prim.ByteArray#) ->
+                 case Fixtures.matId of ww8 { Statistics.Matrix.Types.Matrix ww9 ww10 ww11 ->
+                 case ww11
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww12 { Data.Vector.Primitive.Vector ww13 ww14 ww15 ->
+                 case Statistics.Matrix.$wmultiply
+                        ww
+                        ww1
+                        ww2
+                        ww3
+                        ww4
+                        ww9
+                        ww10
+                        ww13
+                        ww14
+                        ww15 of ww16 { (#,,#) ww17 ww18 ww19 ->
+                 case ww19
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww5 { Data.Vector.Primitive.Vector ww6 ww7 ww23 ->
+                 Statistics.Matrix.Types.$w$c==
+                   ww17
+                   ww18
+                   ww6
+                   ww7
+                   ww23
+                   ww9
+                   ww10
+                   ww13
+                   ww14
+                   ww15 } } } }) -}
+1380ce2986f4cc1a9414941317f3f638
+  $wisOrtho ::
+    GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.ByteArray#
+    -> GHC.Types.Bool
+  {- Arity: 5, Strictness: <S,U><S,U><S,U><S,U><S,U>, Inline: [2],
+     Unfolding: (\ (ww :: GHC.Prim.Int#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (ww3 :: GHC.Prim.Int#)
+                   (ww4 :: GHC.Prim.ByteArray#) ->
+                 case Statistics.Matrix.$wtranspose
+                        ww
+                        ww1
+                        ww2
+                        ww4 of ww8 { (#,,#) ww9 ww10 ww11 ->
+                 case ww11
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww12 { Data.Vector.Primitive.Vector ww13 ww14 ww15 ->
+                 case Statistics.Matrix.$wmultiply
+                        ww
+                        ww1
+                        ww2
+                        ww3
+                        ww4
+                        ww9
+                        ww10
+                        ww13
+                        ww14
+                        ww15 of ww16 { (#,,#) ww17 ww18 ww19 ->
+                 case ww19
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww5 { Data.Vector.Primitive.Vector ww6 ww7 ww23 ->
+                 case Fixtures.matId of ww24 { Statistics.Matrix.Types.Matrix ww25 ww26 ww27 ->
+                 case ww27
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww28 { Data.Vector.Primitive.Vector ww29 ww30 ww31 ->
+                 Statistics.Matrix.Types.$w$c==
+                   ww17
+                   ww18
+                   ww6
+                   ww7
+                   ww23
+                   ww25
+                   ww26
+                   ww29
+                   ww30
+                   ww31 } } } } } }) -}
+c4dd611b0fff6463f987000b61c6ca6b
+  $wisRowFromTriMatrix ::
+    GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.ByteArray#
+    -> GHC.Prim.Int#
+    -> Data.Vector.Fusion.Util.Id GHC.Types.Bool
+  {- Arity: 5, Strictness: <S,U><S,U><S,U><S,U><S,U>, Inline: [2],
+     Unfolding: (\ (ww :: GHC.Prim.Int#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (ww3 :: GHC.Prim.ByteArray#)
+                   (ww4 :: GHC.Prim.Int#) ->
+                 case Statistics.Matrix.$wrow
+                        ww
+                        ww1
+                        ww2
+                        ww3
+                        ww4 of ww10 { (#,,#) ww11 ww12 ww13 ->
+                 Utils.$whasLeadingZeros ww4 ww11 ww12 ww13 }) -}
+4f0728b96036df717f0688ecf1b50cee
+  $wupperTriHelper ::
+    Statistics.Matrix.Types.Matrix -> GHC.Prim.Int# -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <L,U(A,U,U(U,U,U))><S,U>, Inline: [2],
+     Unfolding: (\ (w :: Statistics.Matrix.Types.Matrix)
+                   (ww :: GHC.Prim.Int#) ->
+                 let {
+                   y :: GHC.Prim.Int# = GHC.Prim.-# ww 1#
+                 } in
+                 case GHC.Prim.># 0# y of lwild {
+                   DEFAULT
+                   -> let {
+                        exit :: GHC.Prim.Int# -> GHC.Types.Bool -> GHC.Types.Bool
+                          <join 2> {- Arity: 2, Strictness: <L,U><S,1*U> -}
+                        = \ (x :: GHC.Prim.Int#)[OneShot] (v :: GHC.Types.Bool)[OneShot] ->
+                          case v of wild {
+                            GHC.Types.False -> GHC.Types.False
+                            GHC.Types.True
+                            -> case w of ww1 { Statistics.Matrix.Types.Matrix ww2 ww3 ww4 ->
+                               case ww4
+                                      `cast`
+                                    (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww5 { Data.Vector.Primitive.Vector ww6 ww7 ww8 ->
+                               (Utils.$wisRowFromTriMatrix ww3 ww6 ww7 ww8 x)
+                                 `cast`
+                               (Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Bool>_R) } } }
+                      } in
+                      letrec {
+                        go :: GHC.Prim.Int# -> GHC.Types.Bool -> GHC.Types.Bool
+                          <join 2> {- Arity: 2, Strictness: <S,U><S,1*U> -}
+                        = \ (x :: GHC.Prim.Int#) (v :: GHC.Types.Bool)[OneShot] ->
+                          case GHC.Prim.==# x y of lwild1 {
+                            DEFAULT
+                            -> case v of wild {
+                                 GHC.Types.False -> go (GHC.Prim.+# x 1#) GHC.Types.False
+                                 GHC.Types.True
+                                 -> case w of ww1 { Statistics.Matrix.Types.Matrix ww2 ww3 ww4 ->
+                                    case ww4
+                                           `cast`
+                                         (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww5 { Data.Vector.Primitive.Vector ww6 ww7 ww8 ->
+                                    case Statistics.Matrix.$wrow
+                                           ww3
+                                           ww6
+                                           ww7
+                                           ww8
+                                           x of ww10 { (#,,#) ww11 ww12 ww13 ->
+                                    go
+                                      (GHC.Prim.+# x 1#)
+                                      (Utils.$whasLeadingZeros x ww11 ww12 ww13)
+                                        `cast`
+                                      (Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Bool>_R) } } } }
+                            1# -> exit x v }
+                      } in
+                      go 0# GHC.Types.True
+                   1# -> GHC.Types.True }) -}
+4b0f9acffdd89f583490d6c9575eb9c8
+  hasLeadingZeros ::
+    GHC.Types.Int -> Statistics.Matrix.Types.Vector -> GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S),1*U(U)><S(SSS),1*U(U,U,U)>,
+     Unfolding: InlineRule (0, True, True)
+                Utils.hasLeadingZeros1
+                  `cast`
+                (<GHC.Types.Int>_R
+                 ->_R <Statistics.Matrix.Types.Vector>_R
+                 ->_R Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Bool>_R) -}
+b71625dfa35dc827a465b419198f5f26
+  hasLeadingZeros1 ::
+    GHC.Types.Int
+    -> Statistics.Matrix.Types.Vector
+    -> Data.Vector.Fusion.Util.Id GHC.Types.Bool
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(S),1*U(U)><S(SSS),1*U(U,U,U)>, Inline: [2],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: GHC.Types.Int) (w1 :: Statistics.Matrix.Types.Vector) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 case w1
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww2 { Data.Vector.Primitive.Vector ww3 ww4 ww5 ->
+                 Utils.$whasLeadingZeros ww1 ww3 ww4 ww5 } }) -}
+6ffd8a3b522fc7ee2445f756f96993b3
+  isIdentity :: Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
+  {- Arity: 1, Strictness: <S(SSS(SSS)),1*U(U,U,U(U,U,U))>,
+     Inline: [2],
+     Unfolding: InlineRule (1, True, False)
+                (\ (w :: Statistics.Matrix.Types.Matrix) ->
+                 case w of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
+                 case ww3
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
+                 Utils.$wisIdentity ww1 ww2 ww5 ww6 ww7 } }) -}
+692f10dabe2108ba69ee09dedd62abdf
+  isOrtho :: Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
+  {- Arity: 1, Strictness: <S(SSS(SSS)),1*U(U,U,U(U,U,U))>,
+     Inline: [2],
+     Unfolding: InlineRule (1, True, False)
+                (\ (w :: Statistics.Matrix.Types.Matrix) ->
+                 case w of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
+                 case ww3
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
+                 Utils.$wisOrtho ww1 ww2 ww5 ww6 ww7 } }) -}
+df3e85f6a173772e8fded2af870d48d3
+  isRowFromTriMatrix ::
+    Statistics.Matrix.Types.Matrix -> GHC.Types.Int -> GHC.Types.Bool
+  {- Arity: 2,
+     Strictness: <S(LSS(SSS)),1*U(A,U,U(U,U,U))><S(S),1*U(U)>,
+     Unfolding: InlineRule (0, True, True)
+                Utils.isRowFromTriMatrix1
+                  `cast`
+                (<Statistics.Matrix.Types.Matrix>_R
+                 ->_R <GHC.Types.Int>_R
+                 ->_R Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Bool>_R) -}
+6b62ec5b38c79ea90c54bd980cd22f1c
+  isRowFromTriMatrix1 ::
+    Statistics.Matrix.Types.Matrix
+    -> GHC.Types.Int -> Data.Vector.Fusion.Util.Id GHC.Types.Bool
+  {- Arity: 2,
+     Strictness: <S(LSS(SSS)),1*U(A,U,U(U,U,U))><S(S),1*U(U)>,
+     Inline: [2],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: Statistics.Matrix.Types.Matrix) (w1 :: GHC.Types.Int) ->
+                 case w of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
+                 case ww3
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
+                 case w1 of ww8 { GHC.Types.I# ww9 ->
+                 Utils.$wisRowFromTriMatrix ww2 ww5 ww6 ww7 ww9 } } }) -}
+9b7b5cbe6070c5aabdf4938dd54ccb7b
+  isUpperTri :: Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
+  {- Arity: 1, Strictness: <S(SLS),1*U(U,U,U(U,U,U))>,
+     Unfolding: InlineRule (1, True, False)
+                (\ (mat :: Statistics.Matrix.Types.Matrix) ->
+                 case mat of wild { Statistics.Matrix.Types.Matrix dt dt1 ds1 ->
+                 Utils.upperTriHelper wild (GHC.Types.I# dt) }) -}
+d6c2b00a2fc64f655655ad2dba12e77f
+  upperTriHelper ::
+    Statistics.Matrix.Types.Matrix -> GHC.Types.Int -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <L,U(A,U,U(U,U,U))><S(S),1*U(U)>,
+     Inline: [2],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: Statistics.Matrix.Types.Matrix) (w1 :: GHC.Types.Int) ->
+                 case w1 of ww { GHC.Types.I# ww1 ->
+                 Utils.$wupperTriHelper w ww1 }) -}
+trusted: none
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
