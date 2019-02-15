@@ -120,8 +120,8 @@ testKeep = monadicIO $
                    let keys = A._rframeUpdateKeys update
                    pre $ not (null keys)
 
-                   index <- pick $ choose (0, length keys -2) 
-                   len <- pick $ choose (1, length keys - (index + 1)) -- picks a length of slice 
+                   index <- pick $ choose (0, length keys -1) 
+                   len <- pick $ choose (1, length keys - index) -- picks a length of slice 
 
                    original <- run $ A.fromUpdate update -- converts update to frame
 
@@ -146,7 +146,8 @@ propTests :: Ts.TestTree
 propTests = Ts.testGroup "Test suite"
   [ QC.testProperty "Fixture" testFixture,
     QC.testProperty "Row Decode" testRowDecode,
-    QC.testProperty "Drop" testDrop
+    QC.testProperty "Drop" testDrop,
+    QC.testProperty "Keep" testKeep
   ]
 
 main :: IO ()
