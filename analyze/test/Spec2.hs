@@ -15,7 +15,7 @@ import qualified Data.Text           as T
 import           Data.Vector         (Vector)
 import qualified Data.Vector         as V
 
-import Generation
+import Generation 
 
 import Test.QuickCheck
 import Test.QuickCheck.Monadic (assert, monadicIO, run, pick, pre)
@@ -77,11 +77,11 @@ testRowDecode = monadicIO $
                 where
                    extractDouble (ValueDouble double) = double
 
-                   valueGenDouble x = ValueDouble <$> arbitrary -- we ignore the type that is given, we will output a double anyway
+                   valueGenDouble ValueTypeDouble =  -- we ignore the type that is given, we will output a double anyway
 
-                   valueDeclGenDouble = declGen nameGen (elements [ValueTypeDouble]) -- for some reason, specifying ValueTypeDOuble here isn't enough to guarantee that only ValueDouble will be generated
+                   valueDeclGenDouble = declGen nameGen (elements [ValueTypeDouble])
 
-                   doubleRFrameUpdateGen = valueDeclGen >>= rframeUpdateGen valueGenDouble -- a frame generator that will only have Double's as data
+                   doubleRFrameUpdateGen = valueDeclGenDouble >>= rframeUpdateGen (\x -> ValueDouble <$> arbitrary) -- a frame generator that will only have Double's as data
 
 propTests :: Ts.TestTree
 propTests = Ts.testGroup "Test suite"
