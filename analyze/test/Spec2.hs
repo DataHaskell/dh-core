@@ -6,6 +6,7 @@ module Main where
 
 import qualified Analyze                  as A
 import           Analyze.Common           ((<&>))
+import qualified Data.HashSet             as HS
 
 import Analyze.RFrame (RFrame (..), RFrameUpdate (..))
 import Analyze.Values
@@ -77,16 +78,75 @@ testRowDecode = monadicIO $
                 where
                    extractDouble (ValueDouble double) = double
 
-                   valueGenDouble ValueTypeDouble =  -- we ignore the type that is given, we will output a double anyway
+                   valueGenDouble ValueTypeDouble = ValueDouble <$> arbitrary -- we will only ouput ValueDouble
 
                    valueDeclGenDouble = declGen nameGen (elements [ValueTypeDouble])
 
-                   doubleRFrameUpdateGen = valueDeclGenDouble >>= rframeUpdateGen (\x -> ValueDouble <$> arbitrary) -- a frame generator that will only have Double's as data
+                   doubleRFrameUpdateGen = valueDeclGenDouble >>= rframeUpdateGen valueGenDouble -- a frame generator that will only have Double's as data
+
+testDrop :: Property
+testDrop = monadicIO $ 
+                do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) -- generate random update
+                   
+                   let keys = A._rframeUpdateKeys update
+                   pre $ not (null keys)
+
+                   index <- pick $ choose (0, length keys -1)
+                   original <- run $ A.fromUpdate update -- converts update to frame
+
+                   let
+                      oldData = _rframeUpdateData update 
+                      newData = rmv index <$> oldData
+                      newKeys = rmv index keys
+                      expectedUpdate = update{ _rframeUpdateData = newData, _rframeUpdateKeys = newKeys}
+                      
+                   expected <- run $ A.fromUpdate expectedUpdate
+
+                   let assertion1 = A.numCols original -1 == A.numCols expected
+
+                   let keyToRemove = HS.singleton $ keys V.! index
+                       actual =  A.dropCols (`HS.member` keyToRemove) original
+                       assertion2 = A._rframeKeys actual == A._rframeKeys expected
+
+                   assert $ assertion1 && assertion2
+
+                where
+                   rmv index vec = V.take index vec V.++ V.drop (index+1) vec 
+                   
+testKeep :: Property
+testKeep = monadicIO $ 
+                do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) -- generate random update
+                   
+                   let keys = A._rframeUpdateKeys update
+                   pre $ not (null keys)
+
+                   index <- pick $ choose (0, length keys -2) 
+                   len <- pick $ choose (1, length keys - (index + 1)) -- picks a length of slice 
+
+                   original <- run $ A.fromUpdate update -- converts update to frame
+
+                   let
+                      oldData = _rframeUpdateData update 
+                      newData = V.slice index len <$> oldData
+                      newKeys = V.slice index len keys
+                      expectedUpdate = update{ _rframeUpdateData = newData, _rframeUpdateKeys = newKeys}
+                      
+                   expected <- run $ A.fromUpdate expectedUpdate
+
+                   let assertion1 = A.numCols original == A.numCols expected + (length keys) - len
+
+                   let keyToKeep = HS.fromList $ V.toList newKeys
+                       actual = A.keepCols (`HS.member` keyToKeep) original
+                       assertion2 = A._rframeKeys actual == A._rframeKeys expected
+
+                   assert $ assertion1 && assertion2
+
 
 propTests :: Ts.TestTree
 propTests = Ts.testGroup "Test suite"
   [ QC.testProperty "Fixture" testFixture,
-    QC.testProperty "Row Decode" testRowDecode
+    QC.testProperty "Row Decode" testRowDecode,
+    QC.testProperty "Drop" testDrop
   ]
 
 main :: IO ()
