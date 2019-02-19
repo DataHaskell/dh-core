@@ -24,8 +24,15 @@ personsGrouped = map encodeUtf8 persons
                 T.pack "date,item-bought,person,units\n" `mappend` 
             "6,computer,alice,2"]
 
+withpriceCol :: [LBS.ByteString]
+withpriceCol = map encodeUtf8 persons
+    where persons = [T.pack ("date,item-bought,person,units,price\n" `mappend` 
+        "legal fees,bob,3,300\n" `mappend` "5,motorbike,bob,2,200\n" ), 
+                T.pack "date,item-bought,person,units\n" `mappend` 
+            "6,computer,alice,2,100"]
+
 accumSum :: Vector Text
-accumSum = V.fromList $ ["1300", "200"]
+accumSum = V.fromList $ ["900", "1300"]
 
 totalMean :: Double 
 totalMean = 500
