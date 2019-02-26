@@ -47,6 +47,9 @@ valueRFrameUpdateGenFixedSize size = valueDeclGen >>= rframeUpdateGen valueGen
 instance Arbitrary (RFrameUpdate Text Value) where 
     arbitrary = valueRFrameUpdateGen
 
+instance Arbitrary Value where
+  arbitrary = valueTypeGen >>= valueGen
+
 
 testFixture :: Property
 testFixture = monadicIO $ 
@@ -101,7 +104,7 @@ testRowDecode = monadicIO $
 
 testDrop :: Property
 testDrop = monadicIO $ 
-                do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) -- generate random update
+                do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value))
                    
                    -- we check that we have more than 0 keys
                    let keys = A._rframeUpdateKeys update
@@ -141,7 +144,7 @@ testDrop = monadicIO $
                    
 testKeep :: Property
 testKeep = monadicIO $ -- same spirit as testDrop
-                do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) -- generate random update
+                do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value))
                    
                    let keys = A._rframeUpdateKeys update
                    pre $ not (null keys)
@@ -170,7 +173,7 @@ testKeep = monadicIO $ -- same spirit as testDrop
 
 testUpdateEmpty :: Property
 testUpdateEmpty = monadicIO $ 
-                do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) -- generate random update
+                do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value))
 
                    let
                       lengthEmpty = length $ A._rframeUpdateKeys update
@@ -185,7 +188,7 @@ testUpdateEmpty = monadicIO $
 
 testUpdateEmpty2 :: Property
 testUpdateEmpty2 = monadicIO $ 
-                do frameUp <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) -- generate random update
+                do frameUp <- pick (arbitrary :: Gen (RFrameUpdate Text Value))
                    frame <- run $ A.fromUpdate frameUp
 
                    let
@@ -200,7 +203,7 @@ testUpdateAdd :: Property
 testUpdateAdd = monadicIO $ 
                 -- the general idea is to generate an update, then split it, keep one part into an update, 
                 -- transform the other into a frame, and update the second with the first  
-                do original <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) -- generate random update
+                do original <- pick (arbitrary :: Gen (RFrameUpdate Text Value))
                    expected <- run $ A.fromUpdate original
 
                    let originalKeys = A._rframeUpdateKeys original
@@ -228,9 +231,53 @@ testUpdateAdd = monadicIO $
 
                    assert $ actual == expected
 
+-- should have the overlapping change the data
+testUpdateOverlap :: Property
+testUpdateOverlap = monadicIO $ 
+                -- the general idea is to generate an update, then split it into two overlaping parts.
+                -- one part will be an update, the other will be the frame. Modify the overlapping part of the frame,
+                -- then call A.update and compare with the original
+                do original <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) 
+                   expected <- run $ A.fromUpdate original
+
+                   let originalKeys = A._rframeUpdateKeys original
+                       lenKeys = length originalKeys
+
+                   pre $ not (null originalKeys)
+
+                   lenSlice1 <- pick $ choose (1, lenKeys)
+                   startSlice2 <- pick $ choose (0,lenSlice1-1)
+
+                   let
+                      lenSlice2 = lenKeys - startSlice2
+                      originalData = A._rframeUpdateData original
+
+                      -- data for the base frame
+                      fstData = V.slice 0 lenSlice1 <$> originalData
+                      fstKeys = V.slice 0 lenSlice1 originalKeys
+
+                      -- the update
+                      sndData = V.slice startSlice2 lenSlice2 <$> originalData
+                      sndKeys = V.slice startSlice2 lenSlice2 originalKeys
+
+                   -- then we want to modify the "original" data, so we generate random new data for the overlap
+                   randPart <- pick $ sequence $ V.replicate (lenSlice1-startSlice2) (arbitrary :: Gen Value)
+
+                   let
+                      -- for each row we'll take the part that doesn't overlap, 
+                      -- and then concatenate it with the random part
+                      randRow = ( flip (V.++) randPart . V.take startSlice2)
+                      newFstData = randRow <$> fstData
+                      frameUp = RFrameUpdate {_rframeUpdateKeys = fstKeys, _rframeUpdateData = newFstData}
+                      update = RFrameUpdate {_rframeUpdateKeys = sndKeys, _rframeUpdateData = sndData}
+                   frame <- run $ A.fromUpdate frameUp
+                      
+                   actual <- run $ A.update update frame
+                   assert $ actual == expected
+
 testTakeRows :: Property
 testTakeRows = monadicIO $ 
-                do originalUp <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) -- generate random update
+                do originalUp <- pick (arbitrary :: Gen (RFrameUpdate Text Value))
                    original <- run $ A.fromUpdate originalUp
 
                    let originalData = A._rframeUpdateData originalUp
@@ -255,6 +302,44 @@ testTakeRows = monadicIO $
               
                    assert $ (actual == expected) && (lenActual == nbRows)
 
+testAddColumn :: Property
+testAddColumn = monadicIO $ 
+                -- the general idea is to generate an update, then split it, keep the last column as the update, 
+                -- transform the other into a frame, and update the second with the first  
+                do original <- pick (arbitrary :: Gen (RFrameUpdate Text Value))
+                   expected <- run $ A.fromUpdate original
+
+                   let originalKeys = A._rframeUpdateKeys original
+                       lenKeys = length originalKeys
+
+                   pre $ not (null originalKeys)
+
+                   let
+                      lenSlice = lenKeys -1
+                      originalData = A._rframeUpdateData original
+
+                      -- will contain all but the last column
+                      fstData = V.slice 0 lenSlice <$> originalData
+                      fstKeys = V.slice 0 lenSlice originalKeys
+
+                      -- only last column
+                      sndData = V.slice lenSlice (lenKeys - lenSlice) <$> originalData
+                      sndKeys = V.slice lenSlice (lenKeys - lenSlice) originalKeys
+
+                      --extracts the the only key, and we need `Vector Value` instead of `Vector (Vector Value)`, 
+                      --plus sndData is a vector of singletons
+                      key = sndKeys V.! 0
+                      column = V.concat $ V.toList sndData
+
+                      beforeUp = RFrameUpdate {_rframeUpdateKeys = fstKeys, _rframeUpdateData = fstData}
+                      
+
+                   before <- run $ A.fromUpdate beforeUp
+                      
+                   actual <- run $ A.addColumn before key column
+
+                   assert $ actual == expected
+
 propTests :: Ts.TestTree
 propTests = Ts.testGroup "Test suite"
   [ QC.testProperty "Fixture" testFixture,
@@ -264,7 +349,9 @@ propTests = Ts.testGroup "Test suite"
     QC.testProperty "Update Empty" testUpdateEmpty,
     QC.testProperty "Update Empty 2" testUpdateEmpty2,
     QC.testProperty "Update Add" testUpdateAdd,
-    QC.testProperty "Take Rows" testTakeRows
+    QC.testProperty "Update Overlap" testUpdateOverlap,
+    QC.testProperty "Take Rows" testTakeRows,
+    QC.testProperty "Add Column" testAddColumn
   ]
 
 main :: IO ()
