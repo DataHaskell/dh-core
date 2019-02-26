@@ -165,6 +165,17 @@
   (major1) == 0 && (major2) == 68 && (minor) <= 5)
 #endif /* MIN_TOOL_VERSION_hsc2hs */
 
+/* tool pkg-config-0.29.1 */
+#ifndef TOOL_VERSION_pkg_config
+#define TOOL_VERSION_pkg_config "0.29.1"
+#endif /* TOOL_VERSION_pkg_config */
+#ifndef MIN_TOOL_VERSION_pkg_config
+#define MIN_TOOL_VERSION_pkg_config(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  29 || \
+  (major1) == 0 && (major2) == 29 && (minor) <= 1)
+#endif /* MIN_TOOL_VERSION_pkg_config */
+
 /* tool runghc-8.6.3 */
 #ifndef TOOL_VERSION_runghc
 #define TOOL_VERSION_runghc "8.6.3"
@@ -188,10 +199,10 @@
 #endif /* MIN_TOOL_VERSION_strip */
 
 #ifndef CURRENT_PACKAGE_KEY
-#define CURRENT_PACKAGE_KEY "dense-linear-algebra-0.1.0.0-I9JzV95TllBKiQtN73frLt"
+#define CURRENT_PACKAGE_KEY "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"
 #endif /* CURRENT_PACKAGE_KEY */
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "dense-linear-algebra-0.1.0.0-I9JzV95TllBKiQtN73frLt"
+#define CURRENT_COMPONENT_ID "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"

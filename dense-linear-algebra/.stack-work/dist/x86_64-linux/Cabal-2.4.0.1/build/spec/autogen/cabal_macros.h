@@ -44,15 +44,15 @@
   (major1) == 0 && (major2) == 1 && (minor) <= 0)
 #endif /* MIN_VERSION_dense_linear_algebra */
 
-/* package hspec-2.6.0 */
+/* package hspec-2.6.1 */
 #ifndef VERSION_hspec
-#define VERSION_hspec "2.6.0"
+#define VERSION_hspec "2.6.1"
 #endif /* VERSION_hspec */
 #ifndef MIN_VERSION_hspec
 #define MIN_VERSION_hspec(major1,major2,minor) (\
   (major1) <  2 || \
   (major1) == 2 && (major2) <  6 || \
-  (major1) == 2 && (major2) == 6 && (minor) <= 0)
+  (major1) == 2 && (major2) == 6 && (minor) <= 1)
 #endif /* MIN_VERSION_hspec */
 
 /* package vector-0.12.0.2 */
@@ -132,6 +132,17 @@
   (major1) == 0 && (major2) == 68 && (minor) <= 5)
 #endif /* MIN_TOOL_VERSION_hsc2hs */
 
+/* tool pkg-config-0.29.1 */
+#ifndef TOOL_VERSION_pkg_config
+#define TOOL_VERSION_pkg_config "0.29.1"
+#endif /* TOOL_VERSION_pkg_config */
+#ifndef MIN_TOOL_VERSION_pkg_config
+#define MIN_TOOL_VERSION_pkg_config(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  29 || \
+  (major1) == 0 && (major2) == 29 && (minor) <= 1)
+#endif /* MIN_TOOL_VERSION_pkg_config */
+
 /* tool runghc-8.6.3 */
 #ifndef TOOL_VERSION_runghc
 #define TOOL_VERSION_runghc "8.6.3"
@@ -155,7 +166,7 @@
 #endif /* MIN_TOOL_VERSION_strip */
 
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "dense-linear-algebra-0.1.0.0-Lrwv4VtXcogK9imaP2SFwL-spec"
+#define CURRENT_COMPONENT_ID "dense-linear-algebra-0.1.0.0-7haI6ImEyZQJ2eK6NgjXKK-spec"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"

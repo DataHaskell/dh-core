@@ -22,5 +22,5 @@ Building library for vector-0.12.0.2..
 [19 of 21] Compiling Data.Vector.Unboxed.Base ( Data/Vector/Unboxed/Base.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Unboxed/Base.o )
 [20 of 21] Compiling Data.Vector.Unboxed ( Data/Vector/Unboxed.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Unboxed.o )
 [21 of 21] Compiling Data.Vector.Unboxed.Mutable ( Data/Vector/Unboxed/Mutable.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Unboxed/Mutable.o )
-Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/vector-0.12.0.2-5G85DK6NPIx1LphnqJy7eO
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/vector-0.12.0.2-5G85DK6NPIx1LphnqJy7eO
 Registering library for vector-0.12.0.2..

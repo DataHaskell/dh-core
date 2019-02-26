@@ -5,5 +5,5 @@ Building library for ansi-terminal-0.8.2..
 [2 of 4] Compiling System.Console.ANSI.Codes ( src/System/Console/ANSI/Codes.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Console/ANSI/Codes.o )
 [3 of 4] Compiling System.Console.ANSI.Unix ( src/System/Console/ANSI/Unix.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Console/ANSI/Unix.o )
 [4 of 4] Compiling System.Console.ANSI ( src/System/Console/ANSI.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Console/ANSI.o )
-Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/ansi-terminal-0.8.2-LZ54B5ErqCiIlNwOVvnj65
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/ansi-terminal-0.8.2-LZ54B5ErqCiIlNwOVvnj65
 Registering library for ansi-terminal-0.8.2..

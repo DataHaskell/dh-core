@@ -2,10 +2,10 @@ Configuring clock-0.7.2...
 Preprocessing library for clock-0.7.2..
 Clock.hsc:44:0: warning: "hsc_alignment" redefined
 In file included from .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Clock_hsc_make.c:1:0:
-/home/psycho/.stack/programs/x86_64-linux/ghc-8.6.3/lib/ghc-8.6.3/template-hsc.h:91:0: note: this is the location of the previous definition
+/home/kw/.stack/programs/x86_64-linux/ghc-8.6.3/lib/ghc-8.6.3/template-hsc.h:91:0: note: this is the location of the previous definition
  #define hsc_alignment(x...)                                           \
  
 Building library for clock-0.7.2..
 [1 of 1] Compiling System.Clock     ( .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Clock.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Clock.o )
-Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/clock-0.7.2-6GYCAXixqb8FuS0ooeoDbD
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/clock-0.7.2-6GYCAXixqb8FuS0ooeoDbD
 Registering library for clock-0.7.2..

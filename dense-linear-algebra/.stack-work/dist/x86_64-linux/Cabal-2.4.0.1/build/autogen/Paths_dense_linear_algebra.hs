@@ -29,12 +29,12 @@ version :: Version
 version = Version [0,1,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "/home/psycho/Work/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.0/8.6.3/bin"
-libdir     = "/home/psycho/Work/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/dense-linear-algebra-0.1.0.0-I9JzV95TllBKiQtN73frLt"
-dynlibdir  = "/home/psycho/Work/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3"
-datadir    = "/home/psycho/Work/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.0/8.6.3/share/x86_64-linux-ghc-8.6.3/dense-linear-algebra-0.1.0.0"
-libexecdir = "/home/psycho/Work/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.0/8.6.3/libexec/x86_64-linux-ghc-8.6.3/dense-linear-algebra-0.1.0.0"
-sysconfdir = "/home/psycho/Work/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.0/8.6.3/etc"
+bindir     = "/home/kw/Projects/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.9/8.6.3/bin"
+libdir     = "/home/kw/Projects/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"
+dynlibdir  = "/home/kw/Projects/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3"
+datadir    = "/home/kw/Projects/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.9/8.6.3/share/x86_64-linux-ghc-8.6.3/dense-linear-algebra-0.1.0.0"
+libexecdir = "/home/kw/Projects/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.9/8.6.3/libexec/x86_64-linux-ghc-8.6.3/dense-linear-algebra-0.1.0.0"
+sysconfdir = "/home/kw/Projects/dh-core/dense-linear-algebra/.stack-work/install/x86_64-linux/lts-13.9/8.6.3/etc"
 
 getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "dense_linear_algebra_bindir") (\_ -> return bindir)

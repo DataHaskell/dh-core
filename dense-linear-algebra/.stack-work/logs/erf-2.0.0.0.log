@@ -6,5 +6,5 @@ Configuring erf-2.0.0.0...
 Preprocessing library for erf-2.0.0.0..
 Building library for erf-2.0.0.0..
 [1 of 1] Compiling Data.Number.Erf  ( src/Data/Number/Erf.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Number/Erf.o )
-Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/erf-2.0.0.0-ExhHoenPosmHlOroBQQced
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/erf-2.0.0.0-ExhHoenPosmHlOroBQQced
 Registering library for erf-2.0.0.0..

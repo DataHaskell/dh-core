@@ -15,5 +15,5 @@ Building library for colour-2.3.4..
 [12 of 14] Compiling Data.Colour      ( Data/Colour.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Colour.o )
 [13 of 14] Compiling Data.Colour.Names ( Data/Colour/Names.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Colour/Names.o )
 [14 of 14] Compiling Data.Colour.CIE  ( Data/Colour/CIE.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Colour/CIE.o )
-Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/colour-2.3.4-BYzTQyKoQ9LK29pbkBo2SY
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/colour-2.3.4-BYzTQyKoQ9LK29pbkBo2SY
 Registering library for colour-2.3.4..

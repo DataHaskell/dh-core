@@ -1,0 +1,11 @@
+Configuring hspec-2.6.1...
+Preprocessing library for hspec-2.6.1..
+Building library for hspec-2.6.1..
+[1 of 6] Compiling Paths_hspec      ( .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/autogen/Paths_hspec.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Paths_hspec.o )
+[2 of 6] Compiling Test.Hspec.Formatters ( src/Test/Hspec/Formatters.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/Formatters.o )
+[3 of 6] Compiling Test.Hspec.Discover ( src/Test/Hspec/Discover.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/Discover.o )
+[4 of 6] Compiling Test.Hspec.Runner ( src/Test/Hspec/Runner.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/Runner.o )
+[5 of 6] Compiling Test.Hspec       ( src/Test/Hspec.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec.o )
+[6 of 6] Compiling Test.Hspec.QuickCheck ( src/Test/Hspec/QuickCheck.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/QuickCheck.o )
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/hspec-2.6.1-GRQ8hGQwiR9GaSYIs5coTo
+Registering library for hspec-2.6.1..

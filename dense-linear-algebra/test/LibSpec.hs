@@ -9,80 +9,70 @@ import qualified Statistics.Matrix.Algorithms as Alg
 
 import qualified Fixtures as F
 import AlgorithmsSpec
+import Utils
 
 spec :: Spec
 spec = describe "Q-R Decomposition" $ do
         it "Q x R returns the original matrix" $ do
-          qrDecompositionInvariant F.matA `shouldBe` True
-        --it "Matrix Q is orthogonal" $ do
-          --qrFirstOrthoInvariant `shouldBe` True
+          qrDecompositionInvariant F.matB `shouldBe` True
+         --it "Matrix Q is orthogonal for the QR factorization of an invertible matrix" $ do
+         -- qrFirstOrthoInvariant F.matD`shouldBe` True
         it "Matrix R is triangular" $ do
-          qrSecondTriInvariant F.matA `shouldBe` True
+          qrSecondTriInvariant F.matB `shouldBe` True
 
 
 main :: IO ()
 main = do
   hspec spec
 
+-- noninv
   let q = fst $ Alg.qr F.matA
   let q' = M.transpose q
-  let q_ = M.multiply q q'
+  let q_ = makeAbs (M.multiply q q')
  
+-- inv
   let r = fst $ Alg.qr F.matB
   let r' = M.transpose r
-  let r_ = M.multiply r r'
+  let r_ = makeAbs (M.multiply r r')
 
+-- noninv
   let s = fst $ Alg.qr F.matC
   let s' = M.transpose s
-  let s_ = M.multiply s s'
+  let s_ = makeAbs (M.multiply s s')
 
+-- inv
   let t = fst $ Alg.qr F.matD
   let t' = M.transpose t
-  let t_ = M.multiply t t'
+  let t_ = makeAbs (M.multiply t t')
 
   putStrLn "Algorithms.qr: Test 1"
   putStrLn "This is a matrix"
   putStrLn $ show F.matA
-  putStrLn "This is q from its QR factorization"
-  putStrLn $ show q
-  putStrLn "This is q transposed"
-  putStrLn $ show q'
-  putStrLn "Since matrix Q is supposed to be orthogonal, Q * (Q transposed) should be the identity matrix."
-  putStrLn "This is Q * (Q transposed)"
-  putStrLn $ show q_
+  putStrLn "Is matA invertible?"
+  putStrLn $ show $ isInvertible F.matA
+  putStrLn $ show q_ 
 
   putStrLn "Algorithms.qr: Test 2"
   putStrLn "This is a matrix"
   putStrLn $ show F.matB
-  putStrLn "This is q from its QR factorization"
-  putStrLn $ show r
-  putStrLn "This is q transposed"
-  putStrLn $ show r'
-  putStrLn "Since matrix Q is supposed to be orthogonal, Q * (Q transposed) should be the identity matrix."
-  putStrLn "This is Q * (Q transposed)"
+  putStrLn "Is matB invertible?"
+  putStrLn $ show $ isInvertible F.matB
   putStrLn $ show r_
 
   putStrLn "Algorithms.qr: Test 3"
   putStrLn "This is a matrix"
   putStrLn $ show F.matC
-  putStrLn "This is q from its QR factorization"
-  putStrLn $ show s
-  putStrLn "This is q transposed"
-  putStrLn $ show s'
-  putStrLn "Since matrix Q is supposed to be orthogonal, Q * (Q transposed) should be the identity matrix."
-  putStrLn "This is Q * (Q transposed)"
+  putStrLn "Is matC invertible?"
+  putStrLn $ show $ isInvertible F.matC
   putStrLn $ show s_
 
   putStrLn "Algorithms.qr: Test 4"
   putStrLn "This is a matrix"
   putStrLn $ show F.matD
-  putStrLn "This is q from its QR factorization"
-  putStrLn $ show t
-  putStrLn "This is q transposed"
-  putStrLn $ show t'
-  putStrLn "Since matrix Q is supposed to be orthogonal, Q * (Q transposed) should be the identity matrix."
-  putStrLn "This is Q * (Q transposed)"
-  putStrLn $ show t_
+  putStrLn "Is matD invertible?"
+  putStrLn $ show $ isInvertible F.matD
+  putStrLn $ show $ t_
+  putStrLn $ show $ M.toRowLists t_ 
 
 
 

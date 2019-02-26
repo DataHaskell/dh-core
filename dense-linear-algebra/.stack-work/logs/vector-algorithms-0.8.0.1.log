@@ -11,5 +11,5 @@ Building library for vector-algorithms-0.8.0.1..
 [ 8 of 10] Compiling Data.Vector.Algorithms.Radix ( src/Data/Vector/Algorithms/Radix.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Radix.o )
 [ 9 of 10] Compiling Data.Vector.Algorithms.Search ( src/Data/Vector/Algorithms/Search.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Search.o )
 [10 of 10] Compiling Data.Vector.Algorithms.Tim ( src/Data/Vector/Algorithms/Tim.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Algorithms/Tim.o )
-Installing library in /home/psycho/.stack/snapshots/x86_64-linux/lts-13.0/8.6.3/lib/x86_64-linux-ghc-8.6.3/vector-algorithms-0.8.0.1-l02fj2Jj9pCux4dolCIMf
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/vector-algorithms-0.8.0.1-l02fj2Jj9pCux4dolCIMf
 Registering library for vector-algorithms-0.8.0.1..

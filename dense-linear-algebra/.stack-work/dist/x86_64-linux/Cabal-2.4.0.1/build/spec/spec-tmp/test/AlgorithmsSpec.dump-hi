@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2019-02-12 13:33:04.943223495 UTC
+2019-02-26 20:01:07.803998457 UTC
 
 interface main:AlgorithmsSpec 8063
-  interface hash: 555fc8c40cfb4449ee03861e985b7890
-  ABI hash: e9f1d9bb9d72b7ea2b6048f5efc2d968
-  export-list hash: 0ea396f8baa7640e4eb57025fcb4510a
+  interface hash: 6c56e61e2d6201fd2d43b4423ca59191
+  ABI hash: 5a1714fe464ceaecbbfe92f539615f98
+  export-list hash: 4cc9ad036d8beeaa48d42b34ff126cb9
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 6e53648eade1ec3ffa724212f94d04d6
   opt_hash: 6faf2de08de32d19db9870899d88e59a
@@ -54,16 +54,16 @@ family instance modules: base-4.12.0.0:Control.Applicative
                          vector-0.12.0.2:Data.Vector.Unboxed.Base
 import  -/  base-4.12.0.0:Data.Tuple c92a835d04b6c075a7031d4e28e53c71
 import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix db2abea351d90487a23769bcf0b47eee
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Algorithms a402081cd264358fc08a82d22c3b9778
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Function 5e9111b9fb15b63d2daf6848503b78e4
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Mutable d23739a582a7d3be90c5cce57b1e877f
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Types a6bfaf21f466658cd9bda172814a6d15
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix 13ab77e285f81007796591ea79278ec9
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Algorithms 0835d6573d6ef10889d7f05e0b129662
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Function 1ff23262872805be3e37b5f602ab6100
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Mutable 402a1a0245fa0422f2ee5f0ada7b52e1
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Types 7a9ae1dc0a9192be182b9686b68c4c9c
 import  -/  ghc-prim-0.5.3:GHC.Classes e0d9c979f6368701f34fa421754d2cce
-import  -/  Utils 0a462bcc2a68ea8f3378f747b30748ad
-  exports: 5f45e3539a8f468d90cd9d1ffc87b60c
-  isOrtho 692f10dabe2108ba69ee09dedd62abdf
-  isUpperTri 9b7b5cbe6070c5aabdf4938dd54ccb7b
+import  -/  Utils 9a09ef769e8af6712b2d4fd1c44705f1
+  exports: 1c8c094ee1ed51646dafd7dfe597a232
+  isOrtho f5d79080ace3cf84a89039b112fee2a4
+  isUpperTri 5ee64341349c160267eaa8ae7a3b7945
 d63a8c95dbf20be1bf11781319a1180f
   $trModule :: GHC.Types.Module
   {- HasNoCafRefs, Strictness: m,
@@ -84,7 +84,7 @@ c77a23a0a099a06c21778fadccd743a7
 e918246f15ca50c017708774b1533980
   $trModule4 :: GHC.Prim.Addr#
   {- HasNoCafRefs, Unfolding: ("main"#) -}
-7de5a7dcc3e2c23d26f11073f6cb5988
+0a43d9935875e08deb559296384bd117
   $wqrDecompositionInvariant ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -137,7 +137,7 @@ e918246f15ca50c017708774b1533980
                    ww2
                    ww3
                    ww4 } } } } } } }) -}
-4e793fecf2b61232194403a5084a7022
+a6d922d5fb1908209b751b06e9ad8892
   $wqrFirstOrthoInvariant ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -162,7 +162,7 @@ e918246f15ca50c017708774b1533980
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww9 { Data.Vector.Primitive.Vector ww10 ww11 ww12 ->
                  Utils.$wisOrtho ww6 ww7 ww10 ww11 ww12 } } }) -}
-bb8bdc1f1a25de7a4a9360af90b45938
+748194518602bfd6c9016897c7fdb994
   $wqrSecondTriInvariant ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -184,7 +184,7 @@ bb8bdc1f1a25de7a4a9360af90b45938
                         ww4 of wild { (,) ds1 y ->
                  case y of wild1 { Statistics.Matrix.Types.Matrix dt dt1 ds2 ->
                  Utils.$wupperTriHelper wild1 dt } }) -}
-e390409add85293156a8229c62265ba5
+2bd1a56bbecc586e7510cd00de70e855
   qrDecompositionInvariant ::
     Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
   {- Arity: 1, Strictness: <S(SSS(SSS)),1*U(U,U,U(U,U,U))>,
@@ -201,7 +201,7 @@ e390409add85293156a8229c62265ba5
                    ww5
                    ww6
                    ww7 } }) -}
-7df863df6601815ed6d8ac05337c4397
+b2cd38a4fef5f766004980f20f81e14e
   qrFirstOrthoInvariant ::
     Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
   {- Arity: 1, Strictness: <S(SSS(SSS)),1*U(U,U,U(U,U,U))>,
@@ -213,7 +213,7 @@ e390409add85293156a8229c62265ba5
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
                  AlgorithmsSpec.$wqrFirstOrthoInvariant ww1 ww2 ww5 ww6 ww7 } }) -}
-8140f8d5f9235e2a244511f9ff6fd913
+21b674c01315c839691933f6b6318c9d
   qrSecondTriInvariant ::
     Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
   {- Arity: 1, Strictness: <S(SSS(SSS)),1*U(U,U,U(U,U,U))>,

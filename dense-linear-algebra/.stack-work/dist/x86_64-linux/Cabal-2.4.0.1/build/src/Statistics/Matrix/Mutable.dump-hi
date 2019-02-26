@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2018-12-28 12:05:01.690698505 UTC
+2019-02-26 14:07:34.180546269 UTC
 
-interface dense-linear-algebra-0.1.0.0-I9JzV95TllBKiQtN73frLt:Statistics.Matrix.Mutable 8063
-  interface hash: 714deb6215c5972bba89443f549c7f28
-  ABI hash: d23739a582a7d3be90c5cce57b1e877f
-  export-list hash: db3a891c2474a29057d9da55687d4ec7
+interface dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw:Statistics.Matrix.Mutable 8063
+  interface hash: 7f961dbc1d2a3db906bc9585d6a40ada
+  ABI hash: 402a1a0245fa0422f2ee5f0ada7b52e1
+  export-list hash: 8d74bbf64d6d56a65a1a2803cccdc2bc
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 449a0936b02ab978eb9dc735a290c096
   opt_hash: 6faf2de08de32d19db9870899d88e59a
@@ -62,40 +62,40 @@ import  -/  base-4.12.0.0:GHC.Num 847723f2584d989dac1eada133ac3fb8
 import  -/  base-4.12.0.0:GHC.ST 218d7508dc46ae62ed07f9dc97fd6fd1
 import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
 import  -/  deepseq-1.4.4.0:Control.DeepSeq b671068ccce8410d2c6ef17a4f9b4159
-import  -/  Statistics.Matrix.Types a6bfaf21f466658cd9bda172814a6d15
-  exports: c9fe82daf06bbd3c1998416038f48481
-  MMatrix 887c1e226e74c0fc808d19333ebc9154
-  MMatrix 6beea35af835b91e9a79e02cbb5dd24d
-  MVector e0d3486b1b16ff36c78be66df372be7c
-  Matrix 16b7dee85b3e8eee4773df84a90e36ee
-  Matrix ea69a3a03c30336c011ed265798870b8
+import  -/  Statistics.Matrix.Types 7a9ae1dc0a9192be182b9686b68c4c9c
+  exports: e72460abf602f277e14a782b4192d791
+  MMatrix f53efa0fe3d025fef715e013c0c71ca9
+  MMatrix f1dd81bb5322dbef68d17d4d9c8a0e89
+  MVector 191e4ea9bdb8a45a921daa5601eeb5ba
+  Matrix ae1e7f0c205cd52d7e1d511bb9005ffb
+  Matrix 1123f17a64ad8947e8c754b49360ac94
 import  -/  ghc-prim-0.5.3:GHC.Classes e0d9c979f6368701f34fa421754d2cce
 import  -/  vector-0.12.0.2:Data.Vector.Unboxed 3ec9008297a7b27b6fe569e181327338
 import  -/  vector-0.12.0.2:Data.Vector.Unboxed.Mutable d5dd6163341ecef0e754386a130baa2d
-0484af6d43f507d48d19187484dfd915
+c2f69178a9f2f6c1d75bfa2d6bd3cfad
   $trModule :: GHC.Types.Module
   {- HasNoCafRefs, Strictness: m,
      Unfolding: (GHC.Types.Module
                    Statistics.Matrix.Mutable.$trModule3
                    Statistics.Matrix.Mutable.$trModule1) -}
-3186b7acd2d7ff1d01b3a1da331fbd0b
+88d4302d744def898b48728b2d727bac
   $trModule1 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS
                    Statistics.Matrix.Mutable.$trModule2) -}
-126c8e329f64c196d3255397629a8da0
+535065794a95133c08a082f03e1c11f5
   $trModule2 :: GHC.Prim.Addr#
   {- HasNoCafRefs, Unfolding: ("Statistics.Matrix.Mutable"#) -}
-3c128ca375787c6c98cbbe31032513fb
+57eb5d614f40cc50dc39a7cd5f5eeb6d
   $trModule3 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS
                    Statistics.Matrix.Mutable.$trModule4) -}
-26d8520dd4d6ac130e26ae90ceb80fb0
+9e8ee3fe151950e9fcf40b4a461d4202
   $trModule4 :: GHC.Prim.Addr#
   {- HasNoCafRefs,
-     Unfolding: ("dense-linear-algebra-0.1.0.0-I9JzV95TllBKiQtN73frLt"#) -}
-120e55b2f107def93e877262fe5b94cc
+     Unfolding: ("dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#) -}
+60bc176006dd083007d016598e66dfc5
   $wlvl ::
     GHC.Prim.Int#
     -> GHC.ST.ST
@@ -103,7 +103,7 @@ import  -/  vector-0.12.0.2:Data.Vector.Unboxed.Mutable d5dd6163341ecef0e754386a
          (Data.Vector.Primitive.Mutable.MVector
             (Control.Monad.Primitive.PrimState (GHC.ST.ST s)) GHC.Types.Double)
   {- Arity: 1, Strictness: <B,U>x, Inline: [2] -}
-9c96defaef6df17f333a82cf26bb4dca
+84ac8e9add0412cbd669f6b9ddf50f01
   $wlvl1 ::
     GHC.Prim.Int#
     -> GHC.ST.ST
@@ -111,7 +111,7 @@ import  -/  vector-0.12.0.2:Data.Vector.Unboxed.Mutable d5dd6163341ecef0e754386a
          (Data.Vector.Primitive.Mutable.MVector
             (Control.Monad.Primitive.PrimState (GHC.ST.ST s)) GHC.Types.Double)
   {- Arity: 1, Strictness: <B,U>x, Inline: [2] -}
-64510c9221df4312f0d5701d53f8b3df
+2821bd70c915cdd624820a517e58dcdf
   $wreplicate ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -249,7 +249,7 @@ import  -/  vector-0.12.0.2:Data.Vector.Unboxed.Mutable d5dd6163341ecef0e754386a
                  case GHC.Prim.<=# 0# y1 of lwild {
                    DEFAULT -> $j 0# Statistics.Matrix.Mutable.replicate2
                    1# -> $j y1 (GHC.Types.I# y1) }) -}
-8f10a284f1d12db6ff38f446e84c1eb9
+177259ba73353b5e544f46cb36e1f90b
   $wthaw ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -325,7 +325,7 @@ import  -/  vector-0.12.0.2:Data.Vector.Unboxed.Mutable d5dd6163341ecef0e754386a
                    -> case Statistics.Matrix.Mutable.$wlvl @ s ww3
                       ret_ty (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
                       of {} }) -}
-c744f9019dd48fef2cff645306201959
+908783771e9646d96648bf37ef20d18f
   $wunsafeNew ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -474,7 +474,7 @@ c744f9019dd48fef2cff645306201959
                    -> case Statistics.Matrix.Mutable.unsafeNew2
                       ret_ty (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
                       of {} }) -}
-e76e3154e1260fda4abb6c82614eb714
+ebfe2fa658e00b59d470e300e234f8ea
   bounds ::
     Statistics.Matrix.Types.MMatrix s
     -> GHC.Types.Int
@@ -493,7 +493,7 @@ e76e3154e1260fda4abb6c82614eb714
                        (\ @ b ->
                         GHC.CString.unpackFoldrCString#
                           @ b
-                          "dense-linear-algebra-0.1.0.0-I9JzV95TllBKiQtN73frLt"#)
+                          "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#)
                  } in
                  let {
                    loc1 :: [GHC.Types.Char]
@@ -547,7 +547,7 @@ e76e3154e1260fda4abb6c82614eb714
                        (\ @ b ->
                         GHC.CString.unpackFoldrCString#
                           @ b
-                          "dense-linear-algebra-0.1.0.0-I9JzV95TllBKiQtN73frLt"#)
+                          "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#)
                  } in
                  let {
                    loc8 :: [GHC.Types.Char]
@@ -642,7 +642,7 @@ e76e3154e1260fda4abb6c82614eb714
                              GHC.Types.True -> $j1 }
                         GHC.Types.True -> $j }
                    GHC.Types.True -> $j } }) -}
-9c1a0caeda08c538a15684416031414c
+7c43adb4b119bd67f717440d1019e025
   immutably ::
     Control.DeepSeq.NFData a =>
     Statistics.Matrix.Types.MMatrix s
@@ -696,7 +696,7 @@ e76e3154e1260fda4abb6c82614eb714
                  ->_R <Statistics.Matrix.Types.MMatrix s>_R
                  ->_R <Statistics.Matrix.Types.Matrix -> a>_R
                  ->_R Sym (GHC.ST.N:ST[0] <s>_N <a>_R)) -}
-91c2d0b18921da9f0d5973e64b063ff6
+95013102f75cd2def8311f21570efe7a
   replicate ::
     GHC.Types.Int
     -> GHC.Types.Int
@@ -713,7 +713,7 @@ e76e3154e1260fda4abb6c82614eb714
                  ->_R <GHC.Types.Double>_R
                  ->_R Sym (GHC.ST.N:ST[0]
                                <s>_N <Statistics.Matrix.Types.MMatrix s>_R)) -}
-41f2a15f69dcf6d5e6101c4791e51ee6
+7d3865512ccbe16ccec9cbd1cd528e9e
   replicate1 ::
     GHC.Types.Int
     -> GHC.Types.Int
@@ -733,10 +733,10 @@ e76e3154e1260fda4abb6c82614eb714
                  case w1 of ww2 { GHC.Types.I# ww3 ->
                  case w2 of ww4 { GHC.Types.D# ww5 ->
                  Statistics.Matrix.Mutable.$wreplicate @ s ww1 ww3 ww5 w3 } } }) -}
-76dfa1516b5c4a0a054e0cf95aaf738a
+207f996ee44f16fcf1875aa1c635a7e2
   replicate2 :: GHC.Types.Int
   {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.I# 0#) -}
-5135337eccbcdb8666ab26f266835b4b
+1adc16cbfcbfb2894e1bcdc2caf246b8
   thaw ::
     Statistics.Matrix.Types.Matrix
     -> GHC.ST.ST s (Statistics.Matrix.Types.MMatrix s)
@@ -748,7 +748,7 @@ e76e3154e1260fda4abb6c82614eb714
                  <Statistics.Matrix.Types.Matrix>_R
                  ->_R Sym (GHC.ST.N:ST[0]
                                <s>_N <Statistics.Matrix.Types.MMatrix s>_R)) -}
-bd86242d4ef95f00abebccd5a1b31cb5
+347c55901582aec787721d15d40e42ac
   thaw1 ::
     Statistics.Matrix.Types.Matrix
     -> GHC.Prim.State# s
@@ -764,7 +764,7 @@ bd86242d4ef95f00abebccd5a1b31cb5
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
                  Statistics.Matrix.Mutable.$wthaw @ s ww1 ww2 ww5 ww6 ww7 w1 } }) -}
-d4cc9977416ca467d3b3b7be88a60905
+d9919af0fdf941924d79cd9b5aeb310c
   unsafeBounds ::
     Statistics.Matrix.Types.MMatrix s
     -> GHC.Types.Int
@@ -785,7 +785,7 @@ d4cc9977416ca467d3b3b7be88a60905
                  case r1 of wild1 { GHC.Types.I# x ->
                  case c of wild2 { GHC.Types.I# y ->
                  k mv (GHC.Types.I# (GHC.Prim.+# (GHC.Prim.*# x dt1) y)) } } }) -}
-71dfa6204b6341ed86e5502b9bcfa74e
+bc9f5cf22c0615c386ce22d7e17000af
   unsafeFreeze ::
     Statistics.Matrix.Types.MMatrix s
     -> GHC.ST.ST s Statistics.Matrix.Types.Matrix
@@ -798,7 +798,7 @@ d4cc9977416ca467d3b3b7be88a60905
                  <Statistics.Matrix.Types.MMatrix s>_R
                  ->_R Sym (GHC.ST.N:ST[0]
                                <s>_N <Statistics.Matrix.Types.Matrix>_R)) -}
-0bc6656d5c05389a73fb63aff9f9b1ff
+021e8bcb6ffae4a65544c28b400dc40d
   unsafeFreeze1 ::
     Statistics.Matrix.Types.MMatrix s
     -> GHC.Prim.State# s
@@ -836,7 +836,7 @@ d4cc9977416ca467d3b3b7be88a60905
                       (Data.Vector.Primitive.Vector @ GHC.Types.Double dt2 dt3 ipv1)
                         `cast`
                       (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0])) #) } } }) -}
-f2be43b8d1e70c1ad0a8908237a50a6a
+78408171157da046c253a9e884ccd27e
   unsafeModify ::
     Statistics.Matrix.Types.MMatrix s
     -> GHC.Types.Int
@@ -903,7 +903,7 @@ f2be43b8d1e70c1ad0a8908237a50a6a
                                 <()>_R)_R)) } } } })
                    `cast`
                  (Sym (GHC.ST.N:ST[0] <s>_N <()>_R)) } } }) -}
-3ac1d3b8f2dbc763728b943f8b5fb06c
+1f4bf9e611d856b66d1c39f8a7a8fb6e
   unsafeNew ::
     GHC.Types.Int
     -> GHC.Types.Int -> GHC.ST.ST s (Statistics.Matrix.Types.MMatrix s)
@@ -916,7 +916,7 @@ f2be43b8d1e70c1ad0a8908237a50a6a
                  ->_R <GHC.Types.Int>_R
                  ->_R Sym (GHC.ST.N:ST[0]
                                <s>_N <Statistics.Matrix.Types.MMatrix s>_R)) -}
-2313e9ebf09ae1214240ce35d0c35169
+d181fd537302e58d4fb153b9d4554f5a
   unsafeNew1 ::
     GHC.Types.Int
     -> GHC.Types.Int
@@ -932,13 +932,13 @@ f2be43b8d1e70c1ad0a8908237a50a6a
                  case w of ww { GHC.Types.I# ww1 ->
                  case w1 of ww2 { GHC.Types.I# ww3 ->
                  Statistics.Matrix.Mutable.$wunsafeNew @ s ww1 ww3 w2 } }) -}
-46588b90cfbcf8b2ef6dffabd520a0ff
+e6b8a05f3902393c2e91a88f69cf1a71
   unsafeNew2 :: GHC.ST.ST s (Statistics.Matrix.Types.MMatrix s)
   {- Strictness: x -}
-2e7d691e15c65f1133cc743235500118
+4f9adba20cdc9319c6aaf37ee8408564
   unsafeNew3 :: GHC.ST.ST s (Statistics.Matrix.Types.MMatrix s)
   {- Strictness: x -}
-6b86154419cd0b331f520f57de992472
+d06404be66d740cbeb340ce062955bcb
   unsafeNew4 ::
     GHC.Prim.Int#
     -> GHC.ST.ST
@@ -946,7 +946,7 @@ f2be43b8d1e70c1ad0a8908237a50a6a
          (Data.Vector.Unboxed.Base.MVector
             (Control.Monad.Primitive.PrimState (GHC.ST.ST s)) GHC.Types.Double)
   {- Arity: 1, Strictness: <B,U>x -}
-3266cb009d73145121173d386eb12294
+2f198eddb2b458644064ae6ac1d4015c
   unsafeRead ::
     Statistics.Matrix.Types.MMatrix s
     -> GHC.Types.Int -> GHC.Types.Int -> GHC.ST.ST s GHC.Types.Double
@@ -977,7 +977,7 @@ f2be43b8d1e70c1ad0a8908237a50a6a
                  (Sym (GHC.ST.N:ST[0]
                            (Sym (Control.Monad.Primitive.D:R:PrimStateST[0] <s>_N))
                            <GHC.Types.Double>_R)) } } } }) -}
-71ddda685656fab81d8efa40ee86d736
+2c8d241ca1cdfe524221777347e0c7eb
   unsafeWrite ::
     Statistics.Matrix.Types.MMatrix s
     -> GHC.Types.Int
