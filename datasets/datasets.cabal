@@ -1,17 +1,21 @@
 Name:                datasets
-Version:             0.3.0
+Version:             0.4.0
 Synopsis:            Classical data sets for statistics and machine learning
 Description:         Classical machine learning and statistics datasets from
                      the UCI Machine Learning Repository and other sources.
                      .
-                     The datasets package defines two different kinds of datasets:
+                     The @datasets@ package defines two different kinds of datasets:
                      .
                      * small data sets which are directly (or indirectly with `file-embed`)
                        embedded in the package as pure values and do not require network or IO to download
                        the data set. This includes Iris, Anscombe and OldFaithful.
                      .
                      * other data sets which need to be fetched over the network with
-                       `Numeric.Datasets.getDataset` and are cached in a local temporary directory.
+                     `Numeric.Datasets.getDataset` and are cached in a local temporary directory.
+                     .
+                     The @datafiles/@ directory of this package includes copies of a few famous datasets, such as Titanic, Nightingale and Michelson.
+                     .
+                     Example :
                      .
                      > import Numeric.Datasets (getDataset)
                      > import Numeric.Datasets.Iris (iris)
@@ -29,18 +33,19 @@ Description:         Classical machine learning and statistics datasets from
 License:             MIT
 License-file:        LICENSE
 Author:              Tom Nielsen <tanielsen@gmail.com>
-Maintainer:          Tom Nielsen <tanielsen@gmail.com>
+Maintainer:          Marco Zocca <ocramz fripost org>
 build-type:          Simple
 Cabal-Version: 	     >= 1.10
 homepage:            https://github.com/DataHaskell/dh-core
 bug-reports:         https://github.com/DataHaskell/dh-core/issues
 category:            Statistics, Machine Learning, Data Mining, Data
-Tested-With:         GHC == 7.10.2, GHC == 7.10.3, GHC == 8.0.1
+Tested-With:         GHC == 7.10.2, GHC == 7.10.3, GHC == 8.0.1, GHC == 8.4.3
 extra-source-files:
                    changelog.md
                    datafiles/iris.data
                    datafiles/michelson.json
                    datafiles/nightingale.json
+                   datafiles/titanic2_full.tsv
                    datafiles/netflix/training/mv_0000001.txt
                    datafiles/netflix/test/qualifying.txt
                    datafiles/netflix/movies/movie_titles.txt
@@ -56,9 +61,11 @@ Library
    default-language:  Haskell2010
 
    Exposed-modules:
-                   Numeric.Datasets
+                   Numeric.Dataloader
+                 , Numeric.Datasets
                  , Numeric.Datasets.Anscombe
                  , Numeric.Datasets.BostonHousing
+                 , Numeric.Datasets.CIFAR10
                  , Numeric.Datasets.OldFaithful
                  , Numeric.Datasets.Abalone
                  , Numeric.Datasets.Adult
@@ -68,31 +75,91 @@ Library
                  , Numeric.Datasets.CO2
                  , Numeric.Datasets.Gapminder
                  , Numeric.Datasets.Iris
+                 , Numeric.Datasets.Internal.Streaming
                  , Numeric.Datasets.Michelson
-                 , Numeric.Datasets.Mushroom                 
+                 , Numeric.Datasets.Mushroom
                  , Numeric.Datasets.Nightingale
                  , Numeric.Datasets.Quakes
                  , Numeric.Datasets.States
                  , Numeric.Datasets.Sunspots
-                 , Numeric.Datasets.Titanic                 
+                 , Numeric.Datasets.Titanic
                  , Numeric.Datasets.UN
                  , Numeric.Datasets.Vocabulary
                  , Numeric.Datasets.Wine
                  , Numeric.Datasets.WineQuality
                  , Numeric.Datasets.Netflix
+
+   other-modules:
+     Streaming.Instances
+
    Build-depends:
-                   base                    >= 4.6 && < 5
-                 , aeson
-                 , attoparsec >= 0.13
-                 , bytestring
-                 , cassava
-                 , directory
-                 , file-embed
-                 , filepath
-                 , hashable
-                 , microlens
-                 , stringsearch
-                 , text
-                 , time
-                 , vector
-                 , wreq
+                 base          >= 4.6 && < 5
+               , aeson
+               , attoparsec    >= 0.13
+               , bytestring
+               , cassava
+               , deepseq
+               , directory
+               , exceptions
+               , file-embed
+               , filepath
+               , hashable
+               , JuicyPixels
+               , microlens
+               , mtl
+               , mwc-random
+               , parallel
+               , req            >= 2.0.0
+               , safe-exceptions
+               , streaming
+               , streaming-attoparsec
+               , streaming-bytestring
+               , streaming-cassava >= 0.1.0.1
+               , streaming-commons
+               , stringsearch
+               , tar
+               , text
+               , time
+               , transformers
+               , vector
+               , safe-exceptions
+               , zlib
+                 -- , wreq
+
+
+Benchmark bench
+   type: exitcode-stdio-1.0
+   hs-source-dirs: bench
+   main-is: Main.hs
+   default-language: Haskell2010
+   ghc-options: -Wall -O2 -rtsopts -threaded
+   other-modules:
+       Numeric.Dataloader.Benchmark
+   build-depends:
+       base >= 4.6 && < 5
+     , criterion
+     , datasets
+     , deepseq
+     , directory
+     , filepath
+     , JuicyPixels
+     , mwc-random
+     , req
+     , safe-exceptions
+     , streaming
+
+
+test-suite spec
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+  default-extensions: OverloadedStrings
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+                base >= 4.6 && < 5 , 
+                QuickCheck ,
+                hspec
+  default-language: Haskell2010
+
+

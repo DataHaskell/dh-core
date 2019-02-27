@@ -27,7 +27,7 @@ library
                        Statistics.Matrix.Types
   build-depends:       base                    >= 4.5 && < 5
                      , deepseq                 >= 1.1.0.2
-                     , math-functions          >= 0.1.7
+                     , math-functions          >= 0.1.7                     
                      , primitive               >= 0.3
                      , vector                  >= 0.10
                      , vector-algorithms       >= 0.4
@@ -40,9 +40,6 @@ test-suite spec
   ghc-options:         -Wall
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
-  other-modules:       Fixtures,
-                       Utils,
-                       AlgorithmsSpec
   main-is:             LibSpec.hs
   build-depends:       base
                      , dense-linear-algebra
