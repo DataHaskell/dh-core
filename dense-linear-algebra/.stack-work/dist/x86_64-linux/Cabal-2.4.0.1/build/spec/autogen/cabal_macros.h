@@ -11,6 +11,17 @@
   (major1) == 0 && (major2) == 1 && (minor) <= 0)
 #endif /* MIN_VERSION_dense_linear_algebra */
 
+/* package Decimal-0.5.1 */
+#ifndef VERSION_Decimal
+#define VERSION_Decimal "0.5.1"
+#endif /* VERSION_Decimal */
+#ifndef MIN_VERSION_Decimal
+#define MIN_VERSION_Decimal(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  5 || \
+  (major1) == 0 && (major2) == 5 && (minor) <= 1)
+#endif /* MIN_VERSION_Decimal */
+
 /* package QuickCheck-2.12.6.1 */
 #ifndef VERSION_QuickCheck
 #define VERSION_QuickCheck "2.12.6.1"
@@ -166,7 +177,7 @@
 #endif /* MIN_TOOL_VERSION_strip */
 
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "dense-linear-algebra-0.1.0.0-7haI6ImEyZQJ2eK6NgjXKK-spec"
+#define CURRENT_COMPONENT_ID "dense-linear-algebra-0.1.0.0-chx3wVwUKp6AHoEjCkcPv-spec"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"

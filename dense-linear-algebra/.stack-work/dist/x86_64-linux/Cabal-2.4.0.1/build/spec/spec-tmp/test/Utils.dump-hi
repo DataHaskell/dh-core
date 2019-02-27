@@ -1,12 +1,12 @@
 
 ==================== FINAL INTERFACE ====================
-2019-02-26 20:01:07.732673652 UTC
+2019-02-27 19:48:23.107046994 UTC
 
 interface main:Utils 8063
-  interface hash: d42a9e9acb32a002c1aa440ef7b3f278
-  ABI hash: 9a09ef769e8af6712b2d4fd1c44705f1
-  export-list hash: 1c8c094ee1ed51646dafd7dfe597a232
-  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  interface hash: e3b5a882059e3f8c0165ceacd180985c
+  ABI hash: 3259016111fa8079afcd0aacee713e55
+  export-list hash: 542fc4e281cce90adcb7a18c0e5e2a0b
+  orphan hash: 13c0be58a5d646cbcb3d662346e9bdb6
   flag hash: 6e53648eade1ec3ffa724212f94d04d6
   opt_hash: 6faf2de08de32d19db9870899d88e59a
   hpc_hash: 93b885adfe0da089cdf634904fd59f71
@@ -18,6 +18,7 @@ exports:
   Utils.det
   Utils.getRest
   Utils.hasLeadingZeros
+  Utils.isEqual
   Utils.isFloatZero
   Utils.isInvertible
   Utils.isOrtho
@@ -25,13 +26,14 @@ exports:
   Utils.isUpperTri
   Utils.leaveElement
   Utils.makeAbs
+  Utils.makeDecimal
   Utils.upperTriHelper
 module dependencies: Fixtures
-package dependencies: array-0.5.3.0 base-4.12.0.0 deepseq-1.4.4.0
-                      dense-linear-algebra-0.1.0.0 ghc-boot-th-8.6.3 ghc-prim-0.5.3
-                      integer-gmp-1.0.2.0 math-functions-0.3.1.0 pretty-1.1.3.6
-                      primitive-0.6.4.0 template-haskell-2.14.0.0 transformers-0.5.5.0
-                      vector-0.12.0.2 vector-th-unbox-0.2.1.6
+package dependencies: Decimal-0.5.1 array-0.5.3.0 base-4.12.0.0
+                      deepseq-1.4.4.0 dense-linear-algebra-0.1.0.0 ghc-boot-th-8.6.3
+                      ghc-prim-0.5.3 integer-gmp-1.0.2.0 math-functions-0.3.1.0
+                      pretty-1.1.3.6 primitive-0.6.4.0 template-haskell-2.14.0.0
+                      transformers-0.5.5.0 vector-0.12.0.2 vector-th-unbox-0.2.1.6
 orphans: vector-0.12.0.2:Data.Vector.Unboxed
          vector-0.12.0.2:Data.Vector.Fusion.Bundle
          transformers-0.5.5.0:Control.Monad.Trans.Error
@@ -60,23 +62,78 @@ family instance modules: base-4.12.0.0:Control.Applicative
                          vector-0.12.0.2:Data.Vector vector-0.12.0.2:Data.Vector.Primitive
                          vector-0.12.0.2:Data.Vector.Unboxed
                          vector-0.12.0.2:Data.Vector.Unboxed.Base
+import  -/  Decimal-0.5.1:Data.Decimal f570d2a17304ba1426c63f1c994f196f
 import  -/  base-4.12.0.0:Data.Foldable 00188ddf89c975fee76bdfad479443c1
 import  -/  base-4.12.0.0:Data.Tuple c92a835d04b6c075a7031d4e28e53c71
 import  -/  base-4.12.0.0:GHC.Base cc906f98291a1b830546e99a96674547
 import  -/  base-4.12.0.0:GHC.List 734a72beb76d276fb4a0ba2689a5711f
 import  -/  base-4.12.0.0:GHC.Num 847723f2584d989dac1eada133ac3fb8
 import  -/  base-4.12.0.0:GHC.Real f7dad82c1d43d80823865d3e6c6636e0
+import  -/  base-4.12.0.0:GHC.Word 2f81835517a554ac93a9eb8154dc67ce
 import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix 13ab77e285f81007796591ea79278ec9
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Algorithms 0835d6573d6ef10889d7f05e0b129662
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Function 1ff23262872805be3e37b5f602ab6100
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Mutable 402a1a0245fa0422f2ee5f0ada7b52e1
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Types 7a9ae1dc0a9192be182b9686b68c4c9c
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix 139ad343f7aee20177eb49ca95eab3d3
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Algorithms a1bea6e15f3ddee29402e5430634a9d2
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Function 0d2f9f32ad7ae03fa8f250e2f0be0b5c
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Mutable 4e30ab6a7bd9ce223e9906bd793dbb85
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Types e85952c26980c1752607abe8d259c6cf
 import  -/  ghc-prim-0.5.3:GHC.Classes e0d9c979f6368701f34fa421754d2cce
-import  -/  Fixtures 075e2e5a008ab59e398fd4047f9d7233
-  exports: 497315acd469bbe0ee26b13b90f5fc27
-  matId 294d9b36e9c0e890e8f7ad036524d7c8
+import  -/  Fixtures 142c34dfffe34824ef4c26c9a5746fbd
+  exports: a69bdcabee6fd1e543fcaca09351501f
+  matId 2e6516aa08142fc0c0888f6927ecc207
 import  -/  vector-0.12.0.2:Data.Vector.Unboxed 3ec9008297a7b27b6fe569e181327338
+ce500427e1e5f4750dd41c42990c1c0f
+  $s$fEqDecimalRaw ::
+    GHC.Classes.Eq (Data.Decimal.DecimalRaw GHC.Integer.Type.Integer)
+  {- Strictness: m, Inline: CONLIKE,
+     Unfolding: DFun:.
+                  @ (Data.Decimal.DecimalRaw GHC.Integer.Type.Integer)
+                  (Data.Decimal.$fEqDecimalRaw_$c==
+                     @ GHC.Integer.Type.Integer
+                     GHC.Real.$fIntegralInteger)
+                  Utils.$s$fEqDecimalRaw_$s$fEqDecimalRaw_$c/= -}
+365f73571ffa5a4057e067cff9e9de77
+  $s$fEqDecimalRaw_$s$fEqDecimalRaw_$c/= ::
+    Data.Decimal.DecimalRaw GHC.Integer.Type.Integer
+    -> Data.Decimal.DecimalRaw GHC.Integer.Type.Integer
+    -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S(SS),1*U(U,U)><S(SS),1*U(U,U)>,
+     Inline: (sat-args=2),
+     Unfolding: InlineRule (2, False, False)
+                (\ (x :: Data.Decimal.DecimalRaw GHC.Integer.Type.Integer)
+                   (y :: Data.Decimal.DecimalRaw GHC.Integer.Type.Integer) ->
+                 case Data.Decimal.$fEqDecimalRaw_$c==
+                        @ GHC.Integer.Type.Integer
+                        GHC.Real.$fIntegralInteger
+                        x
+                        y of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
+4213174633b87a1f1f98d428f01a2c1b
+  $s$fEq[] ::
+    GHC.Classes.Eq [Data.Decimal.DecimalRaw GHC.Integer.Type.Integer]
+  {- Strictness: m, Inline: CONLIKE,
+     Unfolding: DFun:.
+                  @ [Data.Decimal.DecimalRaw GHC.Integer.Type.Integer]
+                  (GHC.Classes.$fEq[]_$c==
+                     @ (Data.Decimal.DecimalRaw GHC.Integer.Type.Integer)
+                     Utils.$s$fEqDecimalRaw)
+                  Utils.$s$fEq[]_$s$fEq[]_$c/= -}
+8800fc9e56861802d89d3873d1bcd0f4
+  $s$fEq[]_$s$fEq[]_$c/= ::
+    [Data.Decimal.DecimalRaw GHC.Integer.Type.Integer]
+    -> [Data.Decimal.DecimalRaw GHC.Integer.Type.Integer]
+    -> GHC.Types.Bool
+  {- Arity: 2, Strictness: <S,1*U><S,1*U>, Inline: (sat-args=2),
+     Unfolding: InlineRule (2, False, False)
+                (\ (x :: [Data.Decimal.DecimalRaw GHC.Integer.Type.Integer])
+                   (y :: [Data.Decimal.DecimalRaw GHC.Integer.Type.Integer]) ->
+                 case GHC.Classes.$fEq[]_$c==
+                        @ (Data.Decimal.DecimalRaw GHC.Integer.Type.Integer)
+                        Utils.$s$fEqDecimalRaw
+                        x
+                        y of wild {
+                   GHC.Types.False -> GHC.Types.True
+                   GHC.Types.True -> GHC.Types.False }) -}
 a12658d0a681752c98cb3fc6d3fc5852
   $s^1 :: GHC.Types.Double
   {- Strictness: x -}
@@ -162,7 +219,7 @@ d0605579bb34dcd3090af002be911d84
                  } in
                  case GHC.Prim.<=# ww 0# of lwild {
                    DEFAULT -> $w$j ww 1# -> $w$j 0# }) -}
-9dd0140c7cb7bafa3eb5b819c42dac1b
+8c9130c7fbf6cafc12b3b26d44bc9e1f
   $wisOrtho ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -198,22 +255,12 @@ d0605579bb34dcd3090af002be911d84
                  case ww19
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww5 { Data.Vector.Primitive.Vector ww6 ww7 ww23 ->
-                 case Fixtures.matId of ww24 { Statistics.Matrix.Types.Matrix ww25 ww26 ww27 ->
-                 case ww27
-                        `cast`
-                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww28 { Data.Vector.Primitive.Vector ww29 ww30 ww31 ->
-                 Statistics.Matrix.Types.$w$c==
-                   ww17
-                   ww18
-                   ww6
-                   ww7
-                   ww23
-                   ww25
-                   ww26
-                   ww29
-                   ww30
-                   ww31 } } } } } }) -}
-abcd35ecece070621cf6a63716429d80
+                 GHC.Classes.$fEq[]_$c==
+                   @ [Data.Decimal.Decimal]
+                   Utils.$s$fEq[]
+                   (Utils.$wmakeDecimal Utils.isOrtho_prec ww18 ww6 ww7 ww23)
+                   Utils.isOrtho1 } } } }) -}
+6042725707e9f4a4d1610150fbc15d65
   $wisRowFromTriMatrix ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -238,7 +285,7 @@ cb6a799062884b8317a51d3913495b91
   $wleaveElement :: GHC.Types.Int -> [a] -> [a]
   {- Arity: 2, HasNoCafRefs, Strictness: <L,1*U(1*U)><S,1*U>,
      Inline: [2] -}
-98a888f9d1dc5d0237aec2972d024910
+ec8d2a21bc833bd62beeafd9fc2b8f19
   $wmakeAbs ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -371,7 +418,70 @@ cb6a799062884b8317a51d3913495b91
                     nt
                       `cast`
                     (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0])) #) } }) -}
-c647cb3424d5a7242c01ae443d3d9dba
+827cd42ef8220b7a9afd322bfdb4a87d
+  $wmakeDecimal ::
+    GHC.Word.Word8
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.ByteArray#
+    -> [[Data.Decimal.DecimalRaw GHC.Integer.Type.Integer]]
+  {- Arity: 5, Strictness: <L,U(U)><S,U><S,U><S,U><S,U>, Inline: [2],
+     Unfolding: (\ (w :: GHC.Word.Word8)
+                   (ww :: GHC.Prim.Int#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (ww3 :: GHC.Prim.ByteArray#) ->
+                 let {
+                   lvl3 :: GHC.Types.Double
+                           -> Data.Decimal.DecimalRaw GHC.Integer.Type.Integer
+                     {- Arity: 1, Strictness: <S(S),1*U(U)>m, Inline: [2],
+                        Unfolding: InlineRule (1, True, False)
+                                   (\ (w1 :: GHC.Types.Double) ->
+                                    case w1 of ww4 { GHC.Types.D# ww5 ->
+                                    case w of ww8 { GHC.Word.W8# ww9 ->
+                                    case GHC.Real.^
+                                           @ GHC.Types.Double
+                                           @ GHC.Word.Word8
+                                           Utils.makeDecimal2
+                                           GHC.Word.$fIntegralWord8
+                                           Utils.makeDecimal1
+                                           ww8 of wild1 { GHC.Types.D# y ->
+                                    case GHC.Float.$w$cround
+                                           @ GHC.Integer.Type.Integer
+                                           GHC.Real.$fIntegralInteger
+                                           (GHC.Prim.*## ww5 y) of dt { DEFAULT ->
+                                    Data.Decimal.Decimal
+                                      @ GHC.Integer.Type.Integer
+                                      ww9
+                                      dt } } } }) -}
+                   = \ (w1 :: GHC.Types.Double) ->
+                     case w1 of ww4 { GHC.Types.D# ww5 ->
+                     case w of ww8 { GHC.Word.W8# ww9 ->
+                     case GHC.Real.^
+                            @ GHC.Types.Double
+                            @ GHC.Word.Word8
+                            Utils.makeDecimal2
+                            GHC.Word.$fIntegralWord8
+                            Utils.makeDecimal1
+                            ww8 of wild1 { GHC.Types.D# y ->
+                     case GHC.Float.$w$cround
+                            @ GHC.Integer.Type.Integer
+                            GHC.Real.$fIntegralInteger
+                            (GHC.Prim.*## ww5 y) of dt { DEFAULT ->
+                     Data.Decimal.Decimal @ GHC.Integer.Type.Integer ww9 dt } } } }
+                 } in
+                 GHC.Base.map
+                   @ [GHC.Types.Double]
+                   @ [Data.Decimal.DecimalRaw GHC.Integer.Type.Integer]
+                   (\ (ls :: [GHC.Types.Double]) ->
+                    GHC.Base.map
+                      @ GHC.Types.Double
+                      @ (Data.Decimal.DecimalRaw GHC.Integer.Type.Integer)
+                      lvl3
+                      ls)
+                   (Statistics.Matrix.$wtoRowLists ww ww1 ww2 ww3)) -}
+3f001a8da4d516b304f835090d2a1508
   $wupperTriHelper ::
     Statistics.Matrix.Types.Matrix -> GHC.Prim.Int# -> GHC.Types.Bool
   {- Arity: 2, Strictness: <L,U(A,U,U(U,U,U))><S,U>, Inline: [2],
@@ -425,7 +535,7 @@ c647cb3424d5a7242c01ae443d3d9dba
                       } in
                       go 0# GHC.Types.True
                    1# -> GHC.Types.True }) -}
-c2366f00fe3b7aaae1052053f18fd5c4
+9c4180e9c9756bafbfa7164d48306472
   det :: Statistics.Matrix.Types.Matrix -> GHC.Types.Double
   {- Arity: 1, Strictness: <S(LSS(SSS)),1*U(A,U,U(U,U,U))>,
      Unfolding: InlineRule (1, True, False)
@@ -463,7 +573,7 @@ c2366f00fe3b7aaae1052053f18fd5c4
   getRest_$sleaveElement ::
     GHC.Types.Int -> [GHC.Types.Double] -> [GHC.Types.Double]
   {- Arity: 2, HasNoCafRefs, Strictness: <L,1*U(1*U)><S,1*U> -}
-ab3517243ec10ee720da4fb90881a910
+e28c87b712225303334f41d74b191ff3
   hasLeadingZeros ::
     GHC.Types.Int -> Statistics.Matrix.Types.Vector -> GHC.Types.Bool
   {- Arity: 2, HasNoCafRefs,
@@ -474,7 +584,7 @@ ab3517243ec10ee720da4fb90881a910
                 (<GHC.Types.Int>_R
                  ->_R <Statistics.Matrix.Types.Vector>_R
                  ->_R Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Bool>_R) -}
-79940c90b31867856a9b247e11ca1a03
+eb6584be2ad0b8e132a0a735f6271a25
   hasLeadingZeros1 ::
     GHC.Types.Int
     -> Statistics.Matrix.Types.Vector
@@ -488,6 +598,23 @@ ab3517243ec10ee720da4fb90881a910
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww2 { Data.Vector.Primitive.Vector ww3 ww4 ww5 ->
                  Utils.$whasLeadingZeros ww1 ww3 ww4 ww5 } }) -}
+897e9772f23678d8bc38e431be14728f
+  isEqual ::
+    GHC.Word.Word8
+    -> Statistics.Matrix.Types.Matrix
+    -> Statistics.Matrix.Types.Matrix
+    -> GHC.Types.Bool
+  {- Arity: 3,
+     Strictness: <L,U(U)><S(LSS(SSS)),1*U(A,U,U(U,U,U))><S(LSS(SSS)),1*U(A,U,U(U,U,U))>,
+     Unfolding: InlineRule (3, True, False)
+                (\ (prec :: GHC.Word.Word8)
+                   (a :: Statistics.Matrix.Types.Matrix)
+                   (b :: Statistics.Matrix.Types.Matrix) ->
+                 GHC.Classes.$fEq[]_$c==
+                   @ [Data.Decimal.Decimal]
+                   Utils.$s$fEq[]
+                   (Utils.makeDecimal prec a)
+                   (Utils.makeDecimal prec b)) -}
 0dd285edcbcf0fadd14b0f9a2a542003
   isFloatZero ::
     GHC.Types.Double -> GHC.Types.Double -> GHC.Types.Bool
@@ -501,7 +628,7 @@ ab3517243ec10ee720da4fb90881a910
                    (GHC.Prim.>##
                       (GHC.Prim.fabsDouble# x)
                       (GHC.Prim.fabsDouble# x1)) } }) -}
-c6fc5364f02aea93688758ee2f8fee12
+475ea65736b6957aa5e72643bbdfb7a5
   isInvertible :: Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
   {- Arity: 1, Strictness: <S(LSS(SSS)),1*U(A,U,U(U,U,U))>,
      Unfolding: InlineRule (1, True, False)
@@ -513,7 +640,7 @@ c6fc5364f02aea93688758ee2f8fee12
                    (GHC.Prim.>##
                       (GHC.Prim.fabsDouble# x)
                       (GHC.Prim.fabsDouble# 1.0e-7##)) }) -}
-f5d79080ace3cf84a89039b112fee2a4
+aa2622a53a1e38da6fe844d11abc2c65
   isOrtho :: Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
   {- Arity: 1, Strictness: <S(SSS(SSS)),1*U(U,U,U(U,U,U))>,
      Inline: [2],
@@ -524,7 +651,17 @@ f5d79080ace3cf84a89039b112fee2a4
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
                  Utils.$wisOrtho ww1 ww2 ww5 ww6 ww7 } }) -}
-1f99dbe22945c9ba12dc8469202b2ee8
+dfc8441e9d0386313ec02f3434e02f98
+  isOrtho1 :: [[Data.Decimal.Decimal]]
+  {- Unfolding: (case Fixtures.matId of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
+                 case ww3
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
+                 Utils.$wmakeDecimal Utils.isOrtho_prec ww2 ww5 ww6 ww7 } }) -}
+4b1ada296abdaf8f244bf0fc02edf206
+  isOrtho_prec :: GHC.Word.Word8
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Word.W8# 8##) -}
+7bf7bcd6ca61395ba6a9fb663b395a3a
   isRowFromTriMatrix ::
     Statistics.Matrix.Types.Matrix -> GHC.Types.Int -> GHC.Types.Bool
   {- Arity: 2,
@@ -535,7 +672,7 @@ f5d79080ace3cf84a89039b112fee2a4
                 (<Statistics.Matrix.Types.Matrix>_R
                  ->_R <GHC.Types.Int>_R
                  ->_R Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Bool>_R) -}
-15312fde4f47c91cee663288f8e7e6c9
+df2adeeda651c58b10de286116aed9f5
   isRowFromTriMatrix1 ::
     Statistics.Matrix.Types.Matrix
     -> GHC.Types.Int -> Data.Vector.Fusion.Util.Id GHC.Types.Bool
@@ -550,7 +687,7 @@ f5d79080ace3cf84a89039b112fee2a4
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
                  case w1 of ww8 { GHC.Types.I# ww9 ->
                  Utils.$wisRowFromTriMatrix ww2 ww5 ww6 ww7 ww9 } } }) -}
-5ee64341349c160267eaa8ae7a3b7945
+aefc8064461ed5cd41510b38f80512c6
   isUpperTri :: Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
   {- Arity: 1, Strictness: <S(SLS),1*U(U,U,U(U,U,U))>,
      Unfolding: InlineRule (1, True, False)
@@ -567,7 +704,7 @@ f5d79080ace3cf84a89039b112fee2a4
                    (w1 :: GHC.Types.Int)
                    (w2 :: [a]) ->
                  Utils.$wleaveElement @ a w1 w2) -}
-19dd35e3596b2342515db410e7d49c8e
+cb5fb7570200e67fdd4108684bbc0c62
   makeAbs ::
     Statistics.Matrix.Types.Matrix -> Statistics.Matrix.Types.Matrix
   {- Arity: 1, Strictness: <S(SSS(SSS)),1*U(U,U,U(U,U,U))>m,
@@ -585,7 +722,35 @@ f5d79080ace3cf84a89039b112fee2a4
                         ww6
                         ww7 of ww8 { (#,,#) ww9 ww10 ww11 ->
                  Statistics.Matrix.Types.Matrix ww9 ww10 ww11 } } }) -}
-a22bf7c1f16fcce66f385690de61a3bd
+087ba5743dbc6bfa7da932e17c841b04
+  makeDecimal ::
+    GHC.Word.Word8
+    -> Statistics.Matrix.Types.Matrix -> [[Data.Decimal.Decimal]]
+  {- Arity: 2, Strictness: <L,U(U)><S(LSS(SSS)),1*U(A,U,U(U,U,U))>,
+     Inline: [2],
+     Unfolding: InlineRule (2, True, False)
+                (\ (w :: GHC.Word.Word8) (w1 :: Statistics.Matrix.Types.Matrix) ->
+                 case w1 of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
+                 case ww3
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
+                 Utils.$wmakeDecimal w ww2 ww5 ww6 ww7 } }) -}
+d8ea8b8aec84ce71e33a03ee4297db02
+  makeDecimal1 :: GHC.Types.Double
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.D# 10.0##) -}
+7029cf6cb1da8d0cb78ac8be70d0f2de
+  makeDecimal2 :: GHC.Num.Num GHC.Types.Double
+  {- Strictness: m,
+     Unfolding: (GHC.Num.C:Num
+                   @ GHC.Types.Double
+                   (Data.Decimal.realFracToDecimal3 @ GHC.Types.Double)
+                   (Data.Decimal.realFracToDecimal3 @ GHC.Types.Double)
+                   GHC.Float.timesDouble
+                   (Data.Decimal.realFracToDecimal1 @ GHC.Types.Double)
+                   (Data.Decimal.realFracToDecimal1 @ GHC.Types.Double)
+                   (Data.Decimal.realFracToDecimal1 @ GHC.Types.Double)
+                   GHC.Float.$fNumDouble_$cfromInteger) -}
+5265c27cc98f76a9ade31f37c564878f
   upperTriHelper ::
     Statistics.Matrix.Types.Matrix -> GHC.Types.Int -> GHC.Types.Bool
   {- Arity: 2, Strictness: <L,U(A,U,U(U,U,U))><S(S),1*U(U)>,
@@ -598,6 +763,29 @@ a22bf7c1f16fcce66f385690de61a3bd
                                                 GHC.Types.Double)
   Utils.leaveElement @ GHC.Types.Double $dOrd
   = Utils.getRest_$sleaveElement
+"SPEC/Utils $fEqDecimalRaw @ Integer" [orphan] forall (v :: GHC.Real.Integral
+                                                              GHC.Integer.Type.Integer)
+  Data.Decimal.$fEqDecimalRaw @ GHC.Integer.Type.Integer v
+  = Utils.$s$fEqDecimalRaw
+"SPEC/Utils $fEqDecimalRaw_$c/= @ Integer" [orphan] forall ($dIntegral :: GHC.Real.Integral
+                                                                            GHC.Integer.Type.Integer)
+  Data.Decimal.$fEqDecimalRaw_$c/= @ GHC.Integer.Type.Integer
+                                   $dIntegral
+  = Utils.$s$fEqDecimalRaw_$s$fEqDecimalRaw_$c/=
+"SPEC/Utils $fEq[] @ (DecimalRaw Integer)" [orphan] forall (v :: GHC.Classes.Eq
+                                                                   (Data.Decimal.DecimalRaw
+                                                                      GHC.Integer.Type.Integer))
+  GHC.Classes.$fEq[] @ (Data.Decimal.DecimalRaw
+                          GHC.Integer.Type.Integer)
+                     v
+  = Utils.$s$fEq[]
+"SPEC/Utils $fEq[]_$c/= @ (DecimalRaw Integer)" [orphan] forall ($dEq :: GHC.Classes.Eq
+                                                                           (Data.Decimal.DecimalRaw
+                                                                              GHC.Integer.Type.Integer))
+  GHC.Classes.$fEq[]_$c/= @ (Data.Decimal.DecimalRaw
+                               GHC.Integer.Type.Integer)
+                          $dEq
+  = Utils.$s$fEq[]_$s$fEq[]_$c/=
 trusted: none
 require own pkg trusted: False
 module header:

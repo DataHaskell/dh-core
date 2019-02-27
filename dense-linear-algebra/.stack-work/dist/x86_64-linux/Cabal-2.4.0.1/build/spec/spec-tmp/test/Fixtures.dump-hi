@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2019-02-26 14:07:37.194381868 UTC
+2019-02-27 19:48:22.83798309 UTC
 
 interface main:Fixtures 8063
-  interface hash: a526ff21f4b262bb272991146f325840
-  ABI hash: 075e2e5a008ab59e398fd4047f9d7233
-  export-list hash: 497315acd469bbe0ee26b13b90f5fc27
+  interface hash: ab264970ad727dd790a7cfa35c4ab3e7
+  ABI hash: 142c34dfffe34824ef4c26c9a5746fbd
+  export-list hash: a69bdcabee6fd1e543fcaca09351501f
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 6e53648eade1ec3ffa724212f94d04d6
   opt_hash: 6faf2de08de32d19db9870899d88e59a
@@ -61,8 +61,8 @@ family instance modules: base-4.12.0.0:Control.Applicative
 import  -/  base-4.12.0.0:GHC.Num 847723f2584d989dac1eada133ac3fb8
 import  -/  base-4.12.0.0:GHC.Real f7dad82c1d43d80823865d3e6c6636e0
 import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix 13ab77e285f81007796591ea79278ec9
-import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Types 7a9ae1dc0a9192be182b9686b68c4c9c
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix 139ad343f7aee20177eb49ca95eab3d3
+import  -/  dense-linear-algebra-0.1.0.0:Statistics.Matrix.Types e85952c26980c1752607abe8d259c6cf
 47f3e06ba30edf04e8d51f961a300d19
   $trModule :: GHC.Types.Module
   {- HasNoCafRefs, Strictness: m,
@@ -333,21 +333,21 @@ d7980800039ea95066665d5a3717237a
                         (GHC.Prim.+## (GHC.Prim.+## x y) 1.0##)
                         (GHC.Prim.+## (GHC.Prim.*## x y) 1.0##) of wild2 { DEFAULT ->
                  GHC.Types.D# wild2 } } }) -}
-1aa981dd5b70c0c37599810a89a183a1
+2e48cd246ff5a5ab36db9d1682eddd6a
   matA :: Statistics.Matrix.Types.Matrix
   {- Unfolding: (case Statistics.Matrix.$wgenerate
                         3#
                         3#
                         Fixtures.f of ww4 { (#,,#) ww5 ww6 ww7 ->
                  Statistics.Matrix.Types.Matrix ww5 ww6 ww7 }) -}
-70cba21f060fe04c78621e31b639be40
+3ffbf85ba83ce994d4ae6b2c4cab01fa
   matB :: Statistics.Matrix.Types.Matrix
   {- Unfolding: (case Statistics.Matrix.$wgenerate
                         3#
                         3#
                         Fixtures.g of ww4 { (#,,#) ww5 ww6 ww7 ->
                  Statistics.Matrix.Types.Matrix ww5 ww6 ww7 }) -}
-67c2ab1eb7481ee84fb1f439eafca5aa
+8f2dcd8fddc31d5ead7f57907f043a58
   matC :: Statistics.Matrix.Types.Matrix
   {- Unfolding: (case Statistics.Matrix.$wfromRows
                         (GHC.Base.map
@@ -356,7 +356,7 @@ d7980800039ea95066665d5a3717237a
                            Statistics.Matrix.fromRowLists1
                            Fixtures.c) of ww { (#,,#) ww1 ww2 ww3 ->
                  Statistics.Matrix.Types.Matrix ww1 ww2 ww3 }) -}
-f82f0ce23dd80b84cabe45fab3250800
+1983c352a0f54e5df9dda4823e6aea32
   matD :: Statistics.Matrix.Types.Matrix
   {- Unfolding: (case Statistics.Matrix.$wfromRows
                         (GHC.Base.map
@@ -365,7 +365,7 @@ f82f0ce23dd80b84cabe45fab3250800
                            Statistics.Matrix.fromRowLists1
                            Fixtures.d) of ww { (#,,#) ww1 ww2 ww3 ->
                  Statistics.Matrix.Types.Matrix ww1 ww2 ww3 }) -}
-294d9b36e9c0e890e8f7ad036524d7c8
+2e6516aa08142fc0c0888f6927ecc207
   matId :: Statistics.Matrix.Types.Matrix
   {- Unfolding: (case Statistics.Matrix.$wident
                         3# of ww2 { (#,,#) ww3 ww4 ww5 ->

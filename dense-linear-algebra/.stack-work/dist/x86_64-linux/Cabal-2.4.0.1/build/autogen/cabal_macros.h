@@ -11,6 +11,17 @@
   (major1) == 0 && (major2) == 1 && (minor) <= 0)
 #endif /* MIN_VERSION_dense_linear_algebra */
 
+/* package Decimal-0.5.1 */
+#ifndef VERSION_Decimal
+#define VERSION_Decimal "0.5.1"
+#endif /* VERSION_Decimal */
+#ifndef MIN_VERSION_Decimal
+#define MIN_VERSION_Decimal(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  5 || \
+  (major1) == 0 && (major2) == 5 && (minor) <= 1)
+#endif /* MIN_VERSION_Decimal */
+
 /* package base-4.12.0.0 */
 #ifndef VERSION_base
 #define VERSION_base "4.12.0.0"
@@ -199,10 +210,10 @@
 #endif /* MIN_TOOL_VERSION_strip */
 
 #ifndef CURRENT_PACKAGE_KEY
-#define CURRENT_PACKAGE_KEY "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"
+#define CURRENT_PACKAGE_KEY "dense-linear-algebra-0.1.0.0-9CfM7PgmKUpF60PvHRvGgf"
 #endif /* CURRENT_PACKAGE_KEY */
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"
+#define CURRENT_COMPONENT_ID "dense-linear-algebra-0.1.0.0-9CfM7PgmKUpF60PvHRvGgf"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"

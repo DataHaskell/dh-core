@@ -1,12 +1,12 @@
 
 ==================== FINAL INTERFACE ====================
-2019-02-26 14:07:35.66720771 UTC
+2019-02-27 19:48:21.288822445 UTC
 
-interface dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw:Statistics.Matrix 8063
-  interface hash: 520ea3cf4b1749ef9cc13928c5072f29
-  ABI hash: 13ab77e285f81007796591ea79278ec9
-  export-list hash: 4eca08e5a3b0efae439b367bd11ed259
-  orphan hash: 8d3bb6c86857684037912377549e1cda
+interface dense-linear-algebra-0.1.0.0-9CfM7PgmKUpF60PvHRvGgf:Statistics.Matrix 8063
+  interface hash: 38e993745f686cab7b2789ce0110f430
+  ABI hash: 139ad343f7aee20177eb49ca95eab3d3
+  export-list hash: dfb7e20f45fcb48692a30be5bca55100
+  orphan hash: a9b9156dd881edce966522e6b734b905
   flag hash: 4b54d24fdbeffc6cfd2276e99e2fc115
   opt_hash: 6faf2de08de32d19db9870899d88e59a
   hpc_hash: 93b885adfe0da089cdf634904fd59f71
@@ -94,29 +94,29 @@ import  -/  base-4.12.0.0:GHC.Real f7dad82c1d43d80823865d3e6c6636e0
 import  -/  base-4.12.0.0:GHC.ST 218d7508dc46ae62ed07f9dc97fd6fd1
 import  -/  base-4.12.0.0:GHC.Show 4e438f26d903388cc6c2c5d64ed01b98
 import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
-import  -/  Statistics.Matrix.Function 1ff23262872805be3e37b5f602ab6100
-  exports: 7810c07f51b5d2730b96b885065d01aa
-  for d720f4a128a193abbdaa1027cba67467
-  square d748367e11e18af3ae3e47495762ba1e
-import  -/  Statistics.Matrix.Mutable 402a1a0245fa0422f2ee5f0ada7b52e1
-  exports: 8d74bbf64d6d56a65a1a2803cccdc2bc
-  unsafeFreeze bc9f5cf22c0615c386ce22d7e17000af
-  unsafeNew 1f4bf9e611d856b66d1c39f8a7a8fb6e
-  unsafeWrite 2c8d241ca1cdfe524221777347e0c7eb
-import  -/  Statistics.Matrix.Types 7a9ae1dc0a9192be182b9686b68c4c9c
-  exports: e72460abf602f277e14a782b4192d791
-  Matrix ae1e7f0c205cd52d7e1d511bb9005ffb
-  Matrix 1123f17a64ad8947e8c754b49360ac94
-  Vector 5689df41480a2671bd33b2f65a28c84f
-  _vector 1123f17a64ad8947e8c754b49360ac94
-  cols 1123f17a64ad8947e8c754b49360ac94
-  rows 1123f17a64ad8947e8c754b49360ac94
+import  -/  Statistics.Matrix.Function 0d2f9f32ad7ae03fa8f250e2f0be0b5c
+  exports: 410b36d07ecf73488da5e6e3952879f2
+  for 216d25f6988462018f1f06e5081e172e
+  square 71d55991adef89e544aec020ac2a57fc
+import  -/  Statistics.Matrix.Mutable 4e30ab6a7bd9ce223e9906bd793dbb85
+  exports: 35f3425ae925ebce59f4acc697691c91
+  unsafeFreeze e008f730845915cd0b72fed90726c389
+  unsafeNew 199ed803a91933ceb2684800ee0897e7
+  unsafeWrite 60ce5551f87bbe55dc254ececd0221a8
+import  -/  Statistics.Matrix.Types e85952c26980c1752607abe8d259c6cf
+  exports: faf66659a595f3f6f557fd7556802b00
+  Matrix 963451ef95b030d1f63dfa05538574cf
+  Matrix 870819578589d9fee9a8af211ba11416
+  Vector 3ba9b7f5c6a44a8ca0ba51db609d7ef9
+  _vector 870819578589d9fee9a8af211ba11416
+  cols 870819578589d9fee9a8af211ba11416
+  rows 870819578589d9fee9a8af211ba11416
 import  -/  ghc-prim-0.5.3:GHC.Classes e0d9c979f6368701f34fa421754d2cce
 import  -/  math-functions-0.3.1.0:Numeric.Sum cbc14121a9a62b7e0b4adff8702ec307
 import  -/  vector-0.12.0.2:Data.Vector.Unboxed 3ec9008297a7b27b6fe569e181327338
 import  -/  vector-0.12.0.2:Data.Vector.Unboxed.Base 375baed2db9fb62dbb109ad31742d838
 import  -/  vector-0.12.0.2:Data.Vector.Unboxed.Mutable d5dd6163341ecef0e754386a130baa2d
-8975b5beff760369e7f4ccf5ef427514
+761b4f1669aecf2045e18e54b4c500b8
   $sunsafeIndex ::
     Data.Vector.Unboxed.Base.Vector GHC.Types.Double
     -> GHC.Types.Int -> GHC.Types.Double
@@ -140,28 +140,28 @@ import  -/  vector-0.12.0.2:Data.Vector.Unboxed.Mutable d5dd6163341ecef0e754386a
                 (<Data.Vector.Unboxed.Base.Vector GHC.Types.Double>_R
                  ->_R <GHC.Types.Int>_R
                  ->_R Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Double>_R) -}
-22979112e480fdc35df1a0513c7323bc
+b0c2c866711f066c3e7fa61dadb515ed
   $trModule :: GHC.Types.Module
   {- HasNoCafRefs, Strictness: m,
      Unfolding: (GHC.Types.Module
                    Statistics.Matrix.$trModule3
                    Statistics.Matrix.$trModule1) -}
-df9a3d03979f3136faf54d7b9102d1dd
+31df5d63100b5b0fc2991dbab850f42a
   $trModule1 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS Statistics.Matrix.$trModule2) -}
-b69134af785f99d52b4f93726f84f76b
+8420013390e9ba56fe3647f85e98a8a5
   $trModule2 :: GHC.Prim.Addr#
   {- HasNoCafRefs, Unfolding: ("Statistics.Matrix"#) -}
-8c11ab9ca36a5022238bf34e5953c81e
+e7016ea589402149dc1c6344e6411e38
   $trModule3 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS Statistics.Matrix.$trModule4) -}
-1a1259cc2398a863c4641e2221988b98
+6af0bb93c5d8038434f01559048df458
   $trModule4 :: GHC.Prim.Addr#
   {- HasNoCafRefs,
-     Unfolding: ("dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#) -}
-1e7fc4671fcdb68ffe937ff8b0575b9f
+     Unfolding: ("dense-linear-algebra-0.1.0.0-9CfM7PgmKUpF60PvHRvGgf"#) -}
+896b4fb46ab089e546e3cd98cde29c84
   $wdiag ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -378,7 +378,7 @@ b69134af785f99d52b4f93726f84f76b
                     nt
                       `cast`
                     (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0])) #) } }) -}
-0800907964d3a92f543bd1d6cb978057
+c59662c584353b7b22d382cb0d423b9e
   $wfoldlM_loop ::
     GHC.Types.SPEC
     -> GHC.Prim.Int#
@@ -391,7 +391,7 @@ b69134af785f99d52b4f93726f84f76b
           Data.Vector.Unboxed.Base.Vector GHC.Types.Double #)
   {- Arity: 7, Strictness: <S,1*U><L,U><L,U><S,U><L,U><S,1*U><S,U>,
      Inline: [2] -}
-2f3a96037399f1ab4e689f412096f93e
+161d67f2565a8f7f247b0c9335807aeb
   $wfoldlM_loop1 ::
     GHC.Types.SPEC
     -> GHC.Prim.Int#
@@ -404,7 +404,7 @@ b69134af785f99d52b4f93726f84f76b
           Data.Vector.Unboxed.Base.Vector GHC.Types.Double #)
   {- Arity: 7, Strictness: <S,1*U><L,U><L,U><S,U><L,U><S,1*U><S,U>,
      Inline: [2] -}
-5883b1ea8e7de3a79c20293fa5dcfe85
+21d7676ca88be604ae30054ff50c5eb8
   $wfromRows ::
     [Statistics.Matrix.Types.Vector]
     -> (# GHC.Prim.Int#, GHC.Prim.Int#,
@@ -684,7 +684,7 @@ b69134af785f99d52b4f93726f84f76b
                                          of {} } } } }
                            } in
                            go ns } }) -}
-8b98573152f638bb3d89d3b4be768e88
+88f89e914543140e0758c6e6e7cd21f1
   $wgenerate ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -889,7 +889,7 @@ b69134af785f99d52b4f93726f84f76b
                     nt
                       `cast`
                     (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0])) #) } }) -}
-6c9115684b3a4ef84e7d5941aaffcf96
+fe711a18800b0e98db5a050d0138c635
   $wgenerateSym ::
     GHC.Prim.Int#
     -> (GHC.Types.Int -> GHC.Types.Int -> GHC.Types.Double)
@@ -1049,7 +1049,7 @@ b69134af785f99d52b4f93726f84f76b
                          } in
                          $wloop 0# ipv }) of ds1 { (#,#) ipv ipv1 ->
                  ipv1 }) -}
-f7864da940247598eb110a15024936f1
+6b6c3a5b2b58376e90dcfb4ea31bbc3f
   $whasNaN ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -1089,7 +1089,7 @@ f7864da940247598eb110a15024936f1
                           (Sym (Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Bool>_R)) } }
                  } in
                  $wor_loop GHC.Types.SPEC 0#) -}
-dad49e7e9e6d0e87788d7eb67165bcb8
+a72d55ddad35465fb744f3c747ddce4c
   $wident ::
     GHC.Prim.Int#
     -> (# GHC.Prim.Int#, GHC.Prim.Int#,
@@ -1260,11 +1260,11 @@ dad49e7e9e6d0e87788d7eb67165bcb8
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww1 { Data.Vector.Primitive.Vector ww2 ww3 ww4 ->
                  Statistics.Matrix.$wdiag ww2 ww3 ww4 } }) -}
-582f776d555b17ab675819ac41f15cdb
+c7b129a2f2c674963aa5336425e4af86
   $wlvl ::
     GHC.Prim.Int# -> GHC.Prim.Int# -> Statistics.Matrix.Types.Vector
   {- Arity: 2, Strictness: <B,U><B,U>x, Inline: [2] -}
-0bea760203d51845ce3d8968259951e5
+5f5d539fd7903ad7de1e51e6eb7c1b80
   $wmap ::
     (GHC.Types.Double -> GHC.Types.Double)
     -> GHC.Prim.Int#
@@ -1442,7 +1442,7 @@ dad49e7e9e6d0e87788d7eb67165bcb8
                     nt
                       `cast`
                     (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0])) #) } }) -}
-072cb8d4a7a35251137e8d8ad5bf5071
+98445ff92999b95b3e8d4dc4f40955ab
   $wmultiply ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -1459,7 +1459,7 @@ dad49e7e9e6d0e87788d7eb67165bcb8
   {- Arity: 10,
      Strictness: <S,U><L,U><L,U><L,U><L,U><L,U><S,U><L,U><L,U><L,U>,
      Inline: [2] -}
-49f71dc00a31faee5851aea85d7bfcab
+f513a9f45a8f74486dac3482f74bcc82
   $wmultiplyV ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -1819,7 +1819,7 @@ dad49e7e9e6d0e87788d7eb67165bcb8
                               case GHC.Prim.<=# ww 0# of lwild1 {
                                 DEFAULT -> $j ww 1# -> $j 0# }) of ds1 { (#,#) ipv1 ipv2 ->
                       ipv2 } }) -}
-f15acb5caad7592b803aa7c7e16049f7
+581bc972e8163308853ddf3c9f2f17d5
   $wnorm ::
     GHC.Prim.Int#
     -> GHC.Prim.Int# -> GHC.Prim.ByteArray# -> GHC.Prim.Double#
@@ -1870,7 +1870,7 @@ f15acb5caad7592b803aa7c7e16049f7
                        1# -> GHC.Prim.sqrtDouble# (GHC.Prim.+## ww3 ww4) } }
                  } in
                  $wfoldlM'_loop GHC.Types.SPEC 0.0## 0.0## 0#) -}
-1c393b276b48bf496a4b93c266b8746b
+aa20af4a99b92d10c68f447dc7460cfc
   $wpower ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -1880,7 +1880,7 @@ f15acb5caad7592b803aa7c7e16049f7
           Statistics.Matrix.Types.Vector #)
   {- Arity: 4, Strictness: <S,U><S,U><S,1*U(U,U,U)><S,1*U>,
      Inline: [2] -}
-d48b278d4ce9642ddf6bd387b13ad245
+d7e193eb28f6728760beef0b97fcb9fc
   $wrow ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -1915,7 +1915,7 @@ d48b278d4ce9642ddf6bd387b13ad245
                                 ret_ty (# GHC.Prim.Int#, GHC.Prim.Int#, GHC.Prim.ByteArray# #)
                                 of {}
                              1# -> (# GHC.Prim.+# ww1 i, ww, ww3 #) } } }) -}
-c6d61c32987f859808500797a1756e3e
+4ea061c7062f1aaa310886acbb4cb548
   $wtoList ::
     GHC.Prim.Int#
     -> GHC.Prim.Int# -> GHC.Prim.ByteArray# -> [GHC.Types.Double]
@@ -1940,7 +1940,7 @@ c6d61c32987f859808500797a1756e3e
                        1# -> GHC.Types.[] @ GHC.Types.Double }
                  } in
                  $wgo1 0#) -}
-21d75f7b55a1d8d29c94f5087a936576
+5193dfd93d3636897d5e72131079ace8
   $wtoRowLists ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -2009,7 +2009,7 @@ c6d61c32987f859808500797a1756e3e
                        1# -> GHC.Types.[] @ GHC.Types.Double }
                  } in
                  chunks ($wgo1 0#)) -}
-dc5e0cfca5fb4607b49cf36d80971859
+d50c3c148b5d5b71c3ecde77c8ef2278
   $wtoRows ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -2063,7 +2063,7 @@ dc5e0cfca5fb4607b49cf36d80971859
                             @ (Data.Vector.Unboxed.Base.Vector GHC.Types.Double) }
                  } in
                  $wchunks ww1 ww2 ww3) -}
-098f51d043ae49059e577b9de8fefc61
+b070e57e4fc0e192ee0f4d66a9f1d99f
   $wtranspose ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
@@ -2302,7 +2302,7 @@ dc5e0cfca5fb4607b49cf36d80971859
                     nt
                       `cast`
                     (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0])) #) } }) -}
-52ad8bd89879fb7e9df9ad6f055bd6bf
+5bd15ac7be9114d11e9f2ce3c44773f8
   bounds ::
     (Statistics.Matrix.Types.Vector -> GHC.Types.Int -> r)
     -> Statistics.Matrix.Types.Matrix
@@ -2321,7 +2321,7 @@ dc5e0cfca5fb4607b49cf36d80971859
                        (\ @ b ->
                         GHC.CString.unpackFoldrCString#
                           @ b
-                          "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#)
+                          "dense-linear-algebra-0.1.0.0-9CfM7PgmKUpF60PvHRvGgf"#)
                  } in
                  let {
                    loc8 :: [GHC.Types.Char]
@@ -2372,7 +2372,7 @@ dc5e0cfca5fb4607b49cf36d80971859
                        (\ @ b ->
                         GHC.CString.unpackFoldrCString#
                           @ b
-                          "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#)
+                          "dense-linear-algebra-0.1.0.0-9CfM7PgmKUpF60PvHRvGgf"#)
                  } in
                  let {
                    loc15 :: [GHC.Types.Char]
@@ -2464,7 +2464,7 @@ dc5e0cfca5fb4607b49cf36d80971859
                              GHC.Types.True -> $j1 }
                         GHC.Types.True -> $j }
                    GHC.Types.True -> $j } }) -}
-92c6ca9d28fb6aa182831a49c1455f30
+09a922313169a55fa5dfe40a4d0a9b78
   center :: Statistics.Matrix.Types.Matrix -> GHC.Types.Double
   {- Arity: 1, HasNoCafRefs,
      Strictness: <S(SSS(SLS)),1*U(U,U,U(U,A,U))>m,
@@ -2482,7 +2482,7 @@ dc5e0cfca5fb4607b49cf36d80971859
                               (GHC.Prim.*# (GHC.Prim.quotInt# dt 2#) dt1)
                               (GHC.Prim.quotInt# dt1 2#))) of wild2 { DEFAULT ->
                  GHC.Types.D# wild2 } } }) -}
-bb4be30abe56a0a424b8525cfe128c88
+9ab2ae52ce7059e22e93c7af2889798a
   column ::
     Statistics.Matrix.Types.Matrix
     -> GHC.Types.Int -> Statistics.Matrix.Types.Vector
@@ -2596,7 +2596,7 @@ bb4be30abe56a0a424b8525cfe128c88
                                         v2
                                         (GHC.Types.I# dt1)
                                         (GHC.Types.I# dt))) }))))) } }) -}
-9a712716588431309428c604f37ac03a
+8301d19db4e4d6392d295c2577418e97
   diag ::
     Statistics.Matrix.Types.Vector -> Statistics.Matrix.Types.Matrix
   {- Arity: 1, Strictness: <S(SSS),1*U(U,U,U)>m, Inline: [2],
@@ -2609,10 +2609,10 @@ bb4be30abe56a0a424b8525cfe128c88
                         ww2
                         ww3 of ww4 { (#,,#) ww5 ww6 ww7 ->
                  Statistics.Matrix.Types.Matrix ww5 ww6 ww7 } }) -}
-20e5878cde667e731a943742b5517fc6
+ae84ca416922c15ac1c7c256e22f3999
   diag1 :: GHC.Types.Int
   {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.I# 0#) -}
-a51f6264c77a4670275bce36a1dfda7d
+7221d1a8914c95fce0dbc71bdab6a5ca
   diag2 ::
     GHC.Prim.Int#
     -> GHC.ST.ST
@@ -2621,7 +2621,7 @@ a51f6264c77a4670275bce36a1dfda7d
             (Control.Monad.Primitive.PrimState (GHC.ST.ST s2))
             GHC.Types.Double)
   {- Arity: 1, Strictness: <B,U>x -}
-245f08d85b24acc9b2468665c5773324
+f4e582c7c2f2c02fe1e7e140cd323975
   diag3 ::
     GHC.Prim.Int#
     -> GHC.ST.ST
@@ -2630,15 +2630,15 @@ a51f6264c77a4670275bce36a1dfda7d
             (Control.Monad.Primitive.PrimState (GHC.ST.ST s2))
             GHC.Types.Double)
   {- Arity: 1, Strictness: <B,U>x -}
-44c832604d9a2f100c87bc534582e12e
+521871251d9ce91ce03ee2666ee475f2
   diag4 :: GHC.Prim.Addr#
   {- HasNoCafRefs, Unfolding: ("./Data/Vector/Generic.hs"#) -}
-e9297be47135a13620f28e286fa84b0b
+5e1405114641342e4bde9d454e951ed9
   diag5 ::
     GHC.Prim.Addr#
     -> GHC.Prim.Int# -> GHC.Prim.Int# -> GHC.Types.Double
   {- Arity: 3, Strictness: <B,U><B,U><B,U>x -}
-ed94fe4736075317e93c2bca5b085449
+2a0a75473f71045d7635374c85410c72
   dimension ::
     Statistics.Matrix.Types.Matrix -> (GHC.Types.Int, GHC.Types.Int)
   {- Arity: 1, HasNoCafRefs, Strictness: <S,1*U(U,U,A)>m,
@@ -2646,14 +2646,14 @@ ed94fe4736075317e93c2bca5b085449
                 (\ (ds :: Statistics.Matrix.Types.Matrix) ->
                  case ds of wild { Statistics.Matrix.Types.Matrix dt dt1 ds1 ->
                  (GHC.Types.I# dt, GHC.Types.I# dt1) }) -}
-1b91062d926ef07082fd621808a2fa09
+f3fa2ef9462a0df5317b30e21f9b219a
   fromColumns ::
     [Statistics.Matrix.Types.Vector] -> Statistics.Matrix.Types.Matrix
   {- Arity: 1, Strictness: <S,1*U>m,
      Unfolding: InlineRule (1, True, False)
                 (\ (x :: [Statistics.Matrix.Types.Vector]) ->
                  Statistics.Matrix.transpose (Statistics.Matrix.fromRows x)) -}
-d3f1919eab8473fda0d9e2fd4918106e
+5001be4584335e947f442e72709c0b8e
   fromList ::
     GHC.Types.Int
     -> GHC.Types.Int
@@ -2752,7 +2752,7 @@ d3f1919eab8473fda0d9e2fd4918106e
                           `cast`
                         (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0]))
                    1# -> Statistics.Matrix.fromRows3 } } } } }) -}
-2dcee0632cde967952cf04b4baab71c5
+178a05e16fc29647c3ac8b04b3a552a5
   fromRowLists ::
     [[GHC.Types.Double]] -> Statistics.Matrix.Types.Matrix
   {- Arity: 1, Strictness: <S,1*U>m,
@@ -2776,7 +2776,7 @@ d3f1919eab8473fda0d9e2fd4918106e
                             Statistics.Matrix.fromRowLists1)
                          n
                          x))) -}
-71f1fba187f2f2f7c894033448bca75d
+dd60fac28dc8d193151d689e7eadb799
   fromRowLists1 ::
     [GHC.Types.Double]
     -> Data.Vector.Unboxed.Base.Vector GHC.Types.Double
@@ -2857,7 +2857,7 @@ d3f1919eab8473fda0d9e2fd4918106e
                                                                                                                          (GHC.ST.ST
                                                                                                                             GHC.Prim.RealWorld)>_N <GHC.Types.Double>_N))_R))))))_R }) of ds1 { (#,#) ipv1 ipv2 ->
                  ipv2 }) -}
-9e07d4f1d6e311796dc1eb12fac3e0fe
+cd60adad65026c7b28c52fb9b7aff3b8
   fromRows ::
     [Statistics.Matrix.Types.Vector] -> Statistics.Matrix.Types.Matrix
   {- Arity: 1, Strictness: <S,1*U>m, Inline: [2],
@@ -2865,16 +2865,16 @@ d3f1919eab8473fda0d9e2fd4918106e
                 (\ (w :: [Statistics.Matrix.Types.Vector]) ->
                  case Statistics.Matrix.$wfromRows w of ww { (#,,#) ww1 ww2 ww3 ->
                  Statistics.Matrix.Types.Matrix ww1 ww2 ww3 }) -}
-24c1a8b950ba87e7722b03d317520cb1
+77d3ede48714302142374e1b5f3bf04d
   fromRows1 :: Statistics.Matrix.Types.Matrix
   {- Strictness: x -}
-4390097d38f5d76fb290203dcf845ae5
+edcfde55a9c90a8196d1e6330b1e5fdb
   fromRows2 :: Statistics.Matrix.Types.Matrix
   {- Strictness: x -}
-5e6b3b8a0f333c060ae17d1803cfb6ee
+8c21767b552ff32b8511013d905b98b3
   fromRows3 :: Statistics.Matrix.Types.Matrix
   {- Strictness: x -}
-13554984c2fbd2e3516614c8bb04321c
+aeac63707118de17940266401f595d7a
   fromRows4 ::
     GHC.Prim.Int#
     -> GHC.ST.ST
@@ -2883,7 +2883,7 @@ d3f1919eab8473fda0d9e2fd4918106e
             (Control.Monad.Primitive.PrimState (GHC.ST.ST GHC.Prim.RealWorld))
             GHC.Types.Double)
   {- Arity: 1, Strictness: <B,U>x -}
-11253660c5c5b03483303ec1d1fd9314
+024d0f9b9de1167f25ac9fb7234a5cba
   fromRows5 ::
     GHC.Prim.Int#
     -> GHC.ST.ST
@@ -2892,10 +2892,10 @@ d3f1919eab8473fda0d9e2fd4918106e
             (Control.Monad.Primitive.PrimState (GHC.ST.ST GHC.Prim.RealWorld))
             GHC.Types.Double)
   {- Arity: 1, Strictness: <B,U>x -}
-34b031e61c52701917a7192e852d5acb
+00412947953e4304b57d98164d9639cb
   fromRows6 :: (GHC.Types.Int, [GHC.Types.Int])
   {- Strictness: x -}
-62f6f5c134f0903f4e595b4bf9f532d4
+92439a87a369461191a349ca59fc878b
   fromRows7 ::
     Data.Vector.Unboxed.Base.Vector GHC.Types.Double
     -> Data.Vector.Fusion.Util.Id GHC.Types.Int
@@ -2907,10 +2907,10 @@ d3f1919eab8473fda0d9e2fd4918106e
                  (GHC.Types.I# ipv1)
                    `cast`
                  (Sym (Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Int>_R)) }) -}
-1b9c357fca94fb43e0ce5516cf34da24
+ab019993a268f6c363b8e8f7fad28bfd
   fromRows8 :: Statistics.Matrix.Types.Matrix
   {- Strictness: x -}
-12a5fce0ac6191e215eeb2b323920f4b
+3af010f7a6ce183f9913815c85df9901
   fromVector ::
     GHC.Types.Int
     -> GHC.Types.Int
@@ -2935,7 +2935,7 @@ d3f1919eab8473fda0d9e2fd4918106e
                           `cast`
                         (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0]))
                    1# -> Statistics.Matrix.fromRows3 } } } }) -}
-6ed8bae701f214526ef571450065d015
+7cc1f99587df12bdd4bfb353275daacb
   generate ::
     GHC.Types.Int
     -> GHC.Types.Int
@@ -2955,12 +2955,12 @@ d3f1919eab8473fda0d9e2fd4918106e
                         ww3
                         w2 of ww4 { (#,,#) ww5 ww6 ww7 ->
                  Statistics.Matrix.Types.Matrix ww5 ww6 ww7 } } }) -}
-896e2660ae23f1a9dca18b2170325b8d
+79717cc5d5f9764d8f817ba5b7b4f48c
   generate1 :: (GHC.Types.Int, GHC.Types.Int)
   {- Strictness: m,
      Unfolding: ((GHC.Real.overflowError @ GHC.Types.Int,
                   GHC.Real.$fIntegralInt1)) -}
-d9e55417014fdf290eb5378ad60d8f6e
+1c352422151df91a1f9f13d3546b4db5
   generateSym ::
     GHC.Types.Int
     -> (GHC.Types.Int -> GHC.Types.Int -> GHC.Types.Double)
@@ -2971,7 +2971,7 @@ d9e55417014fdf290eb5378ad60d8f6e
                    (w1 :: GHC.Types.Int -> GHC.Types.Int -> GHC.Types.Double) ->
                  case w of ww { GHC.Types.I# ww1 ->
                  Statistics.Matrix.$wgenerateSym ww1 w1 }) -}
-94fb014d576bc9b5ff8971ed9c1d38cc
+e201f44ac903c71d8acceb1654bfcbf6
   hasNaN :: Statistics.Matrix.Types.Matrix -> GHC.Types.Bool
   {- Arity: 1, HasNoCafRefs,
      Strictness: <S(LLS(SSS)),1*U(A,A,U(U,U,U))>,
@@ -2980,7 +2980,7 @@ d9e55417014fdf290eb5378ad60d8f6e
                   `cast`
                 (<Statistics.Matrix.Types.Matrix>_R
                  ->_R Data.Vector.Fusion.Util.N:Id[0] <GHC.Types.Bool>_R) -}
-f5c42269225f7be9ca9bd57d3588b1f0
+ed430b9937ae98a53b2e70447721bcb9
   hasNaN1 ::
     Statistics.Matrix.Types.Matrix
     -> Data.Vector.Fusion.Util.Id GHC.Types.Bool
@@ -2993,7 +2993,7 @@ f5c42269225f7be9ca9bd57d3588b1f0
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
                  Statistics.Matrix.$whasNaN ww5 ww6 ww7 } }) -}
-3c0ed28f66efb8294c3acff3f3d87b97
+b74ceacc404243b72c281338c9d8db23
   ident :: GHC.Types.Int -> Statistics.Matrix.Types.Matrix
   {- Arity: 1, Strictness: <S(S),1*U(U)>m, Inline: [2],
      Unfolding: InlineRule (1, True, False)
@@ -3001,7 +3001,7 @@ f5c42269225f7be9ca9bd57d3588b1f0
                  case w of ww { GHC.Types.I# ww1 ->
                  case Statistics.Matrix.$wident ww1 of ww2 { (#,,#) ww3 ww4 ww5 ->
                  Statistics.Matrix.Types.Matrix ww3 ww4 ww5 } }) -}
-07c328f2b375903439b5dd629db75102
+f2162503d169a677485c8334956fa3b9
   map ::
     (GHC.Types.Double -> GHC.Types.Double)
     -> Statistics.Matrix.Types.Matrix -> Statistics.Matrix.Types.Matrix
@@ -3023,7 +3023,7 @@ f5c42269225f7be9ca9bd57d3588b1f0
                         ww6
                         ww7 of ww8 { (#,,#) ww9 ww10 ww11 ->
                  Statistics.Matrix.Types.Matrix ww9 ww10 ww11 } } }) -}
-30bb0ac5de5ecad184d6c93930950346
+be53273fa2d7fe026da435437fd420f7
   multiply ::
     Statistics.Matrix.Types.Matrix
     -> Statistics.Matrix.Types.Matrix -> Statistics.Matrix.Types.Matrix
@@ -3053,7 +3053,7 @@ f5c42269225f7be9ca9bd57d3588b1f0
                         ww14
                         ww15 of ww16 { (#,,#) ww17 ww18 ww19 ->
                  Statistics.Matrix.Types.Matrix ww17 ww18 ww19 } } } } }) -}
-fe9902d8d575e7d334d491853f8b81d5
+54a7f5523949dbad327cdc20b17e3658
   multiplyV ::
     Statistics.Matrix.Types.Matrix
     -> Statistics.Matrix.Types.Vector -> Statistics.Matrix.Types.Vector
@@ -3079,14 +3079,14 @@ fe9902d8d575e7d334d491853f8b81d5
                    ww9
                    ww10
                    ww11 } } }) -}
-8f42df5da075e6abfd05881742552be7
+d81ade974f0e3fd2f35ace217f863813
   multiplyV1 ::
     GHC.Prim.Int#
     -> GHC.Prim.Int#
     -> GHC.Prim.Int#
     -> Data.Vector.Unboxed.Base.Vector GHC.Types.Double
   {- Arity: 3, Strictness: <B,U><B,U><B,U>x -}
-2394f7d1a001e794dd4e499fcb38526a
+8882a7c3ab8523c1509c9183abb84892
   norm :: Statistics.Matrix.Types.Vector -> GHC.Types.Double
   {- Arity: 1, HasNoCafRefs, Strictness: <S(SSS),1*U(U,U,U)>m,
      Inline: [2],
@@ -3096,7 +3096,7 @@ fe9902d8d575e7d334d491853f8b81d5
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww { Data.Vector.Primitive.Vector ww1 ww2 ww3 ->
                  case Statistics.Matrix.$wnorm ww1 ww2 ww3 of ww4 { DEFAULT ->
                  GHC.Types.D# ww4 } }) -}
-c8cc28bffc035cdf34e1ae77e0287d5c
+bd3268ba5bb094f48ee664f89afabe48
   power ::
     Statistics.Matrix.Types.Matrix
     -> GHC.Types.Int -> Statistics.Matrix.Types.Matrix
@@ -3113,7 +3113,7 @@ c8cc28bffc035cdf34e1ae77e0287d5c
                         ww3
                         ww5 of ww6 { (#,,#) ww7 ww8 ww9 ->
                  Statistics.Matrix.Types.Matrix ww7 ww8 ww9 } } }) -}
-3ac2cba7c66152c912c370871d11ac00
+d349b7f2412f0f2d129b29c441b18aa7
   row ::
     Statistics.Matrix.Types.Matrix
     -> GHC.Types.Int -> Statistics.Matrix.Types.Vector
@@ -3136,14 +3136,14 @@ c8cc28bffc035cdf34e1ae77e0287d5c
                  (Data.Vector.Primitive.Vector @ GHC.Types.Double ww11 ww12 ww13)
                    `cast`
                  (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0])) } } } }) -}
-fb759f84848d22e55124965cba112d8f
+bd4e31992b6378b587260f72ab6249fc
   toColumns ::
     Statistics.Matrix.Types.Matrix -> [Statistics.Matrix.Types.Vector]
   {- Arity: 1, Strictness: <S(SSS(SLS)),1*U(U,U,U(U,A,U))>,
      Unfolding: InlineRule (1, True, False)
                 (\ (x :: Statistics.Matrix.Types.Matrix) ->
                  Statistics.Matrix.toRows (Statistics.Matrix.transpose x)) -}
-6df42014d50ff8e76c5bc11e69c9d039
+4b598f1c5a1078800cea3fccfd427caf
   toList :: Statistics.Matrix.Types.Matrix -> [GHC.Types.Double]
   {- Arity: 1, HasNoCafRefs,
      Strictness: <S(LLS(SSS)),1*U(A,A,U(U,U,U))>, Inline: [2],
@@ -3154,7 +3154,7 @@ fb759f84848d22e55124965cba112d8f
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
                  Statistics.Matrix.$wtoList ww5 ww6 ww7 } }) -}
-1aee77555bdfac6e8cd5eced8f8f82b4
+a955a4f518a7ab7476de66946997129e
   toRowLists ::
     Statistics.Matrix.Types.Matrix -> [[GHC.Types.Double]]
   {- Arity: 1, HasNoCafRefs,
@@ -3166,7 +3166,7 @@ fb759f84848d22e55124965cba112d8f
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
                  Statistics.Matrix.$wtoRowLists ww2 ww5 ww6 ww7 } }) -}
-da1d5782e2a5359fa127783c1e7c83f0
+4f354df8944c17282a341f1f5aee19ee
   toRows ::
     Statistics.Matrix.Types.Matrix -> [Statistics.Matrix.Types.Vector]
   {- Arity: 1, HasNoCafRefs,
@@ -3178,7 +3178,7 @@ da1d5782e2a5359fa127783c1e7c83f0
                         `cast`
                       (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
                  Statistics.Matrix.$wtoRows ww2 ww5 ww6 ww7 } }) -}
-13afbf91ea14ec64e4add351f7d9378c
+b91e8b50cdf27861eb4dd4561ee62a1a
   toVector ::
     Statistics.Matrix.Types.Matrix
     -> Data.Vector.Unboxed.Base.Vector GHC.Types.Double
@@ -3187,7 +3187,7 @@ da1d5782e2a5359fa127783c1e7c83f0
                 (\ (ds :: Statistics.Matrix.Types.Matrix) ->
                  case ds of wild { Statistics.Matrix.Types.Matrix dt dt1 v ->
                  v }) -}
-71744bf70aa5929b0d9886fcb69ab05b
+ca63fc3b29a91fd6b3cb7811283f94fe
   transpose ::
     Statistics.Matrix.Types.Matrix -> Statistics.Matrix.Types.Matrix
   {- Arity: 1, Strictness: <S(SSS(SLS)),1*U(U,U,U(U,A,U))>m,
@@ -3204,7 +3204,7 @@ da1d5782e2a5359fa127783c1e7c83f0
                         ww5
                         ww7 of ww8 { (#,,#) ww9 ww10 ww11 ->
                  Statistics.Matrix.Types.Matrix ww9 ww10 ww11 } } }) -}
-1ae6fab5004b2b39e89f0fa135604bb3
+f7b794da242ad117e342875b0937bfd6
   unsafeBounds ::
     (Statistics.Matrix.Types.Vector -> GHC.Types.Int -> r)
     -> Statistics.Matrix.Types.Matrix
@@ -3224,7 +3224,7 @@ da1d5782e2a5359fa127783c1e7c83f0
                  case r1 of wild1 { GHC.Types.I# x ->
                  case c of wild2 { GHC.Types.I# y ->
                  k v (GHC.Types.I# (GHC.Prim.+# (GHC.Prim.*# x dt1) y)) } } }) -}
-256b4704d1bc6ff638e8924d8c107f50
+52fee3bfe908ea54bcab4db0c47522e6
   unsafeIndex ::
     Statistics.Matrix.Types.Matrix
     -> GHC.Types.Int -> GHC.Types.Int -> GHC.Types.Double

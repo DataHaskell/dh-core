@@ -1,11 +1,11 @@
 
 ==================== FINAL INTERFACE ====================
-2019-02-26 14:07:33.480273657 UTC
+2019-02-27 19:48:19.116269409 UTC
 
-interface dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw:Statistics.Matrix.Function 8063
-  interface hash: 209edf574c18d1abfc6efb08153a981a
-  ABI hash: 1ff23262872805be3e37b5f602ab6100
-  export-list hash: 7810c07f51b5d2730b96b885065d01aa
+interface dense-linear-algebra-0.1.0.0-9CfM7PgmKUpF60PvHRvGgf:Statistics.Matrix.Function 8063
+  interface hash: 469c9a38efa88489fafb708d6dd64a3c
+  ABI hash: 0d2f9f32ad7ae03fa8f250e2f0be0b5c
+  export-list hash: 410b36d07ecf73488da5e6e3952879f2
   orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
   flag hash: 342713f7ad012e1211b28f6756077a2b
   opt_hash: 6faf2de08de32d19db9870899d88e59a
@@ -30,30 +30,30 @@ import  -/  base-4.12.0.0:GHC.Base cc906f98291a1b830546e99a96674547
 import  -/  base-4.12.0.0:GHC.Num 847723f2584d989dac1eada133ac3fb8
 import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
 import  -/  ghc-prim-0.5.3:GHC.Classes e0d9c979f6368701f34fa421754d2cce
-601bdc9316b98c7ebf8dd22647d056eb
+f51b3075d789912e22d28abb0e8ca723
   $trModule :: GHC.Types.Module
   {- HasNoCafRefs, Strictness: m,
      Unfolding: (GHC.Types.Module
                    Statistics.Matrix.Function.$trModule3
                    Statistics.Matrix.Function.$trModule1) -}
-25ad175492768f98996e70997307c1cd
+cee49d04375eceafdd95d0a210b96c05
   $trModule1 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS
                    Statistics.Matrix.Function.$trModule2) -}
-395deb1e3dde87057d466158be65ce7a
+566debdfb2a5ac4a397aaf721b46b858
   $trModule2 :: GHC.Prim.Addr#
   {- HasNoCafRefs, Unfolding: ("Statistics.Matrix.Function"#) -}
-0b9705a71edc7b0efa5b174c3b101f96
+bd374eaf708943509a42d1c8f2f94e6a
   $trModule3 :: GHC.Types.TrName
   {- HasNoCafRefs, Strictness: m1,
      Unfolding: (GHC.Types.TrNameS
                    Statistics.Matrix.Function.$trModule4) -}
-4a593f579b4f07c46af2c688ec1d792d
+9b090391600376e2544b881b9a70146e
   $trModule4 :: GHC.Prim.Addr#
   {- HasNoCafRefs,
-     Unfolding: ("dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#) -}
-d720f4a128a193abbdaa1027cba67467
+     Unfolding: ("dense-linear-algebra-0.1.0.0-9CfM7PgmKUpF60PvHRvGgf"#) -}
+216d25f6988462018f1f06e5081e172e
   for ::
     GHC.Base.Monad m =>
     GHC.Types.Int -> GHC.Types.Int -> (GHC.Types.Int -> m ()) -> m ()
@@ -84,7 +84,7 @@ d720f4a128a193abbdaa1027cba67467
                        GHC.Types.True -> GHC.Base.return @ m $dMonad @ () GHC.Tuple.() }
                  } in
                  loop n0 }) -}
-d748367e11e18af3ae3e47495762ba1e
+71d55991adef89e544aec020ac2a57fc
   square :: GHC.Types.Double -> GHC.Types.Double
   {- Arity: 1, HasNoCafRefs, Strictness: <S(S),U(U)>m,
      Unfolding: InlineRule (1, True, False)
