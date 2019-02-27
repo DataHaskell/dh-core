@@ -1,8 +1,8 @@
-cabal-version:  1.12
+cabal-version: 1.12
 name:           analyze
 version:        0.2.0
 synopsis:       Haskell data analysis and manipulation library
-description:    Haskell data analysis and manipulation library, please see README.md
+description:    Please see README.md
 category:       Data Science
 homepage:       https://github.com/DataHaskell/dh-core/analyze
 author:         Eric Conlon <ejconlon@gmail.com>, Nikita Tchayka <nikitatchayka@gmail.com>
@@ -11,9 +11,6 @@ copyright:      2017-2018 Analyze contributors
 license:        BSD3
 license-file:   LICENSE.md
 build-type:     Simple
-extra-source-files:  README.md
-                     CHANGELOG.md
-tested-with:    GHC == 8.2.2, GHC == 8.4.3
 
 library
   exposed-modules:
@@ -33,19 +30,19 @@ library
       src
   default-extensions: OverloadedStrings
   build-depends:
-        aeson ,
-        base >= 4.9 && < 5,
-        binary ,
-        bytestring ,
-        cassava ,
-        exceptions ,
-        foldl ,
-        free ,
-        hashable ,
-        lucid ,
-        text ,
-        unordered-containers ,
-        vector ,  
+        aeson >=1.3.1.1,
+        base >=4.9 && <5,
+        binary >=0.8.5.1,
+        bytestring >=0.10.8.2,
+        cassava >=0.5.1.0,
+        exceptions >=0.10.0,
+        foldl >=1.4.5,
+        free >=5.0.2,
+        hashable >=1.2.7.0,
+        lucid >=2.9.10,
+        text >=1.2.3.1,
+        unordered-containers >=0.2.9.0,
+        vector >=0.12.0.1,
         -- DEBUG                
         tasty-hunit,
         tasty-quickcheck
@@ -77,21 +74,21 @@ test-suite spec
   default-extensions: OverloadedStrings
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-        QuickCheck ,
-        aeson ,
-        base ,
-        binary ,
-        bytestring ,
-        cassava ,
-        exceptions ,
-        foldl ,
-        free ,
-        hashable ,
-        lucid ,
-        tasty ,
-        tasty-hunit ,
-        tasty-quickcheck ,
-        text ,
-        unordered-containers ,
-        vector 
+        QuickCheck >=2.11.3,
+        aeson >=1.3.1.1,
+        base >=4.9 && <5,
+        binary >=0.8.5.1,
+        bytestring >=0.10.8.2,
+        cassava >=0.5.1.0,
+        exceptions >=0.10.0,
+        foldl >=1.4.5,
+        free >=5.0.2,
+        hashable >=1.2.7.0,
+        lucid >=2.9.10,
+        tasty >=1.1.0.4,
+        tasty-hunit >=0.10.0.1,
+        tasty-quickcheck >=0.10,
+        text >=1.2.3.1,
+        unordered-containers >=0.2.9.0,
+        vector >=0.12.0.1  
   default-language: Haskell2010

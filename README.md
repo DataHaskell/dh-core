@@ -27,20 +27,9 @@ This is the directory structure of the project; the main project lives in the `d
 
 We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool; in the `dh-core` subdirectory, run 
 
-    $ stack build
+    stack build
 
 and this will re-build the main project and the contributed packages.
-
-More detailed developer information can be found in the wiki : https://github.com/DataHaskell/dh-core/wiki/Development 
-
-### GHC and Stackage compatibility
-
-
-Tested with :
-
-- Stackage LTS-11.22 (GHC 8.2.2)
-- Stackage LTS-12.13 (GHC 8.4.3)
-- Stackage LTS-13.0  (GHC 8.6.3)
 
 
 ## Contributing
@@ -71,15 +60,12 @@ The `stack` tool can take care of multi-package projects; its `packages` stanza 
 Packages that are listed on Hackage already must be added here as distinct sub-directories. Once the migration is complete (PRs merged etc.), add the project to this table :
 
 
-| Package | Description | Original author(s) | First version after merge |
-| --- | --- | --- | --- | 
-| `analyze` | Data analysis and manipulation library | [Eric Conlon](https://github.com/ejconlon) | 0.2.0 | 
-| `datasets` | A collection of ready-to-use datasets | [Tom Nielsen](https://github.com/glutamate) | 0.2.6 | 
-| `dense-linear-algebra` | Fast, native dense linear algebra primitives | [Brian O'Sullivan](https://github.com/bos), [Alexey Khudyakov](https://github.com/Shimuuar) | 0.1.0 (a) | 
+| Package | Original author(s) | First version after merge |
+| --- | --- | --- |
+| `analyze` | [Eric Conlon](https://github.com/ejconlon) | 0.2.0 | 
+| `datasets` | [Tom Nielsen](https://github.com/glutamate) | 0.2.6 | 
+| `dense-linear-algebra` | [Brian O'Sullivan](https://github.com/bos) | 0.1.0 (a) | 
 
 (a) : To be updated
 
 NB: Remember to bump version numbers and change web links accordingly when moving in contributed packages.
-
-
-

@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
 
 {-|
 
@@ -14,7 +14,6 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
-import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data Sex = M | F | I
   deriving (Show, Read, Eq, Generic, Bounded, Enum)
@@ -37,5 +36,4 @@ data Abalone = Abalone
 instance FromRecord Abalone
 
 abalone :: Dataset Abalone
-abalone = csvDataset $ URL $ umassMLDB /: "abalone" /: "abalone.data"
-
+abalone = csvDataset $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/abalone/abalone.data"

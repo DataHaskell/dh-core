@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
 
 {-|
 
@@ -14,7 +14,6 @@ import Numeric.Datasets
 
 import Data.Csv
 import GHC.Generics
-import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data Sex = Female | Male
   deriving (Show, Read, Eq, Generic, Bounded, Enum)
@@ -33,4 +32,4 @@ instance FromNamedRecord Vocab
 
 vocab :: Dataset Vocab
 vocab = csvHdrDataset
-   $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "car" /: "Vocab.csv"
+   $ URL "http://vincentarelbundock.github.io/Rdatasets/csv/car/Vocab.csv"

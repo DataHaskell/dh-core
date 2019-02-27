@@ -1,219 +1,110 @@
 {- |
 
-The @datasets@ package defines three different kinds of datasets:
+The datasets package defines two different kinds of datasets:
 
-* Tiny datasets (up to a few tens of rows) are embedded as part of the library source code, as lists of values.
+* small data sets which are directly (or indirectly with `file-embed`)
+  embedded in the package as pure values and do not require
+  network or IO to download the data set.
 
-* Small data sets are embedded indirectly (via @file-embed@)
-  in the package as pure values and do not require IO
-  to be downloaded (i.e. the data is loaded and parsed at compile time).
+* other data sets which need to be fetched over the network with
+  `getDataset` and are cached in a local temporary directory
 
-* Larger data sets which need to be fetched over the network
-  and are cached in a local temporary directory for subsequent use.
-
-This module defines the 'getDataset' function for fetching datasets
-and utilities for defining new data sets and modifying their options.
-It is only necessary to import this module when using fetched data sets.
-Embedded data sets can be used directly.
-
-Please refer to the dataset modules for examples.
+This module defines the `getDataset` function for fetching datasets
+and utilies for defining new data sets. It is only necessary to import
+this module when using fetched data sets. Embedded data sets can be
+imported directly.
 
 -}
 
-{-# LANGUAGE OverloadedStrings, GADTs, DataKinds #-}
-{-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE ExistentialQuantification #-}
-{-# LANGUAGE ScopedTypeVariables #-}
--- {-# OPTIONS_GHC -fno-warn-unused-imports #-}
+{-# LANGUAGE OverloadedStrings, GADTs #-}
+{-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
-module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, defaultTempDir, getFileFromSource,
-                         -- * Parsing datasets
-                         readDataset, safeReadDataset, ReadAs(..), csvRecord,
-                        -- * Defining datasets
-                        csvDataset, csvHdrDataset, csvHdrDatasetSep, csvDatasetSkipHdr,
-                        jsonDataset,
-                        -- ** Dataset options
-                        withPreprocess, withTempDir,
-                        -- ** Preprocessing functions
-                        --
-                        -- | These functions are to be used as first argument of 'withPreprocess' in order to improve the quality of the parser inputs.
-                        dropLines, fixedWidthToCSV, removeEscQuotes, fixAmericanDecimals,
-                        -- ** Helper functions
-                         parseReadField, parseDashToCamelField,
-                         yearToUTCTime,
-                        -- * Dataset source URLs
-                        umassMLDB, uciMLDB) where
+module Numeric.Datasets where
 
 import Data.Csv
-import Data.Monoid
-import Data.Foldable
-import Data.List (isSuffixOf)
-import Data.List.NonEmpty (NonEmpty((:|)))
-import qualified Data.List.NonEmpty as NE
-import System.FilePath (takeExtensions, (</>))
+import System.FilePath
 import System.Directory
 import Data.Hashable
 import Data.Monoid
 import qualified Data.ByteString.Lazy as BL
+import qualified Data.Vector as V
 import Data.Aeson as JSON
 import Control.Applicative
 import Data.Time
-import Network.HTTP.Req (req, runReq, Url, (/:), http, https, Scheme(..), LbsResponse, lbsResponse, responseBody, GET(..), NoReqBody(..), HttpMethod(..), defaultHttpConfig)
--- import Lens.Micro ((^.))
+import Data.Char (ord)
+import qualified Network.Wreq as Wreq
+import Lens.Micro ((^.))
 
-import Control.Exception.Safe
-import Data.Char (ord, toUpper)
+import Data.Char (toUpper)
 import Text.Read (readMaybe)
 import Data.Maybe (fromMaybe)
 import Data.ByteString.Char8 (unpack)
-import qualified Data.ByteString.Char8 as B8
 import qualified Data.ByteString.Lazy.Char8 as BL8
 import Data.ByteString.Lazy.Search (replace)
-import Control.Monad.IO.Class (MonadIO, liftIO)
-import Data.Vector.Generic (Vector)
-import qualified Data.Vector         as VB
-import qualified Data.Vector.Generic as V
-import qualified Data.Attoparsec.ByteString as Atto'
-import qualified Data.Attoparsec.ByteString.Lazy as Atto
 
 -- * Using datasets
 
--- | Load a dataset into memory
-getDataset :: (MonadThrow io, MonadIO io) => Dataset a -> io [a]
-getDataset ds = VB.toList <$> getDatavec ds
+-- |Load a dataset, using the system temporary directory as a cache
+getDataset :: Dataset a -> IO [a]
+getDataset ds = do
+  dir <- tempDirForDataset ds
+  bs <- fmap (fromMaybe id $ preProcess ds) $ getFileFromSource dir $ source ds
+  return $ readDataset (readAs ds) bs
 
--- | Load a dataset into memory as a vector
-getDatavec :: (MonadThrow io, MonadIO io, Vector v a) => Dataset a -> io (v a)
-getDatavec ds = liftIO $ do
-  folder <- tempDirForDataset ds
-  files <- getFileFromSource folder (source ds)
-  safeReadDataset (readAs ds) (fromMaybe id (preProcess ds) <$> files)
+-- |Read a ByteString into a Haskell value
+readDataset :: ReadAs a -> BL.ByteString -> [a]
+readDataset JSON bs =
+  case JSON.decode bs of
+    Just theData ->  theData
+    Nothing -> error "failed to parse json"
+readDataset (CSVRecord hhdr opts) bs =
+  case decodeWith opts hhdr bs of
+    Right theData -> V.toList theData
+    Left err -> error err
+readDataset (CSVNamedRecord opts) bs =
+  case decodeByNameWith opts bs of
+    Right (_,theData) -> V.toList theData
+    Left err -> error err
 
--- | Get a ByteString from the specified Source
-getFileFromSource
-  :: FilePath  -- ^ Cache directory
-  -> Source
-  -> IO (NonEmpty BL.ByteString)
-getFileFromSource cacheDir (URL url) = do
-  createDirectoryIfMissing True cacheDir
-  let fnm = cacheDir </> "ds" <> show (hash $ show url)
-  ex <- doesFileExist fnm
-  if ex
-     then (:|[]) <$> BL.readFile fnm
-     else do
-       rsp <- runReq defaultHttpConfig $ req GET url NoReqBody lbsResponse mempty
-       let bs = responseBody rsp
-       BL.writeFile fnm bs
-       return (bs:|[])
-getFileFromSource _ (File fnm) = (:|[]) <$> BL.readFile fnm
-getFileFromSource _ (ImgFolder root labels) =
-  NE.fromList <$> foldrM allImFolderData [] labels
-  where
-    allImFolderData :: String -> [BL.ByteString] -> IO [BL.ByteString]
-    allImFolderData label agg = (agg ++) <$> toImFolderData label
-
-    toImFolderData :: String -> IO [BL.ByteString]
-    toImFolderData l = map (asBytes l) . filter hasValidExt <$> listDirectory (root </> l)
-
-    asBytes :: String -> FilePath -> BL8.ByteString
-    asBytes label fp = BL8.pack $ label ++ "<<.>>" ++ (root </> label </> fp)
-
-    hasValidExt :: FilePath -> Bool
-    hasValidExt fp = any (`isExtensionOf` fp) ["png", "jpeg", "bitmap", "tiff"] -- "gif", "tga"]
-
-    -- For backwards compatability (only in filepath >= 1.4.2)
-    isExtensionOf :: String -> FilePath -> Bool
-    isExtensionOf ext@('.':_) = isSuffixOf ext . takeExtensions
-    isExtensionOf ext         = isSuffixOf ('.':ext) . takeExtensions
-
-
--- | Parse a ByteString into a list of Haskell values
-readDataset
-  :: ReadAs a               -- ^ How to parse the raw data string
-  -> BL.ByteString -- ^ The data strings
-  -> [a]
-readDataset ra bs =
-  case safeReadDataset ra (bs:|[]) of
-    Left e    -> error (show e)
-    Right dat -> VB.toList dat
-
-
--- | Read a ByteString into a Haskell value
-safeReadDataset :: (Vector v a, MonadThrow m) => ReadAs a -> NonEmpty BL.ByteString -> m (v a)
-safeReadDataset ra bss = either throwString pure $
-  case (ra, bss) of
-    (JSON, bs:|[]) ->  V.fromList <$> JSON.eitherDecode' bs
-    (CSVRecord hhdr opts, bs:|[]) -> V.convert <$> decodeWith opts hhdr bs
-    (CSVNamedRecord opts, bs:|[]) -> V.convert . snd <$> decodeByNameWith opts bs
-    (Parsable psr, bs:|[]) -> V.fromList <$> Atto.eitherResult (Atto.parse (Atto.many' psr) bs)
-
-    (ImageFolder labels, _) -> do
-      ds <- mapM (getImFiles labels) bss
-      pure $ V.fromList (toList ds)
-
-    _ -> Left $
-      if length bss > 1
-      then "Cannot parse more than one file for this data format"
-      else "impossible: logic has changed, please file this issue on dh-core"
-
-  where
-    getImFiles :: NonEmpty String -> BL.ByteString -> Either String (String, FilePath)
-    getImFiles labels bs' = Atto.eitherResult (Atto.parse (parseTaggedFile labels) bs')
-
-    parseTaggedFile :: NonEmpty String -> Atto.Parser (String, FilePath)
-    parseTaggedFile (l0:|ls) = do
-      lbl <- Atto.choice $ Atto.string . B8.pack <$> (l0:ls)
-      _ <- Atto.string "<<.>>"
-      fp <- Atto.takeByteString
-      pure (B8.unpack lbl, B8.unpack fp)
-
-
--- | Get a temporary directory for a dataset.
 tempDirForDataset :: Dataset a -> IO FilePath
-tempDirForDataset = defaultTempDir . temporaryDirectory
+tempDirForDataset ds =
+  case temporaryDirectory ds of
+    Nothing -> getTemporaryDirectory
+    Just tdir -> return tdir
 
--- | Reify an optional temporary directory
-defaultTempDir :: Maybe FilePath -> IO FilePath
-defaultTempDir = \case
-  Nothing -> getTemporaryDirectory
-  Just tdir -> return tdir
+data Source = URL String
+            | File FilePath
 
+-- | A dataset is a record telling us how to load the data
 
--- | A 'Dataset' source can be either a URL (for remotely-hosted datasets) or the filepath of a local file.
-data Source
-  = forall h . URL (Url h)
-  | File FilePath
-  | ImgFolder FilePath (NonEmpty String)
-
--- | A 'Dataset' contains metadata for loading, caching, preprocessing and parsing data.
 data Dataset a = Dataset
-  { source :: Source    -- ^ Dataset source
-  , temporaryDirectory :: Maybe FilePath  -- ^ Temporary directory (optional)
-  , preProcess :: Maybe (BL.ByteString -> BL.ByteString)  -- ^ Dataset preprocessing function (optional)
+  { source :: Source
+  , temporaryDirectory :: Maybe FilePath
+  , preProcess :: Maybe (BL.ByteString -> BL.ByteString)
   , readAs :: ReadAs a
   }
 
 -- | ReadAs is a datatype to describe data formats that hold data sets
+
 data ReadAs a where
   JSON :: FromJSON a => ReadAs a
   CSVRecord :: FromRecord a => HasHeader -> DecodeOptions -> ReadAs a
   CSVNamedRecord :: FromNamedRecord a => DecodeOptions -> ReadAs a
-  Parsable :: Atto.Parser a -> ReadAs a
-  ImageFolder
-    :: NonEmpty String           -- labels used as folders
-    -> ReadAs (String, FilePath) -- FilePaths representing images on disk, Strings are labels
 
--- | A CSV record with default decoding options (i.e. columns are separated by commas)
 csvRecord :: FromRecord a => ReadAs a
 csvRecord = CSVRecord NoHeader defaultDecodeOptions
 
 -- * Defining datasets
 
--- | Define a dataset from a source for a CSV file
-csvDataset :: FromRecord a =>  Source   -> Dataset a
-csvDataset src = Dataset src Nothing Nothing csvRecord
+-- |Define a dataset from a pre-processing function and a source for a CSV file
+csvDatasetPreprocess :: FromRecord a => (BL.ByteString -> BL.ByteString) -> Source -> Dataset a
+csvDatasetPreprocess preF src = (csvDataset src) { preProcess = Just preF }
+--  parseCSV preF <$> getFileFromSource cacheDir src
 
--- | Define a dataset from a source for a CSV file, skipping the header line
+-- |Define a dataset from a source for a CSV file
+csvDataset :: FromRecord a =>  Source -> Dataset a
+csvDataset src = Dataset src Nothing Nothing $ CSVRecord NoHeader defaultDecodeOptions
+
 csvDatasetSkipHdr :: FromRecord a => Source -> Dataset a
 csvDatasetSkipHdr src = Dataset src Nothing Nothing $ CSVRecord HasHeader defaultDecodeOptions
 
@@ -228,51 +119,55 @@ csvHdrDatasetSep sepc src
    = Dataset src Nothing Nothing
        $ CSVNamedRecord defaultDecodeOptions { decDelimiter = fromIntegral (ord sepc)}
 
--- | Define a dataset from a source for a JSON file
+-- |Define a dataset from a source for a JSON file -- data file must be accessible with HTTP, not HTTPS
 jsonDataset :: FromJSON a => Source -> Dataset a
 jsonDataset src = Dataset src Nothing Nothing JSON
 
+-- | Get a ByteString from the specified Source
+getFileFromSource :: FilePath -> Source -> IO (BL.ByteString)
+getFileFromSource cacheDir (URL url) = do
+  createDirectoryIfMissing True cacheDir
+  let fnm = cacheDir </> "ds" <> show (hash url)
 
--- * Modifying datasets
+  ex <- doesFileExist fnm
+  if ex
+     then BL.readFile fnm
+     else do
+       rsp <- Wreq.get url
+       let bs = rsp ^. Wreq.responseBody
+       BL.writeFile fnm bs
+       return bs
+getFileFromSource _ (File fnm) = do
+  BL.readFile fnm
 
--- | Include a preprocessing stage to a Dataset: each field in the raw data will be preprocessed with the given function.
-withPreprocess :: (BL8.ByteString -> BL8.ByteString) -> Dataset a -> Dataset a
-withPreprocess preF ds = ds { preProcess = Just preF}
+-- * Helper functions for parsing
 
--- | Include a temporary directory for caching the dataset after this has been downloaded one first time.
-withTempDir :: FilePath -> Dataset a -> Dataset a
-withTempDir dir ds = ds { temporaryDirectory = Just dir }
-
-
-
--- * Helper functions for parsing datasets
-
--- | Turn dashes to CamelCase
+-- |Turn dashes to CamlCase
 dashToCamelCase :: String -> String
 dashToCamelCase ('-':c:cs) = toUpper c : dashToCamelCase cs
 dashToCamelCase (c:cs) = c : dashToCamelCase cs
 dashToCamelCase [] = []
 
--- | Parse a field, first turning dashes to CamelCase
+-- | Parse a field, first turning dashes to CamlCase
 parseDashToCamelField :: Read a => Field -> Parser a
 parseDashToCamelField s =
   case readMaybe (dashToCamelCase $ unpack s) of
     Just wc -> pure wc
     Nothing -> fail "unknown"
 
--- | Parse a CSV field, based on its read instance
+-- | parse somethign, based on its read instance
 parseReadField :: Read a => Field -> Parser a
 parseReadField s =
   case readMaybe (unpack s) of
     Just wc -> pure wc
     Nothing -> fail "unknown"
 
--- | Drop lines from a bytestring
+-- |Drop lines from a bytestring
 dropLines :: Int -> BL.ByteString -> BL.ByteString
 dropLines 0 s = s
 dropLines n s = dropLines (n-1) $ BL.tail $ BL8.dropWhile (/='\n') s
 
--- | Turn US-style decimals starting with a period (e.g. .2) into something @cassava@ can parse (e.g. 0.2)
+-- | Turn US-style decimals  starting with a period (e.g. .2) into something Haskell can parse (e.g. 0.2)
 fixAmericanDecimals :: BL.ByteString -> BL.ByteString
 fixAmericanDecimals = replace ",." (",0."::BL.ByteString)
 
@@ -288,33 +183,14 @@ fixedWidthToCSV = BL8.pack . fnl . BL8.unpack where
   chomp (c:cs) = c:cs
   chomp [] = []
 
--- | Filter out escaped double quotes from a field
-removeEscQuotes :: BL8.ByteString -> BL8.ByteString
-removeEscQuotes = BL8.filter (/= '\"')
-
 -- * Helper functions for data analysis
 
--- | Convert a fractional year to UTCTime with second-level precision (due to not taking into account leap seconds)
+-- | convert a fractional year to UTCTime with second-level precision (due to not taking into account leap seconds)
 yearToUTCTime :: Double -> UTCTime
-yearToUTCTime yearDbl = UTCTime day dt
-  where
-    (yearn,yearFrac)  = properFraction yearDbl
-    dayYearBegin = fromGregorian yearn 1 1
-    (dayn, dayFrac) = properFraction $ yearFrac * (if isLeapYear yearn then 366 else 365)
-    day = addDays dayn dayYearBegin
-    dt = secondsToDiffTime $ round $ dayFrac * 86400
-
--- * URLs
-
--- | The UMass machine learning database
---
--- <http://mlr.cs.umass.edu/ml/machine-learning-databases>
-umassMLDB :: Url 'Http
-umassMLDB = http "mlr.cs.umass.edu" /: "ml" /: "machine-learning-databases"
-
--- | The UCI machine learning database
---
--- | <https://archive.ics.uci.edu/ml/machine-learning-databases>
-uciMLDB :: Url 'Https
-uciMLDB = https "archive.ics.uci.edu" /: "ml" /: "machine-learning-databases"
-
+yearToUTCTime yearDbl =
+  let (yearn,yearFrac)  = properFraction yearDbl
+      dayYearBegin = fromGregorian yearn 1 1
+      (dayn, dayFrac) = properFraction $ yearFrac * (if isLeapYear yearn then 366 else 365)
+      day = addDays dayn dayYearBegin
+      dt = secondsToDiffTime $ round $ dayFrac * 86400
+  in UTCTime day dt

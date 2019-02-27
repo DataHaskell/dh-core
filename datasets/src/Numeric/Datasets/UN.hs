@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
 
 {-|
 
@@ -15,7 +15,6 @@ import Numeric.Datasets
 import Data.Csv
 import GHC.Generics
 import Control.Applicative
-import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data GdpMortality = GdpMortality
   { country :: String
@@ -31,6 +30,4 @@ instance FromNamedRecord GdpMortality where
 
 gdpMortalityUN :: Dataset GdpMortality
 gdpMortalityUN = csvHdrDataset
-   $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "car" /: "UN.csv"
-
---   "http://vincentarelbundock.github.io/Rdatasets/csv/car/UN.csv"
+   $ URL "http://vincentarelbundock.github.io/Rdatasets/csv/car/UN.csv"

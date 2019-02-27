@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 {-|
@@ -19,7 +19,6 @@ import Data.Csv
 import GHC.Generics
 import Control.Applicative
 import Data.Text (Text)
-import Network.HTTP.Req ((/:), https, Scheme(..))
 
 data Gapminder = Gapminder
   { country :: Text
@@ -43,4 +42,4 @@ instance FromNamedRecord Gapminder where
 
 gapminder :: Dataset Gapminder
 gapminder = csvHdrDataset
-   $ URL $ https "raw.githubusercontent.com" /: "plotly" /: "datasets" /: "master" /: "gapminderDataFiveYear.csv"
+   $ URL "https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv"

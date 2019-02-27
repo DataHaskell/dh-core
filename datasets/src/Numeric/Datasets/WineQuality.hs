@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 {-|
@@ -16,7 +16,6 @@ import Numeric.Datasets
 import Data.Csv
 import GHC.Generics
 import Control.Applicative
-import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data WineQuality = WineQuality
   { fixedAcidity :: Double
@@ -50,7 +49,7 @@ instance FromNamedRecord WineQuality where
 
 redWineQuality, whiteWineQuality :: Dataset WineQuality
 redWineQuality = csvHdrDatasetSep ';'
-   $ URL $ umassMLDB /: "wine-quality" /: "winequality-red.csv"
+   $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"
 
 whiteWineQuality = csvHdrDatasetSep ';'
-   $ URL $ umassMLDB /: "wine-quality" /: "winequality-white.csv"
+   $ URL "http://mlr.cs.umass.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv"

@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 {-|
@@ -15,11 +15,10 @@ For more data, see <http://www.geyserstudy.org/geyser.aspx?pGeyserNo=OLDFAITHFUL
 
 module Numeric.Datasets.OldFaithful where
 
-import Numeric.Datasets
-
 import Data.Csv
 import Control.Applicative
-import Network.HTTP.Req ((/:), https, Scheme(..))
+import Numeric.Datasets
+
 
 
 data OldFaithful = OldFaithful
@@ -32,5 +31,5 @@ instance FromRecord OldFaithful where
 
 oldFaithful :: Dataset OldFaithful
 oldFaithful
-  = let src = URL $ https "raw.githubusercontent.com" /: "vincentarelbundock" /: "Rdatasets" /: "master" /: "csv" /: "datasets" /: "faithful.csv"
+  = let src = URL "https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/faithful.csv"
     in Dataset src Nothing Nothing $ CSVRecord HasHeader defaultDecodeOptions

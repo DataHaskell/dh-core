@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveGeneric, OverloadedStrings, DataKinds #-}
+{-# LANGUAGE DeriveGeneric, OverloadedStrings #-}
 {-# OPTIONS_GHC -fno-warn-unused-imports #-}
 
 {-|
@@ -18,7 +18,6 @@ import Numeric.Datasets
 import Data.Csv
 import GHC.Generics
 import Control.Applicative
-import Network.HTTP.Req ((/:), http, Scheme(..))
 
 data Sunspot = Sunspot
   { time :: Double
@@ -28,10 +27,8 @@ data Sunspot = Sunspot
 instance FromNamedRecord Sunspot where
     parseNamedRecord m = Sunspot <$>
                          m .: "time" <*>
-                         m .: "value"
+                         m .: "sunspot.month"
 
 sunspots :: Dataset Sunspot
 sunspots = csvHdrDataset
-   $ URL $ http "vincentarelbundock.github.io" /: "Rdatasets" /: "csv" /: "datasets" /: "sunspot.month.csv"
-
---  "http://vincentarelbundock.github.io/Rdatasets/csv/datasets/sunspot.month.csv"
+   $ URL "http://vincentarelbundock.github.io/Rdatasets/csv/datasets/sunspot.month.csv"
