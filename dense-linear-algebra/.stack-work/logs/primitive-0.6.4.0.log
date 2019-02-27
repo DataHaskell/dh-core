@@ -1,0 +1,20 @@
+Configuring primitive-0.6.4.0...
+Preprocessing library for primitive-0.6.4.0..
+Building library for primitive-0.6.4.0..
+[ 1 of 15] Compiling Control.Monad.Primitive ( Control/Monad/Primitive.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Control/Monad/Primitive.o )
+[ 2 of 15] Compiling Data.Primitive.Internal.Compat ( Data/Primitive/Internal/Compat.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/Internal/Compat.o )
+[ 3 of 15] Compiling Data.Primitive.Array ( Data/Primitive/Array.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/Array.o )
+[ 4 of 15] Compiling Data.Primitive.MVar ( Data/Primitive/MVar.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/MVar.o )
+[ 5 of 15] Compiling Data.Primitive.MachDeps ( Data/Primitive/MachDeps.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/MachDeps.o )
+[ 6 of 15] Compiling Data.Primitive.Internal.Operations ( Data/Primitive/Internal/Operations.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/Internal/Operations.o )
+[ 7 of 15] Compiling Data.Primitive.MutVar ( Data/Primitive/MutVar.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/MutVar.o )
+[ 8 of 15] Compiling Data.Primitive.SmallArray ( Data/Primitive/SmallArray.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/SmallArray.o )
+[ 9 of 15] Compiling Data.Primitive.Types ( Data/Primitive/Types.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/Types.o )
+[10 of 15] Compiling Data.Primitive.ByteArray ( Data/Primitive/ByteArray.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/ByteArray.o )
+[11 of 15] Compiling Data.Primitive.PrimArray ( Data/Primitive/PrimArray.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/PrimArray.o )
+[12 of 15] Compiling Data.Primitive.Ptr ( Data/Primitive/Ptr.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/Ptr.o )
+[13 of 15] Compiling Data.Primitive.Addr ( Data/Primitive/Addr.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/Addr.o )
+[14 of 15] Compiling Data.Primitive.UnliftedArray ( Data/Primitive/UnliftedArray.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive/UnliftedArray.o )
+[15 of 15] Compiling Data.Primitive   ( Data/Primitive.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Primitive.o )
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/primitive-0.6.4.0-1mvPxVOk6Q6KOkWCZxqESf
+Registering library for primitive-0.6.4.0..

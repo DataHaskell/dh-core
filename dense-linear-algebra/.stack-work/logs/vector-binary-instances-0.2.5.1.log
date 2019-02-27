@@ -1,0 +1,6 @@
+Configuring vector-binary-instances-0.2.5.1...
+Preprocessing library for vector-binary-instances-0.2.5.1..
+Building library for vector-binary-instances-0.2.5.1..
+[1 of 1] Compiling Data.Vector.Binary ( Data/Vector/Binary.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Binary.o )
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/vector-binary-instances-0.2.5.1-9v2Hs4Y2fvx4gqXXobe9KA
+Registering library for vector-binary-instances-0.2.5.1..

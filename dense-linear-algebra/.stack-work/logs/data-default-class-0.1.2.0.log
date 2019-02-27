@@ -1,0 +1,6 @@
+Configuring data-default-class-0.1.2.0...
+Preprocessing library for data-default-class-0.1.2.0..
+Building library for data-default-class-0.1.2.0..
+[1 of 1] Compiling Data.Default.Class ( Data/Default/Class.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Default/Class.o )
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/data-default-class-0.1.2.0-FeIQ5tLoVZBHMSgrT9zptQ
+Registering library for data-default-class-0.1.2.0..

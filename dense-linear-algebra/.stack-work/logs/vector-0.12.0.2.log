@@ -1,0 +1,26 @@
+Configuring vector-0.12.0.2...
+Preprocessing library for vector-0.12.0.2..
+Building library for vector-0.12.0.2..
+[ 1 of 21] Compiling Data.Vector.Fusion.Util ( Data/Vector/Fusion/Util.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Fusion/Util.o )
+[ 2 of 21] Compiling Data.Vector.Fusion.Bundle.Size ( Data/Vector/Fusion/Bundle/Size.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Fusion/Bundle/Size.o )
+[ 3 of 21] Compiling Data.Vector.Generic.Mutable.Base ( Data/Vector/Generic/Mutable/Base.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Generic/Mutable/Base.o )
+[ 4 of 21] Compiling Data.Vector.Generic.Base ( Data/Vector/Generic/Base.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Generic/Base.o )
+[ 5 of 21] Compiling Data.Vector.Internal.Check ( Data/Vector/Internal/Check.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Internal/Check.o )
+[ 6 of 21] Compiling Data.Vector.Fusion.Stream.Monadic ( Data/Vector/Fusion/Stream/Monadic.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Fusion/Stream/Monadic.o )
+[ 7 of 21] Compiling Data.Vector.Fusion.Bundle.Monadic ( Data/Vector/Fusion/Bundle/Monadic.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Fusion/Bundle/Monadic.o )
+[ 8 of 21] Compiling Data.Vector.Fusion.Bundle ( Data/Vector/Fusion/Bundle.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Fusion/Bundle.o )
+[ 9 of 21] Compiling Data.Vector.Generic.Mutable ( Data/Vector/Generic/Mutable.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Generic/Mutable.o )
+[10 of 21] Compiling Data.Vector.Generic.New ( Data/Vector/Generic/New.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Generic/New.o )
+[11 of 21] Compiling Data.Vector.Generic ( Data/Vector/Generic.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Generic.o )
+[12 of 21] Compiling Data.Vector.Mutable ( Data/Vector/Mutable.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Mutable.o )
+[13 of 21] Compiling Data.Vector      ( Data/Vector.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector.o )
+[14 of 21] Compiling Data.Vector.Primitive.Mutable ( Data/Vector/Primitive/Mutable.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Primitive/Mutable.o )
+[15 of 21] Compiling Data.Vector.Primitive ( Data/Vector/Primitive.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Primitive.o )
+[16 of 21] Compiling Data.Vector.Storable.Internal ( Data/Vector/Storable/Internal.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Storable/Internal.o )
+[17 of 21] Compiling Data.Vector.Storable.Mutable ( Data/Vector/Storable/Mutable.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Storable/Mutable.o )
+[18 of 21] Compiling Data.Vector.Storable ( Data/Vector/Storable.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Storable.o )
+[19 of 21] Compiling Data.Vector.Unboxed.Base ( Data/Vector/Unboxed/Base.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Unboxed/Base.o )
+[20 of 21] Compiling Data.Vector.Unboxed ( Data/Vector/Unboxed.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Unboxed.o )
+[21 of 21] Compiling Data.Vector.Unboxed.Mutable ( Data/Vector/Unboxed/Mutable.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Data/Vector/Unboxed/Mutable.o )
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/vector-0.12.0.2-5G85DK6NPIx1LphnqJy7eO
+Registering library for vector-0.12.0.2..

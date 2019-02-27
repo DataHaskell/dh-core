@@ -1,0 +1,1027 @@
+
+==================== FINAL INTERFACE ====================
+2019-02-26 14:07:34.180546269 UTC
+
+interface dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw:Statistics.Matrix.Mutable 8063
+  interface hash: 7f961dbc1d2a3db906bc9585d6a40ada
+  ABI hash: 402a1a0245fa0422f2ee5f0ada7b52e1
+  export-list hash: 8d74bbf64d6d56a65a1a2803cccdc2bc
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 449a0936b02ab978eb9dc735a290c096
+  opt_hash: 6faf2de08de32d19db9870899d88e59a
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Statistics.Matrix.Mutable.bounds
+  Statistics.Matrix.Mutable.immutably
+  Statistics.Matrix.Mutable.replicate
+  Statistics.Matrix.Mutable.thaw
+  Statistics.Matrix.Mutable.unsafeBounds
+  Statistics.Matrix.Mutable.unsafeFreeze
+  Statistics.Matrix.Mutable.unsafeModify
+  Statistics.Matrix.Mutable.unsafeNew
+  Statistics.Matrix.Mutable.unsafeRead
+  Statistics.Matrix.Mutable.unsafeWrite
+  Statistics.Matrix.Types.MMatrix{Statistics.Matrix.Types.MMatrix}
+  Statistics.Matrix.Types.MVector
+module dependencies: Statistics.Matrix.Types
+package dependencies: array-0.5.3.0 base-4.12.0.0 deepseq-1.4.4.0
+                      ghc-prim-0.5.3 integer-gmp-1.0.2.0 primitive-0.6.4.0
+                      transformers-0.5.5.0 vector-0.12.0.2
+orphans: vector-0.12.0.2:Data.Vector.Unboxed
+         vector-0.12.0.2:Data.Vector.Fusion.Bundle
+         transformers-0.5.5.0:Control.Monad.Trans.Error
+         base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Complex base-4.12.0.0:Data.Functor.Compose
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity
+                         base-4.12.0.0:Data.Functor.Product base-4.12.0.0:Data.Functor.Sum
+                         base-4.12.0.0:Data.Monoid base-4.12.0.0:Data.Semigroup
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:Data.Version
+                         base-4.12.0.0:Data.Void base-4.12.0.0:GHC.Exts
+                         base-4.12.0.0:GHC.Generics base-4.12.0.0:GHC.IO.Exception
+                         primitive-0.6.4.0:Control.Monad.Primitive
+                         primitive-0.6.4.0:Data.Primitive.Array
+                         primitive-0.6.4.0:Data.Primitive.ByteArray
+                         primitive-0.6.4.0:Data.Primitive.PrimArray
+                         primitive-0.6.4.0:Data.Primitive.SmallArray
+                         primitive-0.6.4.0:Data.Primitive.UnliftedArray
+                         vector-0.12.0.2:Data.Vector.Primitive
+                         vector-0.12.0.2:Data.Vector.Unboxed
+                         vector-0.12.0.2:Data.Vector.Unboxed.Base
+import  -/  base-4.12.0.0:Control.Applicative f4c86ba32601955aaee0c0abccbaeade
+import  -/  base-4.12.0.0:Control.Monad.ST 9831a35a97bf725d698400845dbc0ccd
+import  -/  base-4.12.0.0:Data.Functor 22aac80fdb6c7b7f60b4aaab86afee64
+import  -/  base-4.12.0.0:GHC.Base cc906f98291a1b830546e99a96674547
+import  -/  base-4.12.0.0:GHC.Err 28d622b06927ca4c3b335ec5326c34b2
+import  -/  base-4.12.0.0:GHC.Num 847723f2584d989dac1eada133ac3fb8
+import  -/  base-4.12.0.0:GHC.ST 218d7508dc46ae62ed07f9dc97fd6fd1
+import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
+import  -/  deepseq-1.4.4.0:Control.DeepSeq b671068ccce8410d2c6ef17a4f9b4159
+import  -/  Statistics.Matrix.Types 7a9ae1dc0a9192be182b9686b68c4c9c
+  exports: e72460abf602f277e14a782b4192d791
+  MMatrix f53efa0fe3d025fef715e013c0c71ca9
+  MMatrix f1dd81bb5322dbef68d17d4d9c8a0e89
+  MVector 191e4ea9bdb8a45a921daa5601eeb5ba
+  Matrix ae1e7f0c205cd52d7e1d511bb9005ffb
+  Matrix 1123f17a64ad8947e8c754b49360ac94
+import  -/  ghc-prim-0.5.3:GHC.Classes e0d9c979f6368701f34fa421754d2cce
+import  -/  vector-0.12.0.2:Data.Vector.Unboxed 3ec9008297a7b27b6fe569e181327338
+import  -/  vector-0.12.0.2:Data.Vector.Unboxed.Mutable d5dd6163341ecef0e754386a130baa2d
+c2f69178a9f2f6c1d75bfa2d6bd3cfad
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   Statistics.Matrix.Mutable.$trModule3
+                   Statistics.Matrix.Mutable.$trModule1) -}
+88d4302d744def898b48728b2d727bac
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS
+                   Statistics.Matrix.Mutable.$trModule2) -}
+535065794a95133c08a082f03e1c11f5
+  $trModule2 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("Statistics.Matrix.Mutable"#) -}
+57eb5d614f40cc50dc39a7cd5f5eeb6d
+  $trModule3 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS
+                   Statistics.Matrix.Mutable.$trModule4) -}
+9e8ee3fe151950e9fcf40b4a461d4202
+  $trModule4 :: GHC.Prim.Addr#
+  {- HasNoCafRefs,
+     Unfolding: ("dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#) -}
+60bc176006dd083007d016598e66dfc5
+  $wlvl ::
+    GHC.Prim.Int#
+    -> GHC.ST.ST
+         s
+         (Data.Vector.Primitive.Mutable.MVector
+            (Control.Monad.Primitive.PrimState (GHC.ST.ST s)) GHC.Types.Double)
+  {- Arity: 1, Strictness: <B,U>x, Inline: [2] -}
+84ac8e9add0412cbd669f6b9ddf50f01
+  $wlvl1 ::
+    GHC.Prim.Int#
+    -> GHC.ST.ST
+         s
+         (Data.Vector.Primitive.Mutable.MVector
+            (Control.Monad.Primitive.PrimState (GHC.ST.ST s)) GHC.Types.Double)
+  {- Arity: 1, Strictness: <B,U>x, Inline: [2] -}
+2821bd70c915cdd624820a517e58dcdf
+  $wreplicate ::
+    GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Double#
+    -> GHC.Prim.State# s
+    -> (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+  {- Arity: 4, Strictness: <S,U><S,U><S,U><S,U>, Inline: [2],
+     Unfolding: (\ @ s
+                   (ww :: GHC.Prim.Int#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Double#)
+                   (w :: GHC.Prim.State# s) ->
+                 let {
+                   y1 :: GHC.Prim.Int# = GHC.Prim.*# ww ww1
+                 } in
+                 let {
+                   $j :: GHC.Prim.Int#
+                         -> GHC.Types.Int
+                         -> (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+                     <join 2> {- Arity: 2, Strictness: <S,U><L,A> -}
+                   = \ (x :: GHC.Prim.Int#)[OneShot]
+                       (wild :: GHC.Types.Int)[OneShot] ->
+                     case GHC.Prim.<# x 0# of lwild {
+                       DEFAULT
+                       -> case GHC.Prim.># x 1152921504606846975# of lwild1 {
+                            DEFAULT
+                            -> case GHC.Prim.newByteArray#
+                                      @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                                      (GHC.Prim.*# x 8#)
+                                      w `cast`
+                                      (Nth:2
+                                           ((GHC.Prim.State#
+                                               (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                         <s>_N)))_R
+                                            ->_R ((#,#)
+                                                    <'GHC.Types.TupleRep '[]>_R
+                                                    <'GHC.Types.LiftedRep>_R
+                                                    (GHC.Prim.State#
+                                                       (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                 <s>_N)))_R
+                                                    <Data.Primitive.ByteArray.MutableByteArray
+                                                       (Control.Monad.Primitive.PrimState
+                                                          (GHC.ST.ST
+                                                             s))>_R)_R)) of ds1 { (#,#) ipv ipv1 ->
+                               case {__pkg_ccall primitive-0.6.4.0 forall s.
+                                                                   GHC.Prim.MutableByteArray# s
+                                                                   -> GHC.Prim.Int#
+                                                                   -> GHC.Prim.Word#
+                                                                   -> GHC.Prim.Double#
+                                                                   -> GHC.Prim.State#
+                                                                        GHC.Prim.RealWorld
+                                                                   -> (# GHC.Prim.State#
+                                                                           GHC.Prim.RealWorld #)}
+                                      @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                                      ipv1
+                                      0#
+                                      (GHC.Prim.int2Word# x)
+                                      ww2
+                                      ipv
+                                        `cast`
+                                      (GHC.Prim.State#
+                                         (UnsafeCo nominal (Control.Monad.Primitive.PrimState
+                                                              (GHC.ST.ST
+                                                                 s)) GHC.Prim.RealWorld))_R of wild2 { Unit# ds9 ->
+                               (# ds9
+                                    `cast`
+                                  (GHC.Prim.State#
+                                     (UnsafeCo nominal GHC.Prim.RealWorld (Control.Monad.Primitive.PrimState
+                                                                             (GHC.ST.ST s)) ; Nth:0
+                                                                                                  (Nth:2
+                                                                                                       (Nth:3
+                                                                                                            ((GHC.Prim.State#
+                                                                                                                (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                                                                     <s>_N))_R
+                                                                                                             ->_R ((#,#)
+                                                                                                                     <'GHC.Types.TupleRep
+                                                                                                                        '[]>_R
+                                                                                                                     <'GHC.Types.LiftedRep>_R
+                                                                                                                     (GHC.Prim.State#
+                                                                                                                        (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                                                                             <s>_N))_R
+                                                                                                                     <()>_R)_R)) ; Nth:2
+                                                                                                                                       (Nth:3
+                                                                                                                                            (<GHC.Prim.State#
+                                                                                                                                                s>_R
+                                                                                                                                             ->_R ((#,#)
+                                                                                                                                                     <'GHC.Types.TupleRep
+                                                                                                                                                        '[]>_R
+                                                                                                                                                     <'GHC.Types.LiftedRep>_R
+                                                                                                                                                     <GHC.Prim.State#
+                                                                                                                                                        s>_R
+                                                                                                                                                     (Data.Vector.Unboxed.Base.MVector
+                                                                                                                                                        (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                                                                                                             <s>_N)
+                                                                                                                                                        <GHC.Types.Double>_N)_R)_R)))))_R,
+                                  Statistics.Matrix.Types.MMatrix
+                                    @ s
+                                    ww
+                                    ww1
+                                    (Data.Vector.Primitive.Mutable.MVector
+                                       @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                                       @ GHC.Types.Double
+                                       0#
+                                       x
+                                       ipv1)
+                                      `cast`
+                                    (Sym (Data.Vector.Unboxed.Base.N:R:MVectorsDouble[0]
+                                              <Control.Monad.Primitive.PrimState
+                                                 (GHC.ST.ST
+                                                    s)>_N) ; (Sym (Data.Vector.Unboxed.Base.D:R:MVectorsDouble0[0]
+                                                                       <Control.Monad.Primitive.PrimState
+                                                                          (GHC.ST.ST s)>_N) ; Nth:3
+                                                                                                  (Nth:3
+                                                                                                       (<GHC.Prim.State#
+                                                                                                           s>_R
+                                                                                                        ->_R ((#,#)
+                                                                                                                <'GHC.Types.TupleRep
+                                                                                                                   '[]>_R
+                                                                                                                <'GHC.Types.LiftedRep>_R
+                                                                                                                <GHC.Prim.State#
+                                                                                                                   s>_R
+                                                                                                                (Data.Vector.Unboxed.Base.MVector
+                                                                                                                   (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                                                                        <s>_N)
+                                                                                                                   <GHC.Types.Double>_N)_R)_R)))) #) } }
+                            1#
+                            -> case Statistics.Matrix.Mutable.$wlvl1 @ s x
+                               ret_ty (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+                               of {} }
+                       1#
+                       -> case Statistics.Matrix.Mutable.$wlvl @ s x
+                          ret_ty (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+                          of {} }
+                 } in
+                 case GHC.Prim.<=# 0# y1 of lwild {
+                   DEFAULT -> $j 0# Statistics.Matrix.Mutable.replicate2
+                   1# -> $j y1 (GHC.Types.I# y1) }) -}
+177259ba73353b5e544f46cb36e1f90b
+  $wthaw ::
+    GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.ByteArray#
+    -> GHC.Prim.State# s
+    -> (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+  {- Arity: 6, Strictness: <L,U><L,U><S,U><S,U><S,U><S,U>,
+     Inline: [2],
+     Unfolding: (\ @ s
+                   (ww :: GHC.Prim.Int#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (ww2 :: GHC.Prim.Int#)
+                   (ww3 :: GHC.Prim.Int#)
+                   (ww4 :: GHC.Prim.ByteArray#)
+                   (w :: GHC.Prim.State# s) ->
+                 case GHC.Prim.<# ww3 0# of lwild {
+                   DEFAULT
+                   -> case GHC.Prim.># ww3 1152921504606846975# of lwild1 {
+                        DEFAULT
+                        -> case GHC.Prim.newByteArray#
+                                  @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                                  (GHC.Prim.*# ww3 8#)
+                                  w `cast`
+                                  (GHC.Prim.State#
+                                     (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                               <s>_N)))_R of ds1 { (#,#) ipv ipv1 ->
+                           case GHC.Prim.copyByteArray#
+                                  @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                                  ww4
+                                  (GHC.Prim.*# ww2 8#)
+                                  ipv1
+                                  0#
+                                  (GHC.Prim.*# ww3 8#)
+                                  ipv of s'# { DEFAULT ->
+                           (# s'#
+                                `cast`
+                              (GHC.Prim.State#
+                                 (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                      (Nth:0
+                                           (Nth:2
+                                                (Nth:3
+                                                     (<GHC.Prim.State# s>_R
+                                                      ->_R ((#,#)
+                                                              <'GHC.Types.TupleRep '[]>_R
+                                                              <'GHC.Types.LiftedRep>_R
+                                                              <GHC.Prim.State# s>_R
+                                                              (Sub (Data.Vector.Unboxed.Base.D:R:MutableVector[0]) (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                                                                        <s>_N) <GHC.Types.Double>_N))_R))))))_R,
+                              Statistics.Matrix.Types.MMatrix
+                                @ s
+                                ww
+                                ww1
+                                (Data.Vector.Primitive.Mutable.MVector
+                                   @ s
+                                   @ GHC.Types.Double
+                                   0#
+                                   ww3
+                                   ipv1
+                                     `cast`
+                                   (GHC.Prim.MutableByteArray#
+                                      (Control.Monad.Primitive.D:R:PrimStateST[0] <s>_N))_R)
+                                  `cast`
+                                (Sym (Data.Vector.Unboxed.Base.N:R:MVectorsDouble[0]
+                                          <s>_N) ; Sym (Data.Vector.Unboxed.Base.D:R:MVectorsDouble0[0]
+                                                            <s>_N)) #) } }
+                        1#
+                        -> case Statistics.Matrix.Mutable.$wlvl1 @ s ww3
+                           ret_ty (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+                           of {} }
+                   1#
+                   -> case Statistics.Matrix.Mutable.$wlvl @ s ww3
+                      ret_ty (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+                      of {} }) -}
+908783771e9646d96648bf37ef20d18f
+  $wunsafeNew ::
+    GHC.Prim.Int#
+    -> GHC.Prim.Int#
+    -> GHC.Prim.State# s
+    -> (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+  {- Arity: 3, Strictness: <S,U><S,U><S,U>, Inline: [2],
+     Unfolding: (\ @ s
+                   (ww :: GHC.Prim.Int#)
+                   (ww1 :: GHC.Prim.Int#)
+                   (w :: GHC.Prim.State# s) ->
+                 case GHC.Prim.<# ww 0# of lwild {
+                   DEFAULT
+                   -> case GHC.Prim.<# ww1 0# of lwild1 {
+                        DEFAULT
+                        -> let {
+                             n :: GHC.Prim.Int# = GHC.Prim.*# ww ww1
+                           } in
+                           case GHC.Prim.>=# n 0# of lwild2 {
+                             DEFAULT
+                             -> case Statistics.Matrix.Mutable.unsafeNew4 @ s n
+                                ret_ty (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+                                of {}
+                             1#
+                             -> case GHC.Prim.<# n 0# of lwild3 {
+                                  DEFAULT
+                                  -> case GHC.Prim.># n 1152921504606846975# of lwild4 {
+                                       DEFAULT
+                                       -> case GHC.Prim.newByteArray#
+                                                 @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                                                 (GHC.Prim.*# n 8#)
+                                                 w `cast`
+                                                 (Nth:2
+                                                      ((GHC.Prim.State#
+                                                          (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                    <s>_N)))_R
+                                                       ->_R ((#,#)
+                                                               <'GHC.Types.TupleRep '[]>_R
+                                                               <'GHC.Types.LiftedRep>_R
+                                                               (GHC.Prim.State#
+                                                                  (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                            <s>_N)))_R
+                                                               <Data.Primitive.ByteArray.MutableByteArray
+                                                                  (Control.Monad.Primitive.PrimState
+                                                                     (GHC.ST.ST
+                                                                        s))>_R)_R)) of ds1 { (#,#) ipv ipv1 ->
+                                          case {__pkg_ccall primitive-0.6.4.0 forall s.
+                                                                              GHC.Prim.MutableByteArray#
+                                                                                s
+                                                                              -> GHC.Prim.Int#
+                                                                              -> GHC.Prim.Word#
+                                                                              -> GHC.Prim.Word#
+                                                                              -> GHC.Prim.State#
+                                                                                   GHC.Prim.RealWorld
+                                                                              -> (# GHC.Prim.State#
+                                                                                      GHC.Prim.RealWorld #)}
+                                                 @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                                                 ipv1
+                                                 0#
+                                                 (GHC.Prim.int2Word# (GHC.Prim.*# n 8#))
+                                                 0##
+                                                 ipv
+                                                   `cast`
+                                                 (GHC.Prim.State#
+                                                    (UnsafeCo nominal (Control.Monad.Primitive.PrimState
+                                                                         (GHC.ST.ST
+                                                                            s)) GHC.Prim.RealWorld))_R of wild2 { Unit# ds9 ->
+                                          (# ds9
+                                               `cast`
+                                             (GHC.Prim.State#
+                                                (UnsafeCo nominal GHC.Prim.RealWorld (Control.Monad.Primitive.PrimState
+                                                                                        (GHC.ST.ST
+                                                                                           s)) ; Nth:0
+                                                                                                     (Nth:2
+                                                                                                          (Nth:3
+                                                                                                               ((GHC.Prim.State#
+                                                                                                                   (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                                                                        <s>_N))_R
+                                                                                                                ->_R ((#,#)
+                                                                                                                        <'GHC.Types.TupleRep
+                                                                                                                           '[]>_R
+                                                                                                                        <'GHC.Types.LiftedRep>_R
+                                                                                                                        (GHC.Prim.State#
+                                                                                                                           (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                                                                                <s>_N))_R
+                                                                                                                        <()>_R)_R)) ; Nth:2
+                                                                                                                                          (Nth:3
+                                                                                                                                               (<GHC.Prim.State#
+                                                                                                                                                   s>_R
+                                                                                                                                                ->_R ((#,#)
+                                                                                                                                                        <'GHC.Types.TupleRep
+                                                                                                                                                           '[]>_R
+                                                                                                                                                        <'GHC.Types.LiftedRep>_R
+                                                                                                                                                        <GHC.Prim.State#
+                                                                                                                                                           s>_R
+                                                                                                                                                        (Data.Vector.Unboxed.Base.MVector
+                                                                                                                                                           (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                                                                                                                <s>_N)
+                                                                                                                                                           <GHC.Types.Double>_N)_R)_R)))))_R,
+                                             Statistics.Matrix.Types.MMatrix
+                                               @ s
+                                               ww
+                                               ww1
+                                               (Data.Vector.Primitive.Mutable.MVector
+                                                  @ (Control.Monad.Primitive.PrimState
+                                                       (GHC.ST.ST s))
+                                                  @ GHC.Types.Double
+                                                  0#
+                                                  n
+                                                  ipv1)
+                                                 `cast`
+                                               (Sym (Data.Vector.Unboxed.Base.N:R:MVectorsDouble[0]
+                                                         <Control.Monad.Primitive.PrimState
+                                                            (GHC.ST.ST
+                                                               s)>_N) ; (Sym (Data.Vector.Unboxed.Base.D:R:MVectorsDouble0[0]
+                                                                                  <Control.Monad.Primitive.PrimState
+                                                                                     (GHC.ST.ST
+                                                                                        s)>_N) ; Nth:3
+                                                                                                     (Nth:3
+                                                                                                          (<GHC.Prim.State#
+                                                                                                              s>_R
+                                                                                                           ->_R ((#,#)
+                                                                                                                   <'GHC.Types.TupleRep
+                                                                                                                      '[]>_R
+                                                                                                                   <'GHC.Types.LiftedRep>_R
+                                                                                                                   <GHC.Prim.State#
+                                                                                                                      s>_R
+                                                                                                                   (Data.Vector.Unboxed.Base.MVector
+                                                                                                                      (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                                                                                           <s>_N)
+                                                                                                                      <GHC.Types.Double>_N)_R)_R)))) #) } }
+                                       1#
+                                       -> case Statistics.Matrix.Mutable.$wlvl1 @ s n
+                                          ret_ty (# GHC.Prim.State# s,
+                                                    Statistics.Matrix.Types.MMatrix s #)
+                                          of {} }
+                                  1#
+                                  -> case Statistics.Matrix.Mutable.$wlvl @ s n
+                                     ret_ty (# GHC.Prim.State# s,
+                                               Statistics.Matrix.Types.MMatrix s #)
+                                     of {} } }
+                        1#
+                        -> case Statistics.Matrix.Mutable.unsafeNew3
+                           ret_ty (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+                           of {} }
+                   1#
+                   -> case Statistics.Matrix.Mutable.unsafeNew2
+                      ret_ty (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+                      of {} }) -}
+ebfe2fa658e00b59d470e300e234f8ea
+  bounds ::
+    Statistics.Matrix.Types.MMatrix s
+    -> GHC.Types.Int
+    -> GHC.Types.Int
+    -> (Statistics.Matrix.Types.MVector s -> GHC.Types.Int -> r)
+    -> r
+  {- Arity: 4,
+     Strictness: <S(SSS),1*U(U,U,U)><S(S),1*U(U)><S(S),1*U(U)><C(C(S)),1*C1(C1(U))>,
+     Inline: (sat-args=4),
+     Unfolding: InlineRule (4, False, False)
+                (\ @ s @ r ->
+                 let {
+                   loc :: [GHC.Types.Char]
+                   = GHC.Base.build
+                       @ GHC.Types.Char
+                       (\ @ b ->
+                        GHC.CString.unpackFoldrCString#
+                          @ b
+                          "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#)
+                 } in
+                 let {
+                   loc1 :: [GHC.Types.Char]
+                   = GHC.Base.build
+                       @ GHC.Types.Char
+                       (\ @ b ->
+                        GHC.CString.unpackFoldrCString# @ b "Statistics.Matrix.Mutable"#)
+                 } in
+                 let {
+                   loc2 :: [GHC.Types.Char]
+                   = GHC.Base.build
+                       @ GHC.Types.Char
+                       (\ @ b ->
+                        GHC.CString.unpackFoldrCString#
+                          @ b
+                          "src/Statistics/Matrix/Mutable.hs"#)
+                 } in
+                 let {
+                   loc3 :: GHC.Types.Int = GHC.Types.I# 72#
+                 } in
+                 let {
+                   loc4 :: GHC.Types.Int = GHC.Types.I# 24#
+                 } in
+                 let {
+                   loc5 :: GHC.Types.Int = GHC.Types.I# 72#
+                 } in
+                 let {
+                   loc6 :: GHC.Types.Int = GHC.Types.I# 52#
+                 } in
+                 let {
+                   $dIP :: [GHC.Types.Char]
+                   = GHC.Base.build
+                       @ GHC.Types.Char
+                       (\ @ b -> GHC.CString.unpackFoldrCString# @ b "error"#)
+                 } in
+                 let {
+                   $dIP1 :: GHC.Stack.Types.SrcLoc
+                   = GHC.Stack.Types.SrcLoc loc loc1 loc2 loc3 loc4 loc5 loc6
+                 } in
+                 let {
+                   $dIP2 :: GHC.Stack.Types.CallStack
+                   = GHC.Stack.Types.PushCallStack
+                       $dIP
+                       $dIP1
+                       GHC.Stack.Types.EmptyCallStack
+                 } in
+                 let {
+                   loc7 :: [GHC.Types.Char]
+                   = GHC.Base.build
+                       @ GHC.Types.Char
+                       (\ @ b ->
+                        GHC.CString.unpackFoldrCString#
+                          @ b
+                          "dense-linear-algebra-0.1.0.0-37BeN9eTwjI5pkGsQBKaZw"#)
+                 } in
+                 let {
+                   loc8 :: [GHC.Types.Char]
+                   = GHC.Base.build
+                       @ GHC.Types.Char
+                       (\ @ b ->
+                        GHC.CString.unpackFoldrCString# @ b "Statistics.Matrix.Mutable"#)
+                 } in
+                 let {
+                   loc9 :: [GHC.Types.Char]
+                   = GHC.Base.build
+                       @ GHC.Types.Char
+                       (\ @ b ->
+                        GHC.CString.unpackFoldrCString#
+                          @ b
+                          "src/Statistics/Matrix/Mutable.hs"#)
+                 } in
+                 let {
+                   loc10 :: GHC.Types.Int = GHC.Types.I# 71#
+                 } in
+                 let {
+                   loc11 :: GHC.Types.Int = GHC.Types.I# 24#
+                 } in
+                 let {
+                   loc12 :: GHC.Types.Int = GHC.Types.I# 71#
+                 } in
+                 let {
+                   loc13 :: GHC.Types.Int = GHC.Types.I# 49#
+                 } in
+                 let {
+                   $dIP3 :: [GHC.Types.Char]
+                   = GHC.Base.build
+                       @ GHC.Types.Char
+                       (\ @ b -> GHC.CString.unpackFoldrCString# @ b "error"#)
+                 } in
+                 let {
+                   $dIP4 :: GHC.Stack.Types.SrcLoc
+                   = GHC.Stack.Types.SrcLoc loc7 loc8 loc9 loc10 loc11 loc12 loc13
+                 } in
+                 let {
+                   $dIP5 :: GHC.Stack.Types.CallStack
+                   = GHC.Stack.Types.PushCallStack
+                       $dIP3
+                       $dIP4
+                       GHC.Stack.Types.EmptyCallStack
+                 } in
+                 \ (ds :: Statistics.Matrix.Types.MMatrix s)
+                   (r1 :: GHC.Types.Int)
+                   (c :: GHC.Types.Int)
+                   (k :: Statistics.Matrix.Types.MVector s -> GHC.Types.Int -> r) ->
+                 case ds of wild { Statistics.Matrix.Types.MMatrix dt dt1 mv ->
+                 let {
+                   $j :: r <join 0> {- Strictness: x -}
+                   = GHC.Err.error
+                       @ 'GHC.Types.LiftedRep
+                       @ r
+                       $dIP5
+                         `cast`
+                       (Sym (GHC.Classes.N:IP[0]
+                                 <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                       (GHC.Base.build
+                          @ GHC.Types.Char
+                          (\ @ b ->
+                           GHC.CString.unpackFoldrCString# @ b "row out of bounds"#))
+                 } in
+                 case GHC.Classes.ltInt r1 (GHC.Types.I# 0#) of wild1 {
+                   GHC.Types.False
+                   -> case GHC.Classes.geInt r1 (GHC.Types.I# dt) of wild2 {
+                        GHC.Types.False
+                        -> let {
+                             $j1 :: r <join 0> {- Strictness: x -}
+                             = GHC.Err.error
+                                 @ 'GHC.Types.LiftedRep
+                                 @ r
+                                 $dIP2
+                                   `cast`
+                                 (Sym (GHC.Classes.N:IP[0]
+                                           <"callStack">_N <GHC.Stack.Types.CallStack>_N))
+                                 (GHC.Base.build
+                                    @ GHC.Types.Char
+                                    (\ @ b ->
+                                     GHC.CString.unpackFoldrCString# @ b "column out of bounds"#))
+                           } in
+                           case GHC.Classes.ltInt c (GHC.Types.I# 0#) of wild3 {
+                             GHC.Types.False
+                             -> case GHC.Classes.geInt c (GHC.Types.I# dt1) of wild4 {
+                                  GHC.Types.False
+                                  -> case r1 of wild5 { GHC.Types.I# x ->
+                                     case c of wild6 { GHC.Types.I# y ->
+                                     k mv (GHC.Types.I# (GHC.Prim.+# (GHC.Prim.*# x dt1) y)) } }
+                                  GHC.Types.True -> $j1 }
+                             GHC.Types.True -> $j1 }
+                        GHC.Types.True -> $j }
+                   GHC.Types.True -> $j } }) -}
+7c43adb4b119bd67f717440d1019e025
+  immutably ::
+    Control.DeepSeq.NFData a =>
+    Statistics.Matrix.Types.MMatrix s
+    -> (Statistics.Matrix.Types.Matrix -> a) -> GHC.ST.ST s a
+  {- Arity: 4, HasNoCafRefs,
+     Strictness: <C(S),1*C1(H)><S(LLS(LLS)),1*U(U,U,U(U,U,U))><L,1*C1(U)><S,U>,
+     Inline: (sat-args=2),
+     Unfolding: InlineRule (3, False, False)
+                (\ @ a
+                   @ s
+                   ($dNFData :: Control.DeepSeq.NFData a)
+                   (mmat :: Statistics.Matrix.Types.MMatrix s)
+                   (f :: Statistics.Matrix.Types.Matrix -> a)
+                   (s1 :: GHC.Prim.State# s) ->
+                 case mmat of wild { Statistics.Matrix.Types.MMatrix dt dt1 mv ->
+                 case mv
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:MVectorsDouble0[0]
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                     <s>_N)) ; Data.Vector.Unboxed.Base.N:R:MVectorsDouble[0]
+                                                   <Control.Monad.Primitive.PrimState
+                                                      (GHC.ST.ST
+                                                         s)>_N) of wild1 { Data.Vector.Primitive.Mutable.MVector dt2 dt3 dt4 ->
+                 case GHC.Prim.unsafeFreezeByteArray#
+                        @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                        dt4
+                        s1
+                          `cast`
+                        (GHC.Prim.State#
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                     <s>_N)))_R of ds1 { (#,#) ipv ipv1 ->
+                 let {
+                   ipv2 :: a
+                   = f (Statistics.Matrix.Types.Matrix
+                          dt
+                          dt1
+                          (Data.Vector.Primitive.Vector @ GHC.Types.Double dt2 dt3 ipv1)
+                            `cast`
+                          (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0])))
+                 } in
+                 case $dNFData `cast` (Control.DeepSeq.N:NFData[0] <a>_N)
+                        ipv2 of wild2 { () ->
+                 (# ipv
+                      `cast`
+                    (GHC.Prim.State#
+                       (Control.Monad.Primitive.D:R:PrimStateST[0] <s>_N))_R,
+                    ipv2 #) } } } })
+                  `cast`
+                (forall (a :: <*>_N) (s :: <*>_N).
+                 <Control.DeepSeq.NFData a>_R
+                 ->_R <Statistics.Matrix.Types.MMatrix s>_R
+                 ->_R <Statistics.Matrix.Types.Matrix -> a>_R
+                 ->_R Sym (GHC.ST.N:ST[0] <s>_N <a>_R)) -}
+95013102f75cd2def8311f21570efe7a
+  replicate ::
+    GHC.Types.Int
+    -> GHC.Types.Int
+    -> GHC.Types.Double
+    -> GHC.ST.ST s (Statistics.Matrix.Types.MMatrix s)
+  {- Arity: 4,
+     Strictness: <S(S),1*U(U)><S(S),1*U(U)><S(S),1*U(U)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                Statistics.Matrix.Mutable.replicate1
+                  `cast`
+                (forall (s :: <*>_N).
+                 <GHC.Types.Int>_R
+                 ->_R <GHC.Types.Int>_R
+                 ->_R <GHC.Types.Double>_R
+                 ->_R Sym (GHC.ST.N:ST[0]
+                               <s>_N <Statistics.Matrix.Types.MMatrix s>_R)) -}
+7d3865512ccbe16ccec9cbd1cd528e9e
+  replicate1 ::
+    GHC.Types.Int
+    -> GHC.Types.Int
+    -> GHC.Types.Double
+    -> GHC.Prim.State# s
+    -> (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+  {- Arity: 4,
+     Strictness: <S(S),1*U(U)><S(S),1*U(U)><S(S),1*U(U)><S,U>,
+     Inline: [2],
+     Unfolding: InlineRule (4, True, False)
+                (\ @ s
+                   (w :: GHC.Types.Int)
+                   (w1 :: GHC.Types.Int)
+                   (w2 :: GHC.Types.Double)
+                   (w3 :: GHC.Prim.State# s) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 case w1 of ww2 { GHC.Types.I# ww3 ->
+                 case w2 of ww4 { GHC.Types.D# ww5 ->
+                 Statistics.Matrix.Mutable.$wreplicate @ s ww1 ww3 ww5 w3 } } }) -}
+207f996ee44f16fcf1875aa1c635a7e2
+  replicate2 :: GHC.Types.Int
+  {- HasNoCafRefs, Strictness: m, Unfolding: (GHC.Types.I# 0#) -}
+1adc16cbfcbfb2894e1bcdc2caf246b8
+  thaw ::
+    Statistics.Matrix.Types.Matrix
+    -> GHC.ST.ST s (Statistics.Matrix.Types.MMatrix s)
+  {- Arity: 2, Strictness: <S(SSS(SSS)),1*U(U,U,U(U,U,U))><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                Statistics.Matrix.Mutable.thaw1
+                  `cast`
+                (forall (s :: <*>_N).
+                 <Statistics.Matrix.Types.Matrix>_R
+                 ->_R Sym (GHC.ST.N:ST[0]
+                               <s>_N <Statistics.Matrix.Types.MMatrix s>_R)) -}
+347c55901582aec787721d15d40e42ac
+  thaw1 ::
+    Statistics.Matrix.Types.Matrix
+    -> GHC.Prim.State# s
+    -> (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+  {- Arity: 2, Strictness: <S(SSS(SSS)),1*U(U,U,U(U,U,U))><S,U>,
+     Inline: [2],
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   (w :: Statistics.Matrix.Types.Matrix)
+                   (w1 :: GHC.Prim.State# s) ->
+                 case w of ww { Statistics.Matrix.Types.Matrix ww1 ww2 ww3 ->
+                 case ww3
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0] ; Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) of ww4 { Data.Vector.Primitive.Vector ww5 ww6 ww7 ->
+                 Statistics.Matrix.Mutable.$wthaw @ s ww1 ww2 ww5 ww6 ww7 w1 } }) -}
+d9919af0fdf941924d79cd9b5aeb310c
+  unsafeBounds ::
+    Statistics.Matrix.Types.MMatrix s
+    -> GHC.Types.Int
+    -> GHC.Types.Int
+    -> (Statistics.Matrix.Types.MVector s -> GHC.Types.Int -> r)
+    -> r
+  {- Arity: 4, HasNoCafRefs,
+     Strictness: <S(LLS),1*U(A,U,U)><S,1*U(U)><S,1*U(U)><C(C(S)),1*C1(C1(U))>,
+     Inline: (sat-args=4),
+     Unfolding: InlineRule (4, False, False)
+                (\ @ s
+                   @ r
+                   (ds :: Statistics.Matrix.Types.MMatrix s)
+                   (r1 :: GHC.Types.Int)
+                   (c :: GHC.Types.Int)
+                   (k :: Statistics.Matrix.Types.MVector s -> GHC.Types.Int -> r) ->
+                 case ds of wild { Statistics.Matrix.Types.MMatrix dt dt1 mv ->
+                 case r1 of wild1 { GHC.Types.I# x ->
+                 case c of wild2 { GHC.Types.I# y ->
+                 k mv (GHC.Types.I# (GHC.Prim.+# (GHC.Prim.*# x dt1) y)) } } }) -}
+bc9f5cf22c0615c386ce22d7e17000af
+  unsafeFreeze ::
+    Statistics.Matrix.Types.MMatrix s
+    -> GHC.ST.ST s Statistics.Matrix.Types.Matrix
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS(LLS)),1*U(U,U,U(U,U,U))><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                Statistics.Matrix.Mutable.unsafeFreeze1
+                  `cast`
+                (forall (s :: <*>_N).
+                 <Statistics.Matrix.Types.MMatrix s>_R
+                 ->_R Sym (GHC.ST.N:ST[0]
+                               <s>_N <Statistics.Matrix.Types.Matrix>_R)) -}
+021e8bcb6ffae4a65544c28b400dc40d
+  unsafeFreeze1 ::
+    Statistics.Matrix.Types.MMatrix s
+    -> GHC.Prim.State# s
+    -> (# GHC.Prim.State# s, Statistics.Matrix.Types.Matrix #)
+  {- Arity: 2, HasNoCafRefs,
+     Strictness: <S(LLS(LLS)),1*U(U,U,U(U,U,U))><S,U>,
+     Unfolding: InlineRule (2, True, False)
+                (\ @ s
+                   (ds :: Statistics.Matrix.Types.MMatrix s)
+                   (eta :: GHC.Prim.State# s) ->
+                 case ds of wild { Statistics.Matrix.Types.MMatrix dt dt1 mv ->
+                 case mv
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:MVectorsDouble0[0]
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                     <s>_N)) ; Data.Vector.Unboxed.Base.N:R:MVectorsDouble[0]
+                                                   <Control.Monad.Primitive.PrimState
+                                                      (GHC.ST.ST
+                                                         s)>_N) of wild1 { Data.Vector.Primitive.Mutable.MVector dt2 dt3 dt4 ->
+                 case GHC.Prim.unsafeFreezeByteArray#
+                        @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                        dt4
+                        eta
+                          `cast`
+                        (GHC.Prim.State#
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                     <s>_N)))_R of ds1 { (#,#) ipv ipv1 ->
+                 (# ipv
+                      `cast`
+                    (GHC.Prim.State#
+                       (Control.Monad.Primitive.D:R:PrimStateST[0] <s>_N))_R,
+                    Statistics.Matrix.Types.Matrix
+                      dt
+                      dt1
+                      (Data.Vector.Primitive.Vector @ GHC.Types.Double dt2 dt3 ipv1)
+                        `cast`
+                      (Sym (Data.Vector.Unboxed.Base.N:R:VectorDouble[0]) ; Sym (Data.Vector.Unboxed.Base.D:R:VectorDouble0[0])) #) } } }) -}
+78408171157da046c253a9e884ccd27e
+  unsafeModify ::
+    Statistics.Matrix.Types.MMatrix s
+    -> GHC.Types.Int
+    -> GHC.Types.Int
+    -> (GHC.Types.Double -> GHC.Types.Double)
+    -> GHC.ST.ST s ()
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <S(LSS(SLS)),1*U(A,U,U(U,A,U))><S(S),1*U(U)><S(S),1*U(U)><C(S(S)),1*C1(U(U))><S,U>,
+     Inline: (sat-args=4),
+     Unfolding: InlineRule (4, False, False)
+                (\ @ s
+                   (mat :: Statistics.Matrix.Types.MMatrix s)
+                   (row :: GHC.Types.Int)
+                   (col :: GHC.Types.Int)
+                   (f :: GHC.Types.Double -> GHC.Types.Double) ->
+                 case mat of wild { Statistics.Matrix.Types.MMatrix dt dt1 mv ->
+                 case row of wild1 { GHC.Types.I# x ->
+                 case col of wild2 { GHC.Types.I# y ->
+                 let {
+                   ipv :: GHC.Prim.Int# = GHC.Prim.+# (GHC.Prim.*# x dt1) y
+                 } in
+                 (\ (s1 :: GHC.Prim.State# s) ->
+                  case mv
+                         `cast`
+                       (Data.Vector.Unboxed.Base.D:R:MVectorsDouble0[0]
+                            (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                      <s>_N)) ; Data.Vector.Unboxed.Base.N:R:MVectorsDouble[0]
+                                                    <Control.Monad.Primitive.PrimState
+                                                       (GHC.ST.ST
+                                                          s)>_N) of wild3 { Data.Vector.Primitive.Mutable.MVector dt2 dt3 dt4 ->
+                  case GHC.Prim.readDoubleArray#
+                         @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                         dt4
+                         (GHC.Prim.+# dt2 ipv)
+                         s1
+                           `cast`
+                         (Nth:2
+                              ((GHC.Prim.State#
+                                  (Sym (Control.Monad.Primitive.D:R:PrimStateST[0] <s>_N)))_R
+                               ->_R ((#,#)
+                                       <'GHC.Types.TupleRep '[]>_R
+                                       <'GHC.Types.LiftedRep>_R
+                                       (GHC.Prim.State#
+                                          (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                                    <s>_N)))_R
+                                       <GHC.Types.Double>_R)_R)) of ds { (#,#) ipv1 ipv2 ->
+                  case f (GHC.Types.D# ipv2) of wild4 { GHC.Types.D# x# ->
+                  case GHC.Prim.writeDoubleArray#
+                         @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                         dt4
+                         (GHC.Prim.+# dt2 ipv)
+                         x#
+                         ipv1 of s'# { DEFAULT ->
+                  (# s'#, GHC.Tuple.() #)
+                    `cast`
+                  (Nth:3
+                       ((GHC.Prim.State#
+                           (Control.Monad.Primitive.D:R:PrimStateST[0] <s>_N))_R
+                        ->_R ((#,#)
+                                <'GHC.Types.TupleRep '[]>_R
+                                <'GHC.Types.LiftedRep>_R
+                                (GHC.Prim.State#
+                                   (Control.Monad.Primitive.D:R:PrimStateST[0] <s>_N))_R
+                                <()>_R)_R)) } } } })
+                   `cast`
+                 (Sym (GHC.ST.N:ST[0] <s>_N <()>_R)) } } }) -}
+1f4bf9e611d856b66d1c39f8a7a8fb6e
+  unsafeNew ::
+    GHC.Types.Int
+    -> GHC.Types.Int -> GHC.ST.ST s (Statistics.Matrix.Types.MMatrix s)
+  {- Arity: 3, Strictness: <S(S),1*U(U)><S(S),1*U(U)><S,U>,
+     Unfolding: InlineRule (0, True, True)
+                Statistics.Matrix.Mutable.unsafeNew1
+                  `cast`
+                (forall (s :: <*>_N).
+                 <GHC.Types.Int>_R
+                 ->_R <GHC.Types.Int>_R
+                 ->_R Sym (GHC.ST.N:ST[0]
+                               <s>_N <Statistics.Matrix.Types.MMatrix s>_R)) -}
+d181fd537302e58d4fb153b9d4554f5a
+  unsafeNew1 ::
+    GHC.Types.Int
+    -> GHC.Types.Int
+    -> GHC.Prim.State# s
+    -> (# GHC.Prim.State# s, Statistics.Matrix.Types.MMatrix s #)
+  {- Arity: 3, Strictness: <S(S),1*U(U)><S(S),1*U(U)><S,U>,
+     Inline: [2],
+     Unfolding: InlineRule (3, True, False)
+                (\ @ s
+                   (w :: GHC.Types.Int)
+                   (w1 :: GHC.Types.Int)
+                   (w2 :: GHC.Prim.State# s) ->
+                 case w of ww { GHC.Types.I# ww1 ->
+                 case w1 of ww2 { GHC.Types.I# ww3 ->
+                 Statistics.Matrix.Mutable.$wunsafeNew @ s ww1 ww3 w2 } }) -}
+e6b8a05f3902393c2e91a88f69cf1a71
+  unsafeNew2 :: GHC.ST.ST s (Statistics.Matrix.Types.MMatrix s)
+  {- Strictness: x -}
+4f9adba20cdc9319c6aaf37ee8408564
+  unsafeNew3 :: GHC.ST.ST s (Statistics.Matrix.Types.MMatrix s)
+  {- Strictness: x -}
+d06404be66d740cbeb340ce062955bcb
+  unsafeNew4 ::
+    GHC.Prim.Int#
+    -> GHC.ST.ST
+         s
+         (Data.Vector.Unboxed.Base.MVector
+            (Control.Monad.Primitive.PrimState (GHC.ST.ST s)) GHC.Types.Double)
+  {- Arity: 1, Strictness: <B,U>x -}
+2f198eddb2b458644064ae6ac1d4015c
+  unsafeRead ::
+    Statistics.Matrix.Types.MMatrix s
+    -> GHC.Types.Int -> GHC.Types.Int -> GHC.ST.ST s GHC.Types.Double
+  {- Arity: 4, HasNoCafRefs,
+     Strictness: <S(LSS(SLS)),1*U(A,U,U(U,A,U))><S(S),1*U(U)><S(S),1*U(U)><S,U>,
+     Inline: (sat-args=3),
+     Unfolding: InlineRule (3, False, False)
+                (\ @ s
+                   (mat :: Statistics.Matrix.Types.MMatrix s)
+                   (r :: GHC.Types.Int)
+                   (c :: GHC.Types.Int) ->
+                 case mat of wild { Statistics.Matrix.Types.MMatrix dt dt1 mv ->
+                 case r of wild1 { GHC.Types.I# x ->
+                 case c of wild2 { GHC.Types.I# y ->
+                 case mv
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:MVectorsDouble0[0]
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                     <s>_N)) ; Data.Vector.Unboxed.Base.N:R:MVectorsDouble[0]
+                                                   <Control.Monad.Primitive.PrimState
+                                                      (GHC.ST.ST
+                                                         s)>_N) of wild3 { Data.Vector.Primitive.Mutable.MVector dt2 dt3 dt4 ->
+                 (Data.Primitive.Types.$fPrimCDouble_$creadByteArray#
+                    @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                    dt4
+                    (GHC.Prim.+# dt2 (GHC.Prim.+# (GHC.Prim.*# x dt1) y)))
+                   `cast`
+                 (Sym (GHC.ST.N:ST[0]
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0] <s>_N))
+                           <GHC.Types.Double>_R)) } } } }) -}
+2c8d241ca1cdfe524221777347e0c7eb
+  unsafeWrite ::
+    Statistics.Matrix.Types.MMatrix s
+    -> GHC.Types.Int
+    -> GHC.Types.Int
+    -> GHC.Types.Double
+    -> GHC.ST.ST s ()
+  {- Arity: 5, HasNoCafRefs,
+     Strictness: <S(LSS(SLS)),1*U(A,U,U(U,A,U))><S(S),1*U(U)><S(S),1*U(U)><S(S),1*U(U)><S,U>,
+     Inline: (sat-args=4),
+     Unfolding: InlineRule (4, False, False)
+                (\ @ s
+                   (mat :: Statistics.Matrix.Types.MMatrix s)
+                   (row :: GHC.Types.Int)
+                   (col :: GHC.Types.Int)
+                   (k :: GHC.Types.Double) ->
+                 case mat of wild { Statistics.Matrix.Types.MMatrix dt dt1 mv ->
+                 case row of wild1 { GHC.Types.I# x ->
+                 case col of wild2 { GHC.Types.I# y ->
+                 case mv
+                        `cast`
+                      (Data.Vector.Unboxed.Base.D:R:MVectorsDouble0[0]
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0]
+                                     <s>_N)) ; Data.Vector.Unboxed.Base.N:R:MVectorsDouble[0]
+                                                   <Control.Monad.Primitive.PrimState
+                                                      (GHC.ST.ST
+                                                         s)>_N) of wild3 { Data.Vector.Primitive.Mutable.MVector dt2 dt3 dt4 ->
+                 (\ (s# :: GHC.Prim.State#
+                             (Control.Monad.Primitive.PrimState (GHC.ST.ST s))) ->
+                  case k of wild4 { GHC.Types.D# x# ->
+                  case GHC.Prim.writeDoubleArray#
+                         @ (Control.Monad.Primitive.PrimState (GHC.ST.ST s))
+                         dt4
+                         (GHC.Prim.+# dt2 (GHC.Prim.+# (GHC.Prim.*# x dt1) y))
+                         x#
+                         s# of s'# { DEFAULT ->
+                  (# s'#, GHC.Tuple.() #) } })
+                   `cast`
+                 (Sym (GHC.ST.N:ST[0]
+                           (Sym (Control.Monad.Primitive.D:R:PrimStateST[0] <s>_N))
+                           <()>_R)) } } } }) -}
+trusted: none
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+

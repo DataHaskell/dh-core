@@ -1,0 +1,15 @@
+Configuring hspec-discover-2.6.1...
+Preprocessing library for hspec-discover-2.6.1..
+Building library for hspec-discover-2.6.1..
+[1 of 4] Compiling Paths_hspec_discover ( .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/autogen/Paths_hspec_discover.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Paths_hspec_discover.o )
+[2 of 4] Compiling Test.Hspec.Discover.Config ( src/Test/Hspec/Discover/Config.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/Discover/Config.o )
+[3 of 4] Compiling Test.Hspec.Discover.Sort ( src/Test/Hspec/Discover/Sort.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/Discover/Sort.o )
+[4 of 4] Compiling Test.Hspec.Discover.Run ( src/Test/Hspec/Discover/Run.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Test/Hspec/Discover/Run.o )
+Preprocessing executable 'hspec-discover' for hspec-discover-2.6.1..
+Building executable 'hspec-discover' for hspec-discover-2.6.1..
+[1 of 2] Compiling Main             ( driver/hspec-discover.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/hspec-discover/hspec-discover-tmp/Main.o )
+[2 of 2] Compiling Paths_hspec_discover ( .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/hspec-discover/autogen/Paths_hspec_discover.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/hspec-discover/hspec-discover-tmp/Paths_hspec_discover.o )
+Linking .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/hspec-discover/hspec-discover ...
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/hspec-discover-2.6.1-GcEMs7l4z3NWJQPD5eMXU
+Installing executable hspec-discover in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/bin
+Registering library for hspec-discover-2.6.1..

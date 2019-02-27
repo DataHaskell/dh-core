@@ -1,0 +1,16 @@
+Configuring tf-random-0.5...
+Preprocessing library for tf-random-0.5..
+Building library for tf-random-0.5..
+[1 of 4] Compiling System.Random.TF.Gen ( src/System/Random/TF/Gen.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Random/TF/Gen.o )
+[2 of 4] Compiling System.Random.TF.Init ( src/System/Random/TF/Init.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Random/TF/Init.o )
+
+[;1msrc/System/Random/TF/Init.hs:94:5: [;1m[35mwarning:[0m[0m[;1m [[;1m[35m-Wdeprecations[0m[0m[;1m][0m[0m[;1m
+    In the use of ‘bitSize’ (imported from Data.Bits):
+    Deprecated: "Use 'bitSizeMaybe' or 'finiteBitSize' instead"[0m[0m
+[;1m[34m   |[0m[0m
+[;1m[34m94 |[0m[0m   | [;1m[35mbitSize[0m[0m n > 64 = error "mkTFGen: case where size of Int > 64 not implemented"
+[;1m[34m   |[0m[0m[;1m[35m     ^^^^^^^[0m[0m
+[0m[0m[0m[3 of 4] Compiling System.Random.TF ( src/System/Random/TF.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Random/TF.o )
+[4 of 4] Compiling System.Random.TF.Instances ( src/System/Random/TF/Instances.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/System/Random/TF/Instances.o )
+Installing library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/tf-random-0.5-DGXDH2T2OVbHHRLZ895CUL
+Registering library for tf-random-0.5..

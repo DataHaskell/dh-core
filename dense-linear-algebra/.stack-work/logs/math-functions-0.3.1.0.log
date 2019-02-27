@@ -1,0 +1,37 @@
+Configuring math-functions-0.3.1.0...
+Preprocessing library for math-functions-0.3.1.0..
+Building library for math-functions-0.3.1.0..
+[ 1 of 10] Compiling Numeric.MathFunctions.Comparison ( Numeric/MathFunctions/Comparison.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/MathFunctions/Comparison.o )
+[ 2 of 10] Compiling Numeric.MathFunctions.Constants ( Numeric/MathFunctions/Constants.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/MathFunctions/Constants.o )
+[ 3 of 10] Compiling Numeric.Polynomial ( Numeric/Polynomial.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/Polynomial.o )
+[ 4 of 10] Compiling Numeric.Polynomial.Chebyshev ( Numeric/Polynomial/Chebyshev.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/Polynomial/Chebyshev.o )
+[ 5 of 10] Compiling Numeric.RootFinding ( Numeric/RootFinding.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/RootFinding.o )
+
+[;1mNumeric/RootFinding.hs:47:1: [;1m[35mwarning:[0m[0m[;1m [[;1m[35m-Wunused-imports[0m[0m[;1m][0m[0m[;1m
+    The import of ‘Data.Monoid’ is redundant
+      except perhaps to import instances from ‘Data.Monoid’
+    To import instances alone, use: import Data.Monoid()[0m[0m
+[;1m[34m   |[0m[0m
+[;1m[34m47 |[0m[0m [;1m[35mimport Data.Monoid                      (Monoid(..))[0m[0m
+[;1m[34m   |[0m[0m[;1m[35m ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m[0m
+[0m[0m[0m[ 6 of 10] Compiling Numeric.Series   ( Numeric/Series.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/Series.o )
+[ 7 of 10] Compiling Numeric.SpecFunctions.Internal ( Numeric/SpecFunctions/Internal.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/SpecFunctions/Internal.o )
+
+[;1mNumeric/SpecFunctions/Internal.hs:25:1: [;1m[35mwarning:[0m[0m[;1m [[;1m[35m-Wunused-imports[0m[0m[;1m][0m[0m[;1m
+    The import of ‘expm1’ from module ‘GHC.Float’ is redundant[0m[0m
+[;1m[34m   |[0m[0m
+[;1m[34m25 |[0m[0m [;1m[35mimport GHC.Float (log1p,expm1)[0m[0m
+[;1m[34m   |[0m[0m[;1m[35m ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m[0m
+[0m[0m[0m[ 8 of 10] Compiling Numeric.SpecFunctions.Extra ( Numeric/SpecFunctions/Extra.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/SpecFunctions/Extra.o )
+[ 9 of 10] Compiling Numeric.SpecFunctions ( Numeric/SpecFunctions.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/SpecFunctions.o )
+[10 of 10] Compiling Numeric.Sum      ( Numeric/Sum.hs, .stack-work/dist/x86_64-linux/Cabal-2.4.0.1/build/Numeric/Sum.o )
+
+[;1mNumeric/Sum.hs:63:1: [;1m[35mwarning:[0m[0m[;1m [[;1m[35m-Wunused-imports[0m[0m[;1m][0m[0m[;1m
+    The import of ‘Data.Vector.Generic.Mutable’ is redundant
+      except perhaps to import instances from ‘Data.Vector.Generic.Mutable’
+    To import instances alone, use: import Data.Vector.Generic.Mutable()[0m[0m
+[;1m[34m   |[0m[0m
+[;1m[34m63 |[0m[0m [;1m[35mimport Data.Vector.Generic.Mutable (MVector(..))[0m[0m
+[;1m[34m   |[0m[0m[;1m[35m ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m[0m
+[0m[0m[0mInstalling library in /home/kw/.stack/snapshots/x86_64-linux/lts-13.9/8.6.3/lib/x86_64-linux-ghc-8.6.3/math-functions-0.3.1.0-3DZEqBuHyxoGgp9hwqpfp0
+Registering library for math-functions-0.3.1.0..
