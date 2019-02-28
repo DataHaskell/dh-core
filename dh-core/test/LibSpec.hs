@@ -1,9 +1,9 @@
 module LibSpec where
 
 import Test.Hspec
-import Test.Hspec.QuickCheck
+-- import Test.Hspec.QuickCheck
 
-import Lib 
+-- import Lib 
 
 main :: IO ()
 main = hspec spec
