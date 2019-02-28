@@ -36,11 +36,9 @@ More detailed developer information can be found in the wiki : https://github.co
 ### GHC and Stackage compatibility
 
 
-Tested with :
+Tested against :
 
-- Stackage LTS-11.22 (GHC 8.2.2)
-- Stackage LTS-12.13 (GHC 8.4.3)
-- Stackage LTS-13.0  (GHC 8.6.3)
+- Stackage nightly-2019-02-27 (GHC 8.6.3)
 
 
 ## Contributing
