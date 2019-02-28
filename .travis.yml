@@ -16,12 +16,9 @@ env:
   global:
     - ANALYZE_V=0.2.0
     - DENSE_LINEAR_ALGEBRA_V=0.1.0.0
-    - DATASETS_V=0.3.0
+    - DATASETS_V=0.4.0
   matrix:
-    - ARGS="--resolver lts-11.22"  
-    - ARGS="--resolver lts-12.13"
-    - ARGS="--resolver lts-13.0"
-
+    - ARGS="--resolver nightly-2019-02-27"
 
 before_install:
 # Download and unpack the stack executable
