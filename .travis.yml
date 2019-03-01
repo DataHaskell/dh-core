@@ -15,7 +15,7 @@ addons:
 env:
   global:
     - ANALYZE_V=0.2.0
-    - DENSE_LINEAR_ALGEBRA_V=0.1.0.0
+    - DENSE_LINEAR_ALGEBRA_V=0.2.0.0
     - DATASETS_V=0.4.0
   matrix:
     - ARGS="--resolver nightly-2019-02-27"

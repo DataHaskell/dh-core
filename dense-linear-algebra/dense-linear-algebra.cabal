@@ -1,5 +1,5 @@
 name:                dense-linear-algebra
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            Simple and incomplete pure haskell implementation of linear algebra
 description:
   This library is simply collection of linear-algebra related modules
@@ -13,6 +13,7 @@ copyright:           2018 Author name here
 category:            Math, Statistics, Numeric
 build-type:          Simple
 extra-source-files:  README.md
+                     CHANGELOG.md
 cabal-version:       >=1.10
 tested-with: GHC==7.6.3, GHC==7.8.3, GHC==7.10.3, GHC==8.0.1
 

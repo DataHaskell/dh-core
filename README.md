@@ -45,11 +45,13 @@ Tested against :
 
 1. Open an issue (https://github.com/DataHaskell/dh-core/issues) with a description of what you want to work on (if it's not already open)
 2. Assign or add yourself to the issue contributors
-3. Add code on the issue branch
-4. Add tests "
-5. Add yourself to the list of maintainers in the .cabal file (if you're not already)
-6. Send a pull request, referencing the issue
-7. Merge only _after_ another contributor has reviewed and approved the PR
+3. Pull from `dh-core:master`, start a git branch, add code 
+4. Add tests 
+5. Update the changelog, describing briefly your changes and their possible effects
+6a. If you're working on a contributed package (see next section), increase the version number in the Cabal file accordingly
+6b. If you bumped version numbers, make sure these are updated accordingly in the Travis CI .yaml file
+7. Send a pull request with your branch, referencing the issue
+8. `dh-core` admins : merge only _after_ another admin has reviewed and approved the PR
 
 
 
