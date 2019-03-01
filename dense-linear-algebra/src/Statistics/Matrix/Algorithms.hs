@@ -23,6 +23,7 @@ import qualified Data.Vector.Unboxed as U
 qr :: Matrix -> (Matrix, Matrix)
 qr mat = runST $ do
   let (m,n) = dimension mat
+
   r <- M.replicate n n 0
   a <- M.thaw mat
   for 0 n $ \j -> do
