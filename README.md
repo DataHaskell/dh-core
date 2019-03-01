@@ -48,8 +48,12 @@ Tested against :
 3. Pull from `dh-core:master`, start a git branch, add code 
 4. Add tests 
 5. Update the changelog, describing briefly your changes and their possible effects
-6a. If you're working on a contributed package (see next section), increase the version number in the Cabal file accordingly
-6b. If you bumped version numbers, make sure these are updated accordingly in the Travis CI .yaml file
+6.
+
+* If you're working on a contributed package (see next section), increase the version number in the Cabal file accordingly
+
+* If you bumped version numbers, make sure these are updated accordingly in the Travis CI .yaml file
+
 7. Send a pull request with your branch, referencing the issue
 8. `dh-core` admins : merge only _after_ another admin has reviewed and approved the PR
 
