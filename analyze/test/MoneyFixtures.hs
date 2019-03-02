@@ -18,18 +18,18 @@ datesFiltered = encodeUtf8
         "5,legal fees,bob,3\n")
 
 personsGrouped :: [LBS.ByteString]
-personsGrouped = map encodeUtf8 persons
-    where persons = [T.pack ("date,item-bought,person,units\n" `mappend` 
-        "legal fees,bob,3\n" `mappend` "5,motorbike,bob,2\n" ), 
-                T.pack "date,item-bought,person,units\n" `mappend` 
-            "6,computer,alice,2"]
+personsGrouped = map encodeUtf8 [bob, alice] 
+    where bob = T.pack "date,item-bought,person,units\n" `mappend` 
+            "Legal fees,bob,3\n" `mappend` "5,motorbike,bob,2\n"
+          alice = T.pack "date,item-bought,person,units\n" `mappend` 
+            "6,computer,alice,2"
 
 withpriceCol :: [LBS.ByteString]
-withpriceCol = map encodeUtf8 persons
-    where persons = [T.pack ("date,item-bought,person,units,price\n" `mappend` 
-        "legal fees,bob,3,300\n" `mappend` "5,motorbike,bob,2,200\n" ), 
-                T.pack "date,item-bought,person,units\n" `mappend` 
-            "6,computer,alice,2,100"]
+withpriceCol = map encodeUtf8 [bob, alice]
+    where bob = T.pack "date,item-bought,person,units,price\n" `mappend` 
+            "legal fees,bob,3,300\n" `mappend` "5,motorbike,bob,2,200\n" 
+          alice = T.pack "date,item-bought,person,units\n" `mappend` 
+            "6,computer,alice,2,100"
 
 accumSum :: Vector Text
 accumSum = V.fromList $ ["900", "1300"]
