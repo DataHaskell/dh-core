@@ -50,7 +50,6 @@ instance Arbitrary (RFrameUpdate Text Value) where
 instance Arbitrary Value where
   arbitrary = valueTypeGen >>= valueGen
 
-
 testFixture :: Property
 testFixture = monadicIO $ 
                 do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) -- generate random update
@@ -273,6 +272,7 @@ testUpdateOverlap = monadicIO $
                    frame <- run $ A.fromUpdate frameUp
                       
                    actual <- run $ A.update update frame
+                   --run $ traceIO $ show $ lenKeys * length originalData
                    assert $ actual == expected
 
 testTakeRows :: Property
@@ -340,9 +340,66 @@ testAddColumn = monadicIO $
 
                    assert $ actual == expected
 
+testOneHot :: Property
+testOneHot = monadicIO $ 
+                -- the general idea is to generate an update, then split it into two overlapping parts.
+                -- one part will be an update, the other will be the frame. Modify the overlapping part of the frame,
+                -- then call A.update and compare with the original
+                do original <- pick (arbitrary :: Gen (RFrameUpdate Text Value)) 
+                   originalFrame <- run $ A.fromUpdate original
+
+                   let originalKeys = A._rframeUpdateKeys original
+                       lenKeys = length originalKeys
+
+                   pre $ not (null originalKeys)
+                   
+
+                   let
+                      keyToTest = V.head originalKeys
+                      originalData = A._rframeUpdateData original
+                      lenData = length originalData               
+
+                   -- then we want to modify the "original" data, so we generate random new data for the overlap
+                   indexTrue <- pick $ choose (0, lenData-1)
+                   indexFalse <- pick $ choose (0,lenData-1)
+
+                   let
+                       trueValue = (V.head <$> originalData) V.! indexTrue
+                       falseValue = (V.head <$> originalData) V.! indexFalse
+                       transformedData = (T.pack . show . V.head) <$> originalData
+                       newKeys = uniq transformedData
+                       newData = V.map (match newKeys trueValue falseValue) transformedData
+                                         
+                   expected <- run $ A.fromUpdate $ A.RFrameUpdate newKeys newData
+                   actual <- run $ A.oneHot (\k v -> (T.pack . show) v) keyToTest trueValue falseValue originalFrame
+                   --run $ traceIO $ show $ lenKeys * length originalData
+                   run $ traceIO $ "-----------------------\n-----------------------"
+                   run $ traceIO $ "Original Update: " ++ show original
+                   run $ traceIO $ "-----"
+                   run $ traceIO $ "Original data: " ++ show originalData
+                   run $ traceIO $ "-----"
+                   run $ traceIO $ "Key to test: " ++ show keyToTest
+                   run $ traceIO $ "-----"
+                   run $ traceIO $ "True/false value: " ++ show trueValue ++ "/" ++ show falseValue
+                   run $ traceIO $ "-----"
+                   run $ traceIO $ "Expected result: "  ++ show expected 
+                   run $ traceIO $ "-----"
+                   run $ traceIO $ "From A.oneHot: " ++ show actual
+                   assert $ actual == expected
+
+              where 
+                match ks yesVal noVal tk = V.map (\k -> if k == tk then yesVal else noVal) ks
+                uniq ks = V.reverse (V.fromList newKsR)
+                   where
+                      acc (hs, uks) k =
+                        if HS.member k hs
+                        then (hs, uks)
+                        else (HS.insert k hs, k:uks)
+                      (_, newKsR) = V.foldl acc (HS.empty, []) ks
+
 propTests :: Ts.TestTree
 propTests = Ts.testGroup "Test suite"
-  [ QC.testProperty "Fixture" testFixture,
+  [ {-QC.testProperty "Fixture" testFixture,
     QC.testProperty "Row Decode" testRowDecode,
     QC.testProperty "Drop" testDrop,
     QC.testProperty "Keep" testKeep,
@@ -351,7 +408,8 @@ propTests = Ts.testGroup "Test suite"
     QC.testProperty "Update Add" testUpdateAdd,
     QC.testProperty "Update Overlap" testUpdateOverlap,
     QC.testProperty "Take Rows" testTakeRows,
-    QC.testProperty "Add Column" testAddColumn
+    QC.testProperty "Add Column" testAddColumn,-}
+    QC.testProperty "One Hot" testOneHot
   ]
 
 main :: IO ()
