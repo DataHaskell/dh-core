@@ -14,6 +14,13 @@ packages:
 # (e.g., acme-missiles-0.3)
 extra-deps: []
 
+nix:
+  enable: false
+  packages: 
+  - curl
+  - zlib
+
+
 # Override default flag values for local packages and extra-deps
 # flags: {}
 
