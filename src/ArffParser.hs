@@ -35,19 +35,34 @@ data DataType = Numeric
               | String
               | Date 
               | Relational
+              | Unknown
         deriving (Show)
 
--- | Each attribute in the file        
+-- | Type for name of an attribute        
+type AttName = String   
+
+-- | Type for value of a (class-type) attribute
+type AttVal = String
+
+-- | Type of data for each attribute
+-- |
+-- | There are two kinds of attributes:
+-- | Nominal (class) attributes: Have a list of Class names as value
+-- |   These attributes are used as outputs in a supervised-learning scenareo
+-- | Other attributes: Have names, and constitute features of a sample    
+data AttData = Name AttName | ClassList [AttVal]
+
+-- | Each attribute in the file   
 data Attribute = Attribute 
-    { name :: !String
+    { data     :: !AttData
     , dataType :: !DataType  
-    } deriving (Show)       
+    } deriving (Show)        
 
 -- | Complete content of the ARFF file
 data Content = Content
-    { relationName :: !String
+    { relationName   :: !String
     , attributeNames :: ![Attribute]
-    , dataSamples :: ![String]
+    , dataSamples    :: ![String]
     } deriving (Show)
 
 -- | Parse the ARFF file and fill contents in `Content`    
@@ -70,11 +85,24 @@ spaces = skipWhile (\x -> isSpace_w8 x || isEndOfLine x)
 comment :: Parser String
 comment = string "%" >> manyTill anyChar endOfLine
 
+-- | Name of a relation or an attribute
+name :: Parser String
+name = do
+    let quote = char '"' <|> char '\''
+    satisfy 
+
+
 relation :: Parser String
 relation = stringCI "@relation" >> spaces >> manyTill anyChar endOfLine
 
 attribute :: Parser String
-attribute = stringCI "@attribute" >> spaces >> manyTill anyChar endOfLine
+attribute = do
+    stringCI "@attribute" >> spaces 
+    c <- option $ string "class"
+    n <- satisfy (c == "class") manyTill anyChar endOfLine
+    let dt = if t == "class" Class else Unknown
+
+       
 
 readAttributes :: Parser [Attribute]
 readAttributes = do
