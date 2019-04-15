@@ -1,7 +1,7 @@
 module Generation where
 
 import           Analyze.Common  (Data, makeLookup)
-import           Analyze.RFrame  (RFrame (..))
+import           Analyze.RFrame  (RFrame (..),RFrameUpdate (..))
 import           Analyze.Values
 import           Data.HashSet    (HashSet)
 import qualified Data.HashSet    as HS
@@ -43,6 +43,19 @@ rframeGenSized prod decl numRows = gen
 rframeGen :: Data k => (t -> Gen v) -> Vector (k, t) -> Gen (RFrame k v)
 rframeGen prod decl = sized (rframeGenSized prod decl)
 
+-- needed to generate an updated, copied off the 
+rframeUpdateGenSized :: Data k => (t -> Gen v) -> Vector (k, t) -> Int -> Gen (RFrameUpdate k v)
+rframeUpdateGenSized prod decl numRows = gen
+  where
+    rowGen = sequenceA (prod . snd <$> decl)
+    allRowsGen = V.replicateM numRows rowGen
+    keys = fst <$> decl
+    gen = RFrameUpdate keys <$> allRowsGen
+
+-- again some machinery 
+rframeUpdateGen :: Data k => (t -> Gen v) -> Vector (k, t) -> Gen (RFrameUpdate k v)
+rframeUpdateGen prod decl = sized (rframeUpdateGenSized prod decl)
+
 -- Specifics
 
 nameGen :: Gen Text
@@ -62,3 +75,18 @@ valueDeclGen = declGen nameGen valueTypeGen
 
 valueRFrameGen :: Gen (RFrame Text Value)
 valueRFrameGen = valueDeclGen >>= rframeGen valueGen
+
+
+-- generates an update
+valueRFrameUpdateGen :: Gen (RFrameUpdate Text Value)
+valueRFrameUpdateGen = valueDeclGen >>= rframeUpdateGen valueGen
+
+
+-- things down there serve to produce updates with only doubles
+-- only ouputs Vector (Text, ValueTypeDouble))
+valueDeclGenDouble :: Gen (Vector (Text, ValueType))
+valueDeclGenDouble = declGen nameGen (elements [ValueTypeDouble])
+
+-- the actual generator
+doubleRFrameUpdateGen :: Gen (RFrameUpdate Text Value)
+doubleRFrameUpdateGen = valueDeclGenDouble >>= rframeUpdateGen valueGen-- a frame generator that will only have Double's as data
