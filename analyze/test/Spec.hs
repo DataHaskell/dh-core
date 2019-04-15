@@ -24,7 +24,6 @@ import Test.QuickCheck.Monadic (assert, monadicIO, run, pick, pre)
 import qualified Test.Tasty            as Ts
 import qualified Test.Tasty.QuickCheck as QC
 
-
 instance Arbitrary (RFrameUpdate Text Value) where 
     arbitrary = G.valueRFrameUpdateGen
 
@@ -78,10 +77,7 @@ testRowDecode = monadicIO $
 
                 where
                    extractDouble (ValueDouble double) = double -- unsafely extract the value inside a ValueDouble, because we're guaranteed to have a ValueDouble from the Gen
-                   {-valueGenDouble ValueTypeDouble = ValueDouble <$> arbitrary -- we will only ouput ValueDouble
-                   valueDeclGenDouble = declGen nameGen (elements [ValueTypeDouble])
-                   doubleRFrameUpdateGen = valueDeclGenDouble >>= rframeUpdateGen valueGenDouble -- a frame generator that will only have Double's as data
--}
+                   
 testDrop :: Property
 testDrop = monadicIO $ 
                 do update <- pick (arbitrary :: Gen (RFrameUpdate Text Value))
