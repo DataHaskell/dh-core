@@ -26,9 +26,11 @@ library:
   source-dirs: src
   dependencies:
   - attoparsec
+  - word8
+  - bytestring
 
 executables:
-  arffparser-exe:
+  arffparser:
     main:                Main.hs
     source-dirs:         app
     ghc-options:

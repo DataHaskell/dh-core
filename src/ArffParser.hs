@@ -1,10 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, GADTs #-}
 {-# OPTIONS_GHC -funbox-strict-fields #-}
 
 {- |
 Module      :  ArffParser
 Description :  Parser for datasets in the Atrribute-Relation File Format (ARFF)
-Copyright   :  (c) Arvind Devarajan, datahaskell
+Copyright   :  (c) Arvind Devarajan
 License     :  MIT
 
 Maintainer  :  arvindd
@@ -19,15 +19,16 @@ module ArffParser where
     -- , Content
     -- ) where
 
-import Control.Applicative        
-import qualified Data.Char as C
-import Debug.Trace
-import Data.Attoparsec.ByteString.Lazy
-    hiding (take, takeWhile) 
-import Data.Attoparsec.ByteString.Char8 as AttoC 
-    hiding (skipWhile, take, takeWhile)
+import Prelude hiding (take, takeWhile)        
+import Control.Applicative ((<$>), (<|>)) 
+import Data.Dynamic
+import Data.ByteString (ByteString, pack, unpack)
+import Data.Word8 (Word8, toLower)
+import Data.Attoparsec.ByteString.Lazy hiding (satisfy)
+import Data.Attoparsec.ByteString.Char8 
+          hiding (skipWhile, takeWhile, takeWhile1, inClass, notInClass)
 
--- | Data types of attributes
+-- | Data types of attributes 
 data DataType = Numeric 
               | Integer
               | Real
@@ -37,99 +38,109 @@ data DataType = Numeric
               | Relational
               | Unknown
         deriving (Show)
+ 
+{-|
+  Attributes can be of two forms:
+  - Name of the attribute, along with its data type
+  - Class (or nominal form), with valid  values for the class
+-}
+data Attribute where
+    -- | Attr <name> <datatype>   
+    Attr   :: ByteString -> DataType -> Attribute
 
--- | Type for name of an attribute        
-type AttName = String   
+    -- | AttCls <class names>
+    AttCls :: [ByteString] -> Attribute 
+    deriving (Show)
 
--- | Type for value of a (class-type) attribute
-type AttVal = String
+-- | Type for each data record in the ARFF file    
+type ArffRecord = [Dynamic]
 
--- | Type of data for each attribute
--- |
--- | There are two kinds of attributes:
--- | Nominal (class) attributes: Have a list of Class names as value
--- |   These attributes are used as outputs in a supervised-learning scenareo
--- | Other attributes: Have names, and constitute features of a sample    
-data AttData = Name AttName | ClassList [AttVal]
-
--- | Each attribute in the file   
-data Attribute = Attribute 
-    { data     :: !AttData
-    , dataType :: !DataType  
-    } deriving (Show)        
-
--- | Complete content of the ARFF file
-data Content = Content
-    { relationName   :: !String
-    , attributeNames :: ![Attribute]
-    , dataSamples    :: ![String]
-    } deriving (Show)
-
--- | Parse the ARFF file and fill contents in `Content`    
-parseArff :: Parser Content
-parseArff = do
+-- | Parse the ARFF file, and return (Relation name, ARFF Records)
+parseArff :: Parser ([Attribute], [ArffRecord])
+parseArff = do  
     skipMany comment >> spaces
     rel <- relation
     skipMany comment >> spaces
-    atts <- readAttributes
+    atts <- many' attribute
     skipMany comment >> spaces
-    -- dats <- readDataSamples
-    -- skipMany comment >> spaces
-    return $ Content rel atts ["hello"]
+    stringCI "@data" >> spaces
+    skipMany comment >> spaces
+    dat <- manyTill record endOfInput 
+    datval <- return $ map (recordvals atts) dat     
+    return (atts, datval)
+
+{-- |
+ Given an attribute's data type, converts a field to a dynamic value
+ fieldval datatype field => Field value.
+--}    
+fieldval :: Attribute -> ByteString -> Dynamic
+fieldval att field = undefined
+
+{--
+Given a set of attributes, convert a record into an ArffRecord
+recordvals <attributes> <record>
+--}
+recordvals :: [Attribute] -> [ByteString] -> ArffRecord
+recordvals a r = zipWith fieldval a r               
 
 ----------------------- All parsers --------------------------
-
 spaces :: Parser ()
 spaces = skipWhile (\x -> isSpace_w8 x || isEndOfLine x)
 
-comment :: Parser String
-comment = string "%" >> manyTill anyChar endOfLine
+comment :: Parser ()
+comment = char '%' >> manyTill anyWord8 endOfLine >> return ()
+
+eol :: Parser ()
+eol = endOfLine <|> comment
 
 -- | Name of a relation or an attribute
-name :: Parser String
-name = do
-    let quote = char '"' <|> char '\''
-    satisfy 
+quotedName :: Parser ByteString
+quotedName = do
+    quote <- char '"' <|> char '\''
+    pack <$> manyTill anyWord8 (char quote)
 
+unquotedName :: Parser ByteString
+unquotedName = takeWhile (\x -> not (isHorizontalSpace x))
 
-relation :: Parser String
-relation = stringCI "@relation" >> spaces >> manyTill anyChar endOfLine
+relation :: Parser ByteString
+relation = stringCI "@relation" >> spaces >> pack <$> manyTill anyWord8 eol
 
-attribute :: Parser String
+attribute :: Parser Attribute
 attribute = do
     stringCI "@attribute" >> spaces 
-    c <- option $ string "class"
-    n <- satisfy (c == "class") manyTill anyChar endOfLine
-    let dt = if t == "class" Class else Unknown
+    c <- stringCI "class" <|> unquotedName <|> quotedName
+    case c of
+        "class"     -> attclass c
+        _           -> atttype c
+  where
+    attclass :: ByteString -> Parser Attribute
+    attclass c = undefined
 
-       
-
-readAttributes :: Parser [Attribute]
-readAttributes = do
-    attStrs <- many' attribute
-    return $ makeAttribute <$> attStrs
-  where   
-    makeAttribute :: String -> Attribute
-    makeAttribute s = Attribute (attname s) (dattype s) where 
-        attname :: String -> String
-        attname s
-            | head s == '"' = takeWhile (\x -> x /= '"') $ tail s
-            | otherwise     = takeWhile (\x -> (x /= ' ') && (x /= '\t')) s
-        dattype :: String -> DataType            
-        dattype s = case (strToLower $ dtype s) of
+    atttype :: ByteString -> Parser Attribute
+    atttype c = do
+        t <- spaces >> manyTill anyWord8 eol
+        return $ Attr c (dattype t)
+      where
+        dattype :: [Word8] -> DataType            
+        dattype s = case (strToLower s) of
             "numeric"    -> Numeric            
             "integer"    -> Integer
             "real"       -> Real
             "string"     -> String
             "date"       -> Date
             "relational" -> Relational
-            _            -> Numeric
+            _            -> Unknown
           where
-            dtype s = takeWhile (\x -> (x /= '\r') || (x /= '\n')) 
-                        $ drop (length $ attname s) s
-    
-strToLower :: String -> String
-strToLower s = [C.toLower x | x <- s, not $ (C.isSpace x) ]
+            strToLower :: [Word8] -> ByteString
+            strToLower s = pack [toLower x | x <- s]
 
-readDataSamples :: Parser [String]
-readDataSamples = undefined
+----------------------- Parsers for parsing CSV data records ----------
+
+fieldSeperator :: Parser ByteString
+fieldSeperator = takeWhile1 (inClass " ,")            
+
+record :: Parser [ByteString]
+record = field `sepBy` fieldSeperator
+
+field :: Parser ByteString
+field = takeWhile1 (\x->(not $ isSpace_w8 x) && notInClass "," x)
