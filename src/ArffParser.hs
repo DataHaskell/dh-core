@@ -23,6 +23,7 @@ import Prelude hiding (take, takeWhile)
 import Control.Applicative ((<$>), (<|>)) 
 import Data.Dynamic
 import Data.ByteString (ByteString, pack, unpack)
+import Data.ByteString.Char8 (readInt)
 import Data.Word8 (Word8, toLower)
 import Data.Attoparsec.ByteString.Lazy hiding (satisfy)
 import Data.Attoparsec.ByteString.Char8 
@@ -46,20 +47,26 @@ data DataType = Numeric
 -}
 data Attribute where
     -- | Attr <name> <datatype>   
-    Attr   :: ByteString -> DataType -> Attribute
+    Attr :: {
+      attname :: ByteString
+    , atttype :: DataType
+    } -> Attribute
 
     -- | AttCls <class names>
-    AttCls :: [ByteString] -> Attribute 
+    AttCls :: {
+      attclasses :: [ByteString]
+    } -> Attribute 
     deriving (Show)
 
--- | Type for each data record in the ARFF file    
-type ArffRecord = [Dynamic]
+-- | Type for each data record in the ARFF file  
+-- | On   
+type ArffRecord = [Maybe Dynamic]
 
 -- | Parse the ARFF file, and return (Relation name, ARFF Records)
 parseArff :: Parser ([Attribute], [ArffRecord])
 parseArff = do  
     skipMany comment >> spaces
-    rel <- relation
+    rel <- relation 
     skipMany comment >> spaces
     atts <- many' attribute
     skipMany comment >> spaces
@@ -73,8 +80,17 @@ parseArff = do
  Given an attribute's data type, converts a field to a dynamic value
  fieldval datatype field => Field value.
 --}    
-fieldval :: Attribute -> ByteString -> Dynamic
-fieldval att field = undefined
+fieldval :: Attribute -> ByteString -> Maybe Dynamic
+fieldval att field = case (atttype att) of
+    Numeric -> realval field
+    Integer -> realval field
+    Real    -> realval field
+  where
+    -- Extracts out the integer value from the field string
+    realval :: ByteString -> Maybe Dynamic
+    realval f = do
+      (i, s) <- readInt f
+      return $ toDyn i
 
 {--
 Given a set of attributes, convert a record into an ArffRecord
