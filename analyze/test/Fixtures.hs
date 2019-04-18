@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings    #-}
+{-# LANGUAGE TypeSynonymInstances #-}
 module Fixtures where
 
 import           Analyze.RFrame      (RFrame (..), RFrameUpdate (..))
