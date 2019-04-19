@@ -60,7 +60,7 @@ data Attribute where
 
 -- | Type for each data record in the ARFF file  
 -- | On   
-type ArffRecord = [Maybe Dynamic]
+type ArffRecord = [Dynamic]
 
 -- | Parse the ARFF file, and return (Relation name, ARFF Records)
 parseArff :: Parser ([Attribute], [ArffRecord])
@@ -72,32 +72,17 @@ parseArff = do
     skipMany comment >> spaces
     stringCI "@data" >> spaces
     skipMany comment >> spaces
-    dat <- manyTill record endOfInput 
-    datval <- return $ map (recordvals atts) dat     
-    return (atts, datval)
+    dat <- manyTill (record atts) endOfInput 
+    -- datval <- return $ map (recordvals atts) dat     
+    return (atts, dat)
 
-{-- |
- Given an attribute's data type, converts a field to a dynamic value
- fieldval datatype field => Field value.
---}    
-fieldval :: Attribute -> ByteString -> Maybe Dynamic
-fieldval att field = case (atttype att) of
-    Numeric -> realval field
-    Integer -> realval field
-    Real    -> realval field
-  where
-    -- Extracts out the integer value from the field string
-    realval :: ByteString -> Maybe Dynamic
-    realval f = do
-      (i, s) <- readInt f
-      return $ toDyn i
 
 {--
 Given a set of attributes, convert a record into an ArffRecord
 recordvals <attributes> <record>
 --}
-recordvals :: [Attribute] -> [ByteString] -> ArffRecord
-recordvals a r = zipWith fieldval a r               
+-- recordvals :: [Attribute] -> [ByteString] -> ArffRecord
+-- recordvals a r = zipWith fieldval a r               
 
 ----------------------- All parsers --------------------------
 spaces :: Parser ()
@@ -152,11 +137,60 @@ attribute = do
 
 ----------------------- Parsers for parsing CSV data records ----------
 
-fieldSeperator :: Parser ByteString
-fieldSeperator = takeWhile1 (inClass " ,")            
+-- Consume the field separator
+fieldSeparator :: Parser ByteString
+fieldSeparator = takeWhile1 (inClass " ,")            
 
-record :: Parser [ByteString]
-record = field `sepBy` fieldSeperator
+-- Return the value parsed by p, after consuming the field separator
+field :: Parser a -> Parser a
+field p = do
+  val <- p
+  fieldSeparator
+  return val
 
-field :: Parser ByteString
-field = takeWhile1 (\x->(not $ isSpace_w8 x) && notInClass "," x)
+-- | Return a data record as a list of Dynamics  
+record :: [Attribute] -> Parser [Dynamic]
+record [] = return []
+record (a:as) = case (atttype a) of
+  Numeric    -> (:) <$> (toDyn <$> doublefield) <*> record as 
+  Integer    -> (:) <$> (toDyn <$> doublefield) <*> record as
+  Real       -> (:) <$> (toDyn <$> doublefield) <*> record as
+  String     -> (:) <$> (toDyn <$> stringfield) <*> record as
+  Date       -> undefined
+  Relational -> undefined
+
+stringfield :: Parser ByteString
+stringfield = field str
+  where
+    str :: Parser ByteString
+    str = takeWhile1 (\x->(not $ isSpace_w8 x) && notInClass "," x)
+
+doublefield :: Parser Double
+doublefield = field double
+
+datefield :: Parser Date
+
+-- where
+--   -- Extracts out the integer value from the field string
+--   realval :: ByteString -> Maybe Dynamic
+--   realval f = do
+--     (i, s) <- readInt f
+--     return $ toDyn i
+   
+
+{-- |
+ Given an attribute's data type, converts a field to a dynamic value
+ fieldval datatype field => Field value.
+--}    
+-- fieldval :: Attribute -> ByteString -> Maybe Dynamic
+-- fieldval att field = case (atttype att) of
+--     Numeric -> realval field
+--     Integer -> realval field
+--     Real    -> realval field
+--   where
+--     -- Extracts out the integer value from the field string
+--     realval :: ByteString -> Maybe Dynamic
+--     realval f = do
+--       (i, s) <- readInt f
+--       return $ toDyn i
+
