@@ -46,7 +46,7 @@ data DataType = Numeric
 {-|
   Attributes can be of two forms:
   - Name of the attribute, along with its data type
-  - Class (or nominal form), with valid  values for the class
+  - Class (or nominal form), with valid values for the class
 -}
 data Attribute where
     -- | Attr <name> <datatype>   
@@ -62,8 +62,7 @@ data Attribute where
     } -> Attribute 
     deriving (Show)
 
--- | Type for each data record in the ARFF file  
--- | On   
+-- | Type for each data record in the ARFF file
 type ArffRecord = [Dynamic]
 
 -- | Parse the ARFF file, and return (Relation name, ARFF Records)
@@ -76,17 +75,8 @@ parseArff = do
     skipMany comment >> spaces
     stringCI "@data" >> spaces
     skipMany comment >> spaces
-    dat <- manyTill (record atts) endOfInput 
-    -- datval <- return $ map (recordvals atts) dat     
+    dat <- manyTill (record atts) endOfInput   
     return (atts, dat)
-
-
-{--
-Given a set of attributes, convert a record into an ArffRecord
-recordvals <attributes> <record>
---}
--- recordvals :: [Attribute] -> [ByteString] -> ArffRecord
--- recordvals a r = zipWith fieldval a r               
 
 ----------------------- All parsers --------------------------
 spaces :: Parser ()
@@ -105,6 +95,8 @@ quotedName = do
     pack <$> manyTill anyWord8 (char quote)
 
 unquotedName :: Parser ByteString
+-- We use isHorizontalSpace instead of isSpace_w8 below because
+-- we want to only capture the character " " or "\t" and not newlines
 unquotedName = takeWhile (\x -> not (isHorizontalSpace x))
 
 relation :: Parser ByteString
@@ -115,11 +107,15 @@ attribute = do
     stringCI "@attribute" >> spaces 
     c <- stringCI "class" <|> unquotedName <|> quotedName
     case c of
-        "class"     -> attclass c
+        "class"     -> attclass
         _           -> atttype c
   where
-    attclass :: ByteString -> Parser Attribute
-    attclass c = undefined
+    attclass :: Parser Attribute
+    attclass = do
+        spaces >> char '{'
+        vals <- word `sepBy` (char ',')
+        char '}'
+        return $ AttCls vals
 
     atttype :: ByteString -> Parser Attribute
     atttype c = do
@@ -186,4 +182,3 @@ field p = do
   val <- p
   fieldSeparator
   return val
-
