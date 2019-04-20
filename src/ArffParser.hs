@@ -30,7 +30,7 @@ import Data.Attoparsec.ByteString.Char8
           hiding (skipWhile, takeWhile, takeWhile1, inClass, notInClass)
 import Data.Time.Calendar (Day)
 import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)
-import Control.Exception (Exception, ArithException, throw)
+import Control.Exception (Exception, TypeError, throw)
 
 -- | Data types of attributes 
 data DataType = Numeric 
@@ -113,9 +113,12 @@ attribute = do
     attclass :: Parser Attribute
     attclass = do
         spaces >> char '{'
-        vals <- word `sepBy` (char ',')
+        vals <- clsname `sepBy` (char ',')
         char '}'
         return $ AttCls vals
+      where
+        clsname :: Parser ByteString
+        clsname = takeWhile1 (\x -> notInClass ",}" x)   
 
     atttype :: ByteString -> Parser Attribute
     atttype c = do
@@ -137,23 +140,49 @@ attribute = do
 
 ----------------------- Parsers for parsing CSV data records ----------
 
--- Exception thrown when a reserved / future keyword from
--- the ARFF file was used in the file that is parsed
+{- |
+  Exception thrown when a reserved / future keyword from
+  the ARFF file was used in the file that is parsed
+-}
 data NotImplementedException = 
   RelationalAttributeException | ReservedException
   deriving (Show)
 instance Exception NotImplementedException
 
+{- |
+ Exception thrown when a data record's field value is not of the
+ type as defined by the attributes in the ARFF file.
+-}
+data InvalidRecordException =
+  InvalidFieldTypeException
+  deriving (Show)
+instance Exception InvalidRecordException
+
 -- | Return a data record as a list of Dynamics  
 record :: [Attribute] -> Parser [Dynamic]
 record [] = return []
-record (a:as) = case (atttype a) of
-  Numeric    -> (:) <$> (toDyn <$> doublefield) <*> record as 
-  Integer    -> (:) <$> (toDyn <$> doublefield) <*> record as
-  Real       -> (:) <$> (toDyn <$> doublefield) <*> record as
-  String     -> (:) <$> (toDyn <$> stringfield) <*> record as
-  Date       -> (:) <$> (toDyn <$> datefield) <*> record as
+record (a:as) = (:) <$> fieldval a <*> record as
+
+{- |
+ Reads a field from the data record, and returns its value as
+ a Dynamic. If the value of the field is not of an expected
+ type (as defined by the attributes in the file), throws
+ an InvalidFieldTypeException.
+-}
+fieldval :: Attribute -> Parser Dynamic
+fieldval (Attr _ t) = case t of
+  Numeric    -> toDyn <$> doublefield 
+  Integer    -> toDyn <$> doublefield
+  Real       -> toDyn <$> doublefield
+  String     -> toDyn <$> stringfield
+  Date       -> toDyn <$> datefield
   Relational -> throw RelationalAttributeException
+fieldval (AttCls cls) = do
+  val <- stringfield
+  if (val `elem` cls) then
+    return $ toDyn val
+  else
+    throw InvalidFieldTypeException
 
 stringfield :: Parser ByteString
 stringfield = field word

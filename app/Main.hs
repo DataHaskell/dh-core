@@ -10,4 +10,3 @@ main :: IO ()
 main = do
     fileContents <- B.readFile "E:/Workspace/datahaskell/arffparser/data/iris.arff"
     print $ Atto.parseOnly parseArff fileContents
-
