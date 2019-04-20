@@ -27,7 +27,7 @@ import qualified Data.ByteString.Char8 as BC8 (pack, unpack)
 import Data.Word8 (Word8, toLower)
 import Data.Attoparsec.ByteString.Lazy hiding (satisfy)
 import Data.Attoparsec.ByteString.Char8
-          hiding (skipWhile, takeWhile, takeWhile1, inClass, notInClass)
+          hiding (skipWhile, takeWhile, inClass, notInClass)
 import Data.Time.Calendar (Day)
 import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)
 import Control.Exception (Exception, TypeError, throw)
@@ -75,7 +75,8 @@ parseArff = do
     skipMany comment >> spaces
     stringCI "@data" >> spaces
     skipMany comment >> spaces
-    dat <- manyTill (record atts) endOfInput   
+    dat <- manyTill (recordlines atts) endOfInput   
+    skipMany comment >> spaces
     return (atts, dat)
 
 ----------------------- All parsers --------------------------
@@ -83,7 +84,7 @@ spaces :: Parser ()
 spaces = skipWhile (\x -> isSpace_w8 x || isEndOfLine x)
 
 comment :: Parser ()
-comment = char '%' >> manyTill anyWord8 endOfLine >> return ()
+comment = char '%' >> manyTill anyWord8 (endOfLine <|> endOfInput) >> return ()
 
 eol :: Parser ()
 eol = endOfLine <|> comment
@@ -118,7 +119,7 @@ attribute = do
         return $ AttCls vals
       where
         clsname :: Parser ByteString
-        clsname = takeWhile1 (\x -> notInClass ",}" x)   
+        clsname = takeWhile (\x -> notInClass ",}" x)   
 
     atttype :: ByteString -> Parser Attribute
     atttype c = do
@@ -157,6 +158,17 @@ data InvalidRecordException =
   InvalidFieldTypeException
   deriving (Show)
 instance Exception InvalidRecordException
+
+{- |
+  Return a data record, and consume any comments following
+  the record. This function takes care of situations where
+  the ARFF files end with empty comment lines. 
+-}
+recordlines :: [Attribute] -> Parser [Dynamic]
+recordlines atts = do
+  val <- record atts
+  skipMany comment >> spaces
+  return val
 
 -- | Return a data record as a list of Dynamics  
 record :: [Attribute] -> Parser [Dynamic]
