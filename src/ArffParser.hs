@@ -206,11 +206,11 @@ datefield = field date
 
 -- Read a word (delimited by a fieldseparator)
 word :: Parser ByteString
-word = takeWhile1 (\x->(not $ isSpace_w8 x) && notInClass "," x)
+word = takeWhile1 (\x->(not $ isSpace_w8 x) && (notInClass "," x))
 
 -- Consume the field separator
 fieldSeparator :: Parser ByteString
-fieldSeparator = takeWhile1 (\x->(isSpace_w8 x) && inClass "," x)
+fieldSeparator = takeWhile1 (\x-> isSpace_w8 x || (inClass "," x))
 
 -- Return the value parsed by p, after consuming the field separator
 field :: Parser a -> Parser a
