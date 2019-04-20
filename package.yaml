@@ -28,6 +28,7 @@ library:
   - attoparsec
   - word8
   - bytestring
+  - time
 
 executables:
   arffparser:

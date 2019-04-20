@@ -23,11 +23,14 @@ import Prelude hiding (take, takeWhile)
 import Control.Applicative ((<$>), (<|>)) 
 import Data.Dynamic
 import Data.ByteString (ByteString, pack, unpack)
-import Data.ByteString.Char8 (readInt)
+import qualified Data.ByteString.Char8 as BC8 (pack, unpack)
 import Data.Word8 (Word8, toLower)
 import Data.Attoparsec.ByteString.Lazy hiding (satisfy)
-import Data.Attoparsec.ByteString.Char8 
+import Data.Attoparsec.ByteString.Char8
           hiding (skipWhile, takeWhile, takeWhile1, inClass, notInClass)
+import Data.Time.Calendar (Day)
+import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)         
+import Data.Maybe (fromMaybe)
 
 -- | Data types of attributes 
 data DataType = Numeric 
@@ -48,13 +51,14 @@ data DataType = Numeric
 data Attribute where
     -- | Attr <name> <datatype>   
     Attr :: {
-      attname :: ByteString
-    , atttype :: DataType
+      attname :: ByteString -- ^ Name of the attribute
+    , atttype :: DataType   -- ^ DataType of the attribute
     } -> Attribute
 
     -- | AttCls <class names>
     AttCls :: {
-      attclasses :: [ByteString]
+      attclasses :: [ByteString] 
+      -- ^ The names of the classes of the "class-type" attribute
     } -> Attribute 
     deriving (Show)
 
@@ -137,17 +141,6 @@ attribute = do
 
 ----------------------- Parsers for parsing CSV data records ----------
 
--- Consume the field separator
-fieldSeparator :: Parser ByteString
-fieldSeparator = takeWhile1 (inClass " ,")            
-
--- Return the value parsed by p, after consuming the field separator
-field :: Parser a -> Parser a
-field p = do
-  val <- p
-  fieldSeparator
-  return val
-
 -- | Return a data record as a list of Dynamics  
 record :: [Attribute] -> Parser [Dynamic]
 record [] = return []
@@ -156,41 +149,41 @@ record (a:as) = case (atttype a) of
   Integer    -> (:) <$> (toDyn <$> doublefield) <*> record as
   Real       -> (:) <$> (toDyn <$> doublefield) <*> record as
   String     -> (:) <$> (toDyn <$> stringfield) <*> record as
-  Date       -> undefined
+  Date       -> (:) <$> (toDyn <$> datefield) <*> record as
   Relational -> undefined
 
 stringfield :: Parser ByteString
-stringfield = field str
-  where
-    str :: Parser ByteString
-    str = takeWhile1 (\x->(not $ isSpace_w8 x) && notInClass "," x)
+stringfield = field word
 
 doublefield :: Parser Double
 doublefield = field double
 
-datefield :: Parser Date
+datefield :: Parser (Maybe Day)
+datefield = field date
+  where
+    date :: Parser (Maybe Day)
+    date = do
+      d <- word 
+      f <- option defformat word
+      return $ parseTimeM False defaultTimeLocale (BC8.unpack f) (BC8.unpack d)
+    
+    defformat :: ByteString
+    defformat = BC8.pack $ iso8601DateFormat Nothing
 
--- where
---   -- Extracts out the integer value from the field string
---   realval :: ByteString -> Maybe Dynamic
---   realval f = do
---     (i, s) <- readInt f
---     return $ toDyn i
-   
+------------- CSV Helper functions -------------------------
 
-{-- |
- Given an attribute's data type, converts a field to a dynamic value
- fieldval datatype field => Field value.
---}    
--- fieldval :: Attribute -> ByteString -> Maybe Dynamic
--- fieldval att field = case (atttype att) of
---     Numeric -> realval field
---     Integer -> realval field
---     Real    -> realval field
---   where
---     -- Extracts out the integer value from the field string
---     realval :: ByteString -> Maybe Dynamic
---     realval f = do
---       (i, s) <- readInt f
---       return $ toDyn i
+-- Read a word (delimited by a fieldseparator)
+word :: Parser ByteString
+word = takeWhile1 (\x->(not $ isSpace_w8 x) && notInClass "," x)
+
+-- Consume the field separator
+fieldSeparator :: Parser ByteString
+fieldSeparator = takeWhile1 (\x->(isSpace_w8 x) && inClass "," x)
+
+-- Return the value parsed by p, after consuming the field separator
+field :: Parser a -> Parser a
+field p = do
+  val <- p
+  fieldSeparator
+  return val
 
