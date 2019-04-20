@@ -29,8 +29,8 @@ import Data.Attoparsec.ByteString.Lazy hiding (satisfy)
 import Data.Attoparsec.ByteString.Char8
           hiding (skipWhile, takeWhile, takeWhile1, inClass, notInClass)
 import Data.Time.Calendar (Day)
-import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)         
-import Data.Maybe (fromMaybe)
+import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)
+import Control.Exception (Exception, ArithException, throw)
 
 -- | Data types of attributes 
 data DataType = Numeric 
@@ -137,6 +137,13 @@ attribute = do
 
 ----------------------- Parsers for parsing CSV data records ----------
 
+-- Exception thrown when a reserved / future keyword from
+-- the ARFF file was used in the file that is parsed
+data NotImplementedException = 
+  RelationalAttributeException | ReservedException
+  deriving (Show)
+instance Exception NotImplementedException
+
 -- | Return a data record as a list of Dynamics  
 record :: [Attribute] -> Parser [Dynamic]
 record [] = return []
@@ -146,7 +153,7 @@ record (a:as) = case (atttype a) of
   Real       -> (:) <$> (toDyn <$> doublefield) <*> record as
   String     -> (:) <$> (toDyn <$> stringfield) <*> record as
   Date       -> (:) <$> (toDyn <$> datefield) <*> record as
-  Relational -> undefined
+  Relational -> throw RelationalAttributeException
 
 stringfield :: Parser ByteString
 stringfield = field word
