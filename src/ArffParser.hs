@@ -40,7 +40,6 @@ data DataType = Numeric
               | String
               | Date 
               | Relational
-              | Unknown
         deriving (Show)
  
 {-|
@@ -55,12 +54,37 @@ data Attribute where
     , atttype :: DataType   -- ^ DataType of the attribute
     } -> Attribute
 
-    -- | AttCls <class names>
+    -- | AttCls <class name> <class-element names>
     AttCls :: {
-      attclasses :: [ByteString] 
-      -- ^ The names of the classes of the "class-type" attribute
+      attname :: ByteString -- ^ Name of the attribute class
+      , attclasses :: [ByteString] 
+      -- ^ The names of the elements of this class
     } -> Attribute 
     deriving (Show)
+
+{- |
+  Exception thrown when a reserved / future keyword from
+  the ARFF file was used in the file that is parsed
+-}
+data NotImplementedException = 
+  RelationalAttributeException 
+  -- ^ Relational attribute waa parsed, and this is reserved for the future
+  | ReservedException
+  -- ^ Some reserved keyword was parsed
+
+  | UnknownAttributeTypeException
+  -- ^ Attribute type error - could not parse
+  deriving (Show)
+instance Exception NotImplementedException
+
+{- |
+ Exception thrown when a data record's field value is not of the
+ type as defined by the attributes in the ARFF file.
+-}
+data InvalidRecordException =
+  InvalidFieldTypeException
+  deriving (Show)
+instance Exception InvalidRecordException
 
 -- | Type for each data record in the ARFF file
 type ArffRecord = [Dynamic]
@@ -103,28 +127,43 @@ unquotedName = takeWhile (\x -> not (isHorizontalSpace x))
 relation :: Parser ByteString
 relation = stringCI "@relation" >> spaces >> pack <$> manyTill anyWord8 eol
 
+{- |
+Consumes attributes: depending on how these are defined in the
+ARFF file, these can be attributes with some data-type or 
+attribute classes. Returns one of these:
+
+Attr <attr-name> <attr-type>
+
+OR
+
+AttCls <attclass-name> <att-class-element-names>
+-}
 attribute :: Parser Attribute
 attribute = do
     stringCI "@attribute" >> spaces 
-    c <- stringCI "class" <|> unquotedName <|> quotedName
+    n <- unquotedName <|> quotedName
+    spaces
+    c <- peekChar'
     case c of
-        "class"     -> attclass
-        _           -> atttype c
+        '{' -> attclass n
+        _   -> atttype n
   where
-    attclass :: Parser Attribute
-    attclass = do
+    attclass :: ByteString -> Parser Attribute
+    -- ^ Create an attribute with AttCls, given the attribute's name
+    attclass n = do
         spaces >> char '{'
-        vals <- clsname `sepBy` (char ',')
-        char '}'
-        return $ AttCls vals
+        vals <- clsname `sepBy` (many1 $ char ',' <|> space)
+        char '}' >> spaces
+        return $ AttCls n vals
       where
         clsname :: Parser ByteString
         clsname = takeWhile (\x -> notInClass ",}" x)   
 
     atttype :: ByteString -> Parser Attribute
-    atttype c = do
+    -- ^ Create an attribute with Attr, given the attribute's name
+    atttype n = do
         t <- spaces >> manyTill anyWord8 eol
-        return $ Attr c (dattype t)
+        return $ Attr n (dattype t)
       where
         dattype :: [Word8] -> DataType            
         dattype s = case (strToLower s) of
@@ -134,30 +173,12 @@ attribute = do
             "string"     -> String
             "date"       -> Date
             "relational" -> Relational
-            _            -> Unknown
+            _            -> throw UnknownAttributeTypeException
           where
             strToLower :: [Word8] -> ByteString
             strToLower s = pack [toLower x | x <- s]
 
 ----------------------- Parsers for parsing CSV data records ----------
-
-{- |
-  Exception thrown when a reserved / future keyword from
-  the ARFF file was used in the file that is parsed
--}
-data NotImplementedException = 
-  RelationalAttributeException | ReservedException
-  deriving (Show)
-instance Exception NotImplementedException
-
-{- |
- Exception thrown when a data record's field value is not of the
- type as defined by the attributes in the ARFF file.
--}
-data InvalidRecordException =
-  InvalidFieldTypeException
-  deriving (Show)
-instance Exception InvalidRecordException
 
 {- |
   Return a data record, and consume any comments following
@@ -189,7 +210,7 @@ fieldval (Attr _ t) = case t of
   String     -> toDyn <$> stringfield
   Date       -> toDyn <$> datefield
   Relational -> throw RelationalAttributeException
-fieldval (AttCls cls) = do
+fieldval (AttCls _ cls) = do
   val <- stringfield
   if (val `elem` cls) then
     return $ toDyn val
