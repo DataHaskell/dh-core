@@ -89,8 +89,8 @@ instance Exception InvalidRecordException
 -- | Type for each data record in the ARFF file
 type ArffRecord = [Dynamic]
 
--- | Parse the ARFF file, and return (Relation name, ARFF Records)
-parseArff :: Parser ([Attribute], [ArffRecord])
+-- | Parse the ARFF file, and return (Relation name, Attributes, ARFF Records)
+parseArff :: Parser (ByteString, [Attribute], [ArffRecord])
 parseArff = do  
     skipMany comment >> spaces
     rel <- relation 
@@ -101,7 +101,7 @@ parseArff = do
     skipMany comment >> spaces
     dat <- manyTill (recordlines atts) endOfInput   
     skipMany comment >> spaces
-    return (atts, dat)
+    return (rel, atts, dat)
 
 ----------------------- All parsers --------------------------
 spaces :: Parser ()
@@ -157,7 +157,7 @@ attribute = do
         return $ AttCls n vals
       where
         clsname :: Parser ByteString
-        clsname = takeWhile (\x -> notInClass ",}" x)   
+        clsname = spaces >> takeWhile (\x -> notInClass ",}" x)   
 
     atttype :: ByteString -> Parser Attribute
     -- ^ Create an attribute with Attr, given the attribute's name

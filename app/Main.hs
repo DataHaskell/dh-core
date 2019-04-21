@@ -4,9 +4,12 @@ module Main where
 
 import ArffParser
 import qualified Data.ByteString as B
-import qualified Data.Attoparsec.ByteString.Lazy as Atto    
+import qualified Data.Attoparsec.ByteString.Lazy as Atto  
+import System.Environment  
 
 main :: IO ()
 main = do
-    fileContents <- B.readFile "E:/Workspace/datahaskell/arffparser/data/contact-lens.arff"
+    args <- getArgs
+    let arffFile = "E:/Workspace/datahaskell/arffparser/data/" ++ head args ++ ".arff"
+    fileContents <- B.readFile arffFile
     print $ Atto.parseOnly parseArff fileContents
