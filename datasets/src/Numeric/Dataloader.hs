@@ -13,6 +13,7 @@
 -- primarily to provide a unified API with training that is not batch-oriented.
 -------------------------------------------------------------------------------
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS_GHC -Wno-unused-top-binds -Wno-name-shadowing #-}
 module Numeric.Dataloader
   ( Dataloader(..)
   , uniformIxline

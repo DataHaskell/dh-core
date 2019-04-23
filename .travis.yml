@@ -1,6 +1,10 @@
 # Use new container infrastructure to enable caching
 sudo: false
 
+os:
+  - linux
+  - osx
+  
 # Choose a lightweight base image; we provide our own build tools.
 language: c
 
@@ -14,20 +18,18 @@ addons:
 # change flags or use --stack-yaml to point to a different file.
 env:
   global:
+    - CODECOV_TOKEN="c11b1f41-6dad-495b-a5b0-fa4170eab2c4"
     - ANALYZE_V=0.2.0
-    - DENSE_LINEAR_ALGEBRA_V=0.1.0.0
-    - DATASETS_V=0.3.0
+    - DENSE_LINEAR_ALGEBRA_V=0.2.0.0
+    - DATASETS_V=0.4.0
   matrix:
-    - ARGS="--resolver lts-11.22"  
-    - ARGS="--resolver lts-12.13"
-    - ARGS="--resolver lts-13.0"
-
+    - ARGS="--resolver nightly-2019-02-27"
 
 before_install:
 # Download and unpack the stack executable
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
-- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+- travis_retry curl -sSL https://get.haskellstack.org/ | sh
 
 # This line does all of the work: installs GHC if necessary, build the library,
 # executables, and test suites, and runs the test suites. --no-terminal works
@@ -35,9 +37,9 @@ before_install:
 script:
 - cd dh-core
 - stack $ARGS --no-terminal --install-ghc test --haddock
-- cat /home/travis/build/DataHaskell/dh-core/dh-core/.stack-work/logs/analyze-${ANALYZE_V}-test.log
-- cat /home/travis/build/DataHaskell/dh-core/dh-core/.stack-work/logs/dense-linear-algebra-${DENSE_LINEAR_ALGEBRA_V}-test.log
-- cat /home/travis/build/DataHaskell/dh-core/dh-core/.stack-work/logs/datasets-${DATASETS_V}-test.log
+- cat .stack-work/logs/analyze-${ANALYZE_V}-test.log
+- cat .stack-work/logs/dense-linear-algebra-${DENSE_LINEAR_ALGEBRA_V}-test.log
+- cat .stack-work/logs/datasets-${DATASETS_V}-test.log
 
 # Caching so the next build will be fast too.
 cache:

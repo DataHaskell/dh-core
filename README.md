@@ -23,39 +23,8 @@ This is the directory structure of the project; the main project lives in the `d
       dh-core-accelerate/
       ....
 
-## Building
 
-We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool; in the `dh-core` subdirectory, run 
-
-    $ stack build
-
-and this will re-build the main project and the contributed packages.
-
-More detailed developer information can be found in the wiki : https://github.com/DataHaskell/dh-core/wiki/Development 
-
-### GHC and Stackage compatibility
-
-
-Tested with :
-
-- Stackage LTS-11.22 (GHC 8.2.2)
-- Stackage LTS-12.13 (GHC 8.4.3)
-- Stackage LTS-13.0  (GHC 8.6.3)
-
-
-## Contributing
-
-1. Open an issue (https://github.com/DataHaskell/dh-core/issues) with a description of what you want to work on (if it's not already open)
-2. Assign or add yourself to the issue contributors
-3. Add code on the issue branch
-4. Add tests "
-5. Add yourself to the list of maintainers in the .cabal file (if you're not already)
-6. Send a pull request, referencing the issue
-7. Merge only _after_ another contributor has reviewed and approved the PR
-
-
-
-### Contributed packages
+## Contributed packages
 
 A number of authors and maintainers agreed to move ownership of their repositories under the `dh-core` umbrella. In some cases, these packages were already published on Hackage and cannot simply disappear from there, nor can this new line of development break downstream packages.
 
@@ -80,6 +49,88 @@ Packages that are listed on Hackage already must be added here as distinct sub-d
 (a) : To be updated
 
 NB: Remember to bump version numbers and change web links accordingly when moving in contributed packages.
+
+
+
+
+
+## Contributing
+
+1. Open an issue (https://github.com/DataHaskell/dh-core/issues) with a description of what you want to work on (if it's not already open)
+2. Assign or add yourself to the issue contributors
+3. Pull from `dh-core:master`, start a git branch, add code 
+4. Add tests 
+5. Update the changelog, describing briefly your changes and their possible effects
+6.
+
+* If you're working on a contributed package (see next section), increase the version number in the Cabal file accordingly
+
+* If you bumped version numbers, make sure these are updated accordingly in the Travis CI .yaml file
+
+7. Send a pull request with your branch, referencing the issue
+8. `dh-core` admins : merge only _after_ another admin has reviewed and approved the PR
+
+
+### GHC and Stackage compatibility
+
+Tested against :
+
+- Stackage nightly-2019-02-27 (GHC 8.6.3)
+
+
+
+## Development information and guidelines
+
+### Dependencies
+
+We use the [`stack`](https://docs.haskellstack.org/en/stable/README/) build tool.
+
+Some systems /might/ need binaries and headers for these additional libraries:
+
+* zlib
+* curl
+
+(however if you're unsure, first try building with your current configuration).
+
+Nix users should set `nix.enable` to `true` in the `dh-core/dh-core/stack.yaml` file.
+
+
+### Building instructions
+
+In the `dh-core/dh-core` subdirectory, run 
+
+    $ stack build
+
+and this will re-build the main project and the contributed packages.
+
+While developing this `stack` command can come in handy : it will trigger a re-build and run the tests every time a file in the project is modified:
+
+    $ stack build --test --ghc-options -Wall --file-watch
+
+## Testing
+
+Example : 
+
+    $ stack test core:doctest core:spec
+
+The `<project>:<test_suite>` pairs determine which tests will be run. 
+
+
+## Continuous Integration (TravisCI)
+
+Travis builds `dh-core` and its hosted projects every time a commit is pushed to Github. 
+Currently the `dh-core/.travis.yml` script uses the following command to install the GHC compiler, build the project and subprojects with `stack`, run the tests and build the Haddock documentation HTMLs:
+
+    - stack $ARGS --no-terminal --install-ghc test core:spec core:doctest dense-linear-algebra:spec --haddock
+
+
+## Visualizing the dependency tree of a package
+
+`stack` can produce a .dot file with the dependency graph of a Haskell project, which can then be rendered by the `dot` tool (from the [`graphviz`](https://graphviz.gitlab.io/_pages/Download/Download_source.html) suite).
+For example, in the following command the output of `stack dot` will be piped into `dot`, which will produce a SVG file called `deps.svg`:
+
+`stack dot --external --no-include-base --prune rts,ghc-prim,ghc-boot-th,template-haskell,transformers,containers,deepseq,bytestring,time,primitive,vector,text,hashable | dot -Tsvg > deps.svg`
+
 
 
 
