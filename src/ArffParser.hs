@@ -31,6 +31,7 @@ import Data.Attoparsec.ByteString.Char8
 import Data.Time.Calendar (Day)
 import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)
 import Control.Exception (Exception, TypeError, throw)
+import Debug.Trace (trace, traceM)
 
 -- | Data types of attributes 
 data DataType = Numeric 
@@ -92,40 +93,53 @@ type ArffRecord = [Dynamic]
 -- | Parse the ARFF file, and return (Relation name, Attributes, ARFF Records)
 parseArff :: Parser (ByteString, [Attribute], [ArffRecord])
 parseArff = do  
-    skipMany comment >> spaces
-    rel <- relation 
-    skipMany comment >> spaces
+    spaces >> skipMany comment >> spaces
+    rel <- relation
+    spaces >> skipMany comment
+    spaces >> skipMany comment
     atts <- many' attribute
-    skipMany comment >> spaces
+    spaces >> skipMany comment
     stringCI "@data" >> spaces
-    skipMany comment >> spaces
+    spaces >> skipMany comment
     dat <- manyTill (recordlines atts) endOfInput   
-    skipMany comment >> spaces
+    spaces >> skipMany comment
     return (rel, atts, dat)
 
 ----------------------- All parsers --------------------------
 spaces :: Parser ()
 spaces = skipWhile (\x -> isSpace_w8 x || isEndOfLine x)
 
-comment :: Parser ()
-comment = char '%' >> manyTill anyWord8 (endOfLine <|> endOfInput) >> return ()
-
 eol :: Parser ()
-eol = endOfLine <|> comment
+eol = endOfLine <|> endOfInput <|> comment
+
+comment :: Parser ()
+comment = char '%' >> 
+  skipWhile (\x->not $ isEndOfLine x) >> 
+  (endOfLine <|> endOfInput)
+
+-- | Parses names (of classes, attributes, etc.) 
+name :: Parser ByteString
+name = do
+  spaces
+  n <- (quotedName <|> unquotedName)
+  return n
 
 -- | Name of a relation or an attribute
 quotedName :: Parser ByteString
 quotedName = do
     quote <- char '"' <|> char '\''
-    pack <$> manyTill anyWord8 (char quote)
+    n <- pack <$> manyTill anyWord8 (char quote)
+    return n
 
 unquotedName :: Parser ByteString
 -- We use isHorizontalSpace instead of isSpace_w8 below because
 -- we want to only capture the character " " or "\t" and not newlines
-unquotedName = takeWhile (\x -> not (isHorizontalSpace x))
+-- unquotedName = takeWhile (\x -> not (isHorizontalSpace x))
+unquotedName = takeWhile (\x -> notInClass ",}\'\"" x 
+    && not (isHorizontalSpace x) && not (isEndOfLine x))
 
 relation :: Parser ByteString
-relation = stringCI "@relation" >> spaces >> pack <$> manyTill anyWord8 eol
+relation = stringCI "@relation" >> spaces >> name
 
 {- |
 Consumes attributes: depending on how these are defined in the
@@ -141,7 +155,7 @@ AttCls <attclass-name> <att-class-element-names>
 attribute :: Parser Attribute
 attribute = do
     stringCI "@attribute" >> spaces 
-    n <- unquotedName <|> quotedName
+    n <- name
     spaces
     c <- peekChar'
     case c of
@@ -151,13 +165,10 @@ attribute = do
     attclass :: ByteString -> Parser Attribute
     -- ^ Create an attribute with AttCls, given the attribute's name
     attclass n = do
-        spaces >> char '{'
-        vals <- clsname `sepBy` (many1 $ char ',' <|> space)
+        char '{' >> spaces  
+        vals <- name `sepBy` (char ',')
         char '}' >> spaces
         return $ AttCls n vals
-      where
-        clsname :: Parser ByteString
-        clsname = spaces >> takeWhile (\x -> notInClass ",}" x)   
 
     atttype :: ByteString -> Parser Attribute
     -- ^ Create an attribute with Attr, given the attribute's name
@@ -218,7 +229,7 @@ fieldval (AttCls _ cls) = do
     throw InvalidFieldTypeException
 
 stringfield :: Parser ByteString
-stringfield = field word
+stringfield = field name
 
 doublefield :: Parser Double
 doublefield = field double
@@ -246,8 +257,37 @@ fieldSeparator :: Parser ByteString
 fieldSeparator = takeWhile (\x->(isSpace_w8 x) || (inClass "," x))
 
 -- Return the value parsed by p, after consuming the field separator
-field :: Parser a -> Parser a
+field :: (Show a) => Parser a -> Parser a
 field p = do
   val <- p
   fieldSeparator
   return val
+
+----------------------- Debug Helpers -----------------------------
+-- Trace with value return: make False to True to switch on tracing
+debug s v | False      = trace s v
+          | otherwise  = v        
+
+-- Trace inside a do block: make False to True to switch on tracing          
+debugM :: (Applicative f) => 
+  String  -- Message that is printed
+  -> f ()
+debugM s | True      = traceM s   
+         | otherwise  = pure () 
+
+-- Peek next char and print
+debugPeekChar :: 
+     String  -- Message that is printed along with next char
+  -> Parser () 
+debugPeekChar s = do
+  c <- peekChar'
+  debugM $ s ++ ": " ++ [c]
+
+-- Eatup next char and print it  
+debugEatChar ::
+     String -- Message that is printed along with next char
+  -> Parser ()
+debugEatChar s = do
+  c <- anyChar
+  debugM $ s ++ ": " ++ [c]  
+-------------------------------------------------------------------
