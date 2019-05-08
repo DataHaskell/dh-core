@@ -79,7 +79,7 @@ test-suite spec
       test
       src
   default-extensions: OverloadedStrings
-  ghc-options: -O2 -fspec-constr-recursive=10 -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
         QuickCheck ,
         aeson ,
