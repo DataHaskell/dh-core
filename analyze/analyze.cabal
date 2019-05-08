@@ -38,21 +38,22 @@ library
         binary ,
         bytestring ,
         cassava ,
-        criterion,
         exceptions ,
         foldl ,
         free ,
         hashable ,
         lucid ,
-        mwc-random,
-        streamly >= 0.6.0,
         text ,
         unordered-containers ,
         vector ,  
-        weigh ,
+        
         -- DEBUG                
         tasty-hunit,
-        tasty-quickcheck
+        tasty-quickcheck ,
+        criterion ,
+        mwc-random ,
+        streamly >= 0.6.0 ,
+        weigh
         -- QuickCheck,
         -- hspec
 
