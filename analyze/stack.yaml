@@ -1,5 +1,4 @@
-resolver: lts-12.14 #just to make it work with my installation of IHaskell
-
+resolver: lts-11.22
 packages:
 - .
 # Dependency packages to be pulled from upstream that are not in the resolver
