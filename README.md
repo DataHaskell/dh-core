@@ -42,9 +42,9 @@ Packages that are listed on Hackage already must be added here as distinct sub-d
 
 | Package | Description | Original author(s) | First version after merge |
 | --- | --- | --- | --- | 
-| `analyze` | Data analysis and manipulation library | [Eric Conlon](https://github.com/ejconlon) | 0.2.0 | 
-| `datasets` | A collection of ready-to-use datasets | [Tom Nielsen](https://github.com/glutamate) | 0.2.6 | 
-| `dense-linear-algebra` | Fast, native dense linear algebra primitives | [Brian O'Sullivan](https://github.com/bos), [Alexey Khudyakov](https://github.com/Shimuuar) | 0.1.0 (a) | 
+| [`analyze`](https://hackage.haskell.org/package/analyze) | Data analysis and manipulation library | [Eric Conlon](https://github.com/ejconlon) | 0.2.0 | 
+| [`datasets`](https://hackage.haskell.org/package/datasets) | A collection of ready-to-use datasets | [Tom Nielsen](https://github.com/glutamate) | 0.2.6 | 
+| [`dense-linear-algebra`](https://hackage.haskell.org/package/dense-linear-algebra) | Fast, native dense linear algebra primitives | [Brian O'Sullivan](https://github.com/bos), [Alexey Khudyakov](https://github.com/Shimuuar) | 0.1.0 (a) | 
 
 (a) : To be updated
 
