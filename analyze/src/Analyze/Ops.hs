@@ -10,8 +10,6 @@ import qualified Data.HashSet        as HS
 import           Data.Vector         (Vector)
 import qualified Data.Vector         as V
 
-import Debug.Trace
-
 uniq :: Data k => Vector k -> Vector k
 uniq ks = V.reverse (V.fromList newKsR)
   where
