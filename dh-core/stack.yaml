@@ -2,6 +2,7 @@
 # resolver: lts-11.22 # GHC 8.2.2
 # resolver: lts-13.0 # GHC 8.6.3
 resolver: nightly-2019-02-27
+# resolver: nightly-2019-05-10 # GHC 8.6.5
 
 packages:
 - .
@@ -12,7 +13,8 @@ packages:
 # Dependency packages to be pulled from upstream that are not in the resolver
 # using the same syntax as the packages field.
 # (e.g., acme-missiles-0.3)
-extra-deps: []
+extra-deps:
+- statistics-0.14.0.2
 
 nix:
   enable: false
