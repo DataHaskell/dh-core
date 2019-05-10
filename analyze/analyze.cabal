@@ -46,9 +46,14 @@ library
         text ,
         unordered-containers ,
         vector ,  
+        
         -- DEBUG                
         tasty-hunit,
-        tasty-quickcheck
+        tasty-quickcheck ,
+        criterion ,
+        mwc-random ,
+        streamly >= 0.6.0 ,
+        weigh
         -- QuickCheck,
         -- hspec
 
@@ -88,10 +93,34 @@ test-suite spec
         free ,
         hashable ,
         lucid ,
+        mwc-random,
         tasty ,
         tasty-hunit ,
         tasty-quickcheck ,
         text ,
         unordered-containers ,
-        vector 
+        vector
+
   default-language: Haskell2010
+
+benchmark bench
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  hs-source-dirs: bench
+  default-extensions: OverloadedStrings
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+                base,
+                analyze ,
+                criterion,
+                exceptions ,                
+                mwc-random ,
+                random , 
+                streamly >= 0.6.0 ,
+                -- tasty ,
+                -- tasty-hunit ,
+                -- tasty-quickcheck ,                            
+                text ,                
+                unordered-containers  ,               
+                weigh,
+                vector

@@ -24,6 +24,7 @@ env:
     - DATASETS_V=0.4.0
   matrix:
     - ARGS="--resolver nightly-2019-02-27"
+    - ARGS="--resolver nightly-2019-05-10"    
 
 before_install:
 # Download and unpack the stack executable
@@ -37,6 +38,8 @@ before_install:
 script:
 - cd dh-core
 - stack $ARGS --no-terminal --install-ghc test --haddock
+- stack $ARGS --no-terminal bench analyze:bench
+# - stack $ARGS --no-terminal bench datasets:bench 
 - cat .stack-work/logs/analyze-${ANALYZE_V}-test.log
 - cat .stack-work/logs/dense-linear-algebra-${DENSE_LINEAR_ALGEBRA_V}-test.log
 - cat .stack-work/logs/datasets-${DATASETS_V}-test.log
