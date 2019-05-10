@@ -2,6 +2,7 @@
 # resolver: lts-11.22 # GHC 8.2.2
 # resolver: lts-13.0 # GHC 8.6.3
 resolver: nightly-2019-02-27
+# resolver: nightly-2019-05-10 # GHC 8.6.5
 
 packages:
 - .
