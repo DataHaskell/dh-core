@@ -193,6 +193,7 @@ multiply m1@(Matrix r1 _ _) m2@(Matrix _ c2 _) =
   where
     go t = sumVector kbn $ U.zipWith (*) (row m1 i) (column m2 j)
       where (i,j) = t `quotRem` c2
+{-# INLINE multiply #-}
 
 -- | Matrix-vector multiplication.
 multiplyV :: Matrix -> Vector -> Vector
@@ -200,6 +201,7 @@ multiplyV m v
   | cols m == c = U.generate (rows m) (sumVector kbn . U.zipWith (*) v . row m)
   | otherwise   = error $ "matrix/vector unconformable " ++ show (cols m,c)
   where c = U.length v
+{-# INLINE multiplyV #-}
 
 -- | Raise matrix to /n/th power. Power must be positive
 -- (/note: not checked).
@@ -220,6 +222,7 @@ center mat@(Matrix r c _) =
 -- | Calculate the Euclidean norm of a vector.
 norm :: Vector -> Double
 norm = sqrt . sumVector kbn . U.map square
+{-# INLINE norm #-}
 
 -- | Return the given column.
 column :: Matrix -> Int -> Vector
@@ -263,3 +266,4 @@ transpose :: Matrix -> Matrix
 transpose m@(Matrix r0 c0 _) = Matrix c0 r0 . U.generate (r0*c0) $ \i ->
   let (r,c) = i `quotRem` r0
   in unsafeIndex m c r
+{-# INLINE transpose #-}

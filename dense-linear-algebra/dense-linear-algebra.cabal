@@ -52,6 +52,21 @@ test-suite spec
                      , vector
                      , Decimal
 
+benchmark bench
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  hs-source-dirs: bench
+  default-extensions: OverloadedStrings
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N 
+  build-depends:
+                base,
+                dense-linear-algebra,
+                chronos-bench,
+                vector,
+                deepseq,
+                mwc-random,
+                weigh
+
 source-repository head
   type:     git
   location: https://github.com/bos/statistics
