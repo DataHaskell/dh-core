@@ -193,6 +193,7 @@ multiply m1@(Matrix r1 _ _) m2@(Matrix _ c2 _) =
   where
     go t = sumVector kbn $ U.zipWith (*) (row m1 i) (column m2 j)
       where (i,j) = t `quotRem` c2
+{-# INLINE multiply #-}
 
 -- | Matrix-vector multiplication.
 multiplyV :: Matrix -> Vector -> Vector
