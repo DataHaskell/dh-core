@@ -39,6 +39,7 @@ script:
 - cd dh-core
 - stack $ARGS --no-terminal --install-ghc test --haddock
 - stack $ARGS --no-terminal bench analyze:bench
+- stack $ARGS --no-terminal bench dense-linear-algebra:bench
 # - stack $ARGS --no-terminal bench datasets:bench 
 - cat .stack-work/logs/analyze-${ANALYZE_V}-test.log
 - cat .stack-work/logs/dense-linear-algebra-${DENSE_LINEAR_ALGEBRA_V}-test.log
