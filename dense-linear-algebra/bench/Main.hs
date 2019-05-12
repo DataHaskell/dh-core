@@ -1,7 +1,3 @@
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE DeriveAnyClass #-}
-{-# LANGUAGE DeriveGeneric #-}
-
 module Main where
 
 import qualified Statistics.Matrix as M
@@ -15,12 +11,6 @@ import qualified System.Random.MWC as Mwc
 
 import qualified Chronos.Bench as C
 import qualified Weigh         as W 
-
-import GHC.Generics (Generic)
-import Control.DeepSeq (NFData)
-
-deriving instance Generic Matrix
-deriving instance NFData Matrix
 
 n :: Int
 n = 100

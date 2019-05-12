@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
 -- |
 -- Module    : Statistics.Matrix.Types
 -- Copyright : 2014 Bryan O'Sullivan
@@ -22,6 +24,9 @@ import Numeric (showFFloat)
 import qualified Data.Vector.Unboxed as U
 import qualified Data.Vector.Unboxed.Mutable as M
 
+import GHC.Generics (Generic)
+import Control.DeepSeq (NFData)
+
 type Vector = U.Vector Double
 type MVector s = M.MVector s Double
 
@@ -30,7 +35,7 @@ data Matrix = Matrix {
       rows     :: {-# UNPACK #-} !Int -- ^ Rows of matrix.
     , cols     :: {-# UNPACK #-} !Int -- ^ Columns of matrix.
     , _vector  :: !Vector             -- ^ Matrix data.
-    } deriving (Eq)
+    } deriving (Eq, Generic, NFData)
 
 -- | Two-dimensional mutable matrix, stored in row-major order.
 data MMatrix s = MMatrix
