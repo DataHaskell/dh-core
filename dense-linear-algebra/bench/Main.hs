@@ -34,10 +34,10 @@ runtimelight v a b = do
     C.defaultMainWith (C.defaultConfig {C.timeout = Just 3}) [
                    C.bench "norm" M.norm v,
 
-                   C.bench "multiplicationV" (M.multiplyV a) (v2),
+                   C.bench "multiplyV" (M.multiplyV a) (v2),
             
                    C.bench "transpose" M.transpose a ,
-                   C.bench "identity" M.ident n,
+                   C.bench "ident" M.ident n,
                    C.bench "diag" M.diag v2
                    ]
 
@@ -47,8 +47,8 @@ runtimeheavy v a b = do
       v2 = U.take n v
     
     C.defaultMainWith (C.defaultConfig {C.timeout = Just 1}) [
-                   C.bench "multiplication" (M.multiply a) b,
-                   C.bench "qr factorization" A.qr a
+                   C.bench "multiply" (M.multiply a) b,
+                   C.bench "qr" A.qr a
                    ]
 
 weight :: Vector Double -> Matrix -> Matrix -> IO ()
@@ -58,12 +58,12 @@ weight v a b = do
     W.mainWith (do 
         W.func "norm" M.norm v
 
-        W.func "multiplication" (M.multiply a) b
-        W.func "multiplicationV" (M.multiplyV a) (v2)
-        W.func "qr factorization" A.qr a
+        W.func "multiply" (M.multiply a) b
+        W.func "multiplyV" (M.multiplyV a) (v2)
+        W.func "qr" A.qr a
 
         W.func "transpose" M.transpose a
-        W.func "identity" M.ident n
+        W.func "ident" M.ident n
         W.func "diag" M.diag v2)
 
 
@@ -76,6 +76,7 @@ main = do
 
     --
     print "---Benchmarking light operations---"
+    -- we split heavy and light, we lose some precision in the bar plots from chronos
     runtimelight v a b
     print "---Benchmarking heavy operations---"
     runtimeheavy v a b
