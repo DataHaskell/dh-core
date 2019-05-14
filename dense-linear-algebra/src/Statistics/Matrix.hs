@@ -223,7 +223,7 @@ norm = sqrt . sumVector kbn . U.map square
 
 -- | Return the given column.
 column :: Matrix -> Int -> Vector
-column (Matrix r c v) i = U.backpermute v $ U.enumFromStepN i c r
+column (Matrix r c v) j= U.generate r (\x -> v `U.unsafeIndex` (j + x * c))
 {-# INLINE column #-}
 
 -- | Return the given row.
