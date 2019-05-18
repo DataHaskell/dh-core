@@ -10,7 +10,6 @@ import           Data.Vector.Unboxed         (Vector)
 import qualified System.Random.MWC as Mwc
 
 import qualified Chronos.Bench as C
-import qualified Weigh         as W 
 
 n :: Int
 n = 100
@@ -18,7 +17,7 @@ n = 100
 testVector :: IO (Vector Double)
 testVector = do 
     gen <- Mwc.create
-    Mwc.uniformVector gen (n^2)
+    Mwc.uniformVector gen (n*n)
 
 
 testMatrix :: IO Matrix
@@ -26,8 +25,8 @@ testMatrix = do
     vec <- testVector
     return $ Matrix n n vec
 
-runtimelight :: Vector Double -> Matrix -> Matrix -> IO ()
-runtimelight v a b = do 
+runtimelight :: Vector Double -> Matrix -> IO ()
+runtimelight v a = do
     let 
       v2 = U.take n v
     
@@ -41,31 +40,13 @@ runtimelight v a b = do
                    C.bench "diag" M.diag v2
                    ]
 
-runtimeheavy :: Vector Double -> Matrix -> Matrix -> IO ()
-runtimeheavy v a b = do 
-    let 
-      v2 = U.take n v
+runtimeheavy :: Matrix -> Matrix -> IO ()
+runtimeheavy a b = do
     
     C.defaultMainWith (C.defaultConfig {C.timeout = Just 1}) [
                    C.bench "multiply" (M.multiply a) b,
                    C.bench "qr" A.qr a
                    ]
-
-weight :: Vector Double -> Matrix -> Matrix -> IO ()
-weight v a b = do
-    let 
-      v2 = U.take n v
-    W.mainWith (do 
-        W.func "norm" M.norm v
-
-        W.func "multiply" (M.multiply a) b
-        W.func "multiplyV" (M.multiplyV a) (v2)
-        W.func "qr" A.qr a
-
-        W.func "transpose" M.transpose a
-        W.func "ident" M.ident n
-        W.func "diag" M.diag v2)
-
 
 
 main :: IO ()
@@ -75,10 +56,8 @@ main = do
     b <- testMatrix
 
     --
-    print "---Benchmarking light operations---"
+    putStrLn "---Benchmarking light operations---"
     -- we split heavy and light, we lose some precision in the bar plots from chronos
-    runtimelight v a b
-    print "---Benchmarking heavy operations---"
-    runtimeheavy v a b
-    print "---Benchmarking memory consumption---"
-    weight v a b
+    runtimelight v a
+    putStrLn "---Benchmarking heavy operations---"
+    runtimeheavy a b
