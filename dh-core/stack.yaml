@@ -15,6 +15,7 @@ packages:
 # (e.g., acme-missiles-0.3)
 extra-deps:
 - statistics-0.14.0.2
+- chronos-bench-0.2.0.2
 
 nix:
   enable: false
