@@ -37,7 +37,7 @@ weight v a b = do
         W.func "Fast.norm" F.norm v2
 
         W.func "multiplyV" (M.multiplyV a) (v2)
-
+        W.func "Fast.multiplyV" (F.multiplyV a) (v2)
         W.func "transpose" M.transpose a
         W.func "ident" M.ident n
         W.func "diag" M.diag v2

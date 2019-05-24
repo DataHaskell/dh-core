@@ -2,16 +2,16 @@
 
 module Statistics.Matrix.Fast (
     multiply,
-    norm
+    norm,
+    multiplyV
     ) where
 
 import Prelude hiding (exponent, map)
-import Control.Applicative ((<$>))
 import Control.Monad.ST
 import qualified Data.Vector.Unboxed as U
-import           Data.Vector.Unboxed   ((!))
-import qualified Data.Vector.Unboxed.Mutable as UM
 
+
+import Statistics.Matrix (row)
 import Statistics.Matrix.Function
 import Statistics.Matrix.Types
 import Statistics.Matrix.Mutable  (unsafeNew,unsafeWrite,unsafeFreeze)
@@ -35,5 +35,13 @@ accum ithrow (Matrix r1 c1 v1) jthcol (Matrix _ c2 v2) = sub 0 0
                                     valRow = U.unsafeIndex v1 (ithrow*c1 + ij)
                                     valCol = U.unsafeIndex v2 (ij*c2+jthcol)
 
+multiplyV :: Matrix -> Vector -> Vector
+multiplyV m v
+  | cols m == c = U.generate (rows m) (U.sum . U.zipWith (*) v . row m)
+  | otherwise   = error $ "matrix/vector unconformable " ++ show (cols m,c)
+  where c = U.length v
+
+
 norm :: Vector -> Double
 norm = sqrt . U.sum . U.map square
+
