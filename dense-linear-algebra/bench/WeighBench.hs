@@ -1,6 +1,8 @@
 module Main where
 
 import qualified Statistics.Matrix as M
+import qualified Statistics.Matrix.Fast as F
+import qualified Statistics.Matrix.Fast.Algorithms as FA
 import           Statistics.Matrix (Matrix (..))
 import qualified Statistics.Matrix.Algorithms as A
 
@@ -33,13 +35,19 @@ weight v a b = do
     W.mainWith (do 
         W.func "norm" M.norm v2
 
-        W.func "multiply" (M.multiply a) b
         W.func "multiplyV" (M.multiplyV a) (v2)
-        W.func "qr" A.qr a
 
         W.func "transpose" M.transpose a
         W.func "ident" M.ident n
-        W.func "diag" M.diag v2)
+        W.func "diag" M.diag v2
+
+        W.func "multiply" (M.multiply a) b
+        W.func "Fast.multiply" (F.multiply a) b
+        
+        W.func "qr" A.qr a
+        W.func "Fast.qr" FA.qr a
+
+        )
 
 
 
