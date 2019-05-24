@@ -34,6 +34,7 @@ weight v a b = do
       v2 = U.take n v
     W.mainWith (do 
         W.func "norm" M.norm v2
+        W.func "Fast.norm" F.norm v2
 
         W.func "multiplyV" (M.multiplyV a) (v2)
 

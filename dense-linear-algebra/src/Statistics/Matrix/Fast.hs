@@ -1,7 +1,8 @@
 {-# LANGUAGE BangPatterns #-}
 
 module Statistics.Matrix.Fast (
-    multiply
+    multiply,
+    norm
     ) where
 
 import Prelude hiding (exponent, map)
@@ -33,3 +34,6 @@ accum ithrow (Matrix r1 c1 v1) jthcol (Matrix _ c2 v2) = sub 0 0
                                    where 
                                     valRow = U.unsafeIndex v1 (ithrow*c1 + ij)
                                     valCol = U.unsafeIndex v2 (ij*c2+jthcol)
+
+norm :: Vector -> Double
+norm = sqrt . U.sum . U.map square
