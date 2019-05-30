@@ -1,8 +1,8 @@
 {-# LANGUAGE BangPatterns #-}
 
 -- |
--- Module    : Statistics.Matrix.Algorithms
--- Copyright : 2014 Bryan O'Sullivan
+-- Module    : Statistics.Matrix.Fast.Algorithms
+-- Copyright : 2019 Magalame
 -- License   : BSD3
 --
 -- Useful matrix functions.
