@@ -9,6 +9,7 @@ extra-deps:
 - torsor-0.1
 - chronos-1.0.5
 - chronos-bench-0.2.0.2
+- primitive-0.6.4.0
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
