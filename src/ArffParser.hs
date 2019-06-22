@@ -31,7 +31,7 @@ import Data.Attoparsec.ByteString.Char8
 import Data.Time.Calendar (Day)
 import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)
 import Control.Exception (Exception, TypeError, throw)
-import Debug.Trace (trace, traceM)
+import DebugTrace
 
 -- | Data types of attributes 
 data DataType = Numeric 
@@ -97,7 +97,6 @@ parseArff = do
     rel <- relation
     spaces >> skipMany comment
     atts <- many' attribute
-    debugM $ "atts: " ++ show atts
     spaces >> skipMany comment
     stringCI "@data" >> spaces
     spaces >> skipMany comment
@@ -272,32 +271,3 @@ field p = do
   val <- p
   fieldSeparator
   return val
-
------------------------ Debug Helpers -----------------------------
--- Trace with value return: make False to True to switch on tracing
-debug s v | False      = trace s v
-          | otherwise  = v        
-
--- Trace inside a do block: make False to True to switch on tracing          
-debugM :: (Applicative f) => 
-  String  -- Message that is printed
-  -> f ()
-debugM s | True      = traceM s   
-         | otherwise  = pure () 
-
--- Peek next char and print
-debugPeekChar :: 
-     String  -- Message that is printed along with next char
-  -> Parser () 
-debugPeekChar s = do
-  c <- peekChar'
-  debugM $ s ++ ": " ++ [c]
-
--- Eatup next char and print it  
-debugEatChar ::
-     String -- Message that is printed along with next char
-  -> Parser ()
-debugEatChar s = do
-  c <- anyChar
-  debugM $ s ++ ": " ++ [c]  
--------------------------------------------------------------------
