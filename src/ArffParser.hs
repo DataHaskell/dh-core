@@ -218,8 +218,7 @@ datavals (a:as) = (:) <$> fieldval a <*> datavals as
 fieldval :: Attribute -> Parser (Maybe Dynamic)
 fieldval (Attr _ t) = do
   c <- peekChar'
-  if (c == '?') then 
-    return Nothing
+  if (c == '?') then missing
   else dynVal   
     where dynVal :: Parser (Maybe Dynamic)
           dynVal = case t of
@@ -231,17 +230,27 @@ fieldval (Attr _ t) = do
             Relational -> throw RelationalAttributeException
   
 fieldval (AttCls _ cls) = do
-  val <- stringfield
-  if (val `elem` cls) then
-    return $ Just (toDyn val)
-  else
-    throw InvalidFieldTypeException
+  c <- peekChar'
+  if (c == '?') then missing
+  else dynVal   
+    where dynVal :: Parser (Maybe Dynamic)
+          dynVal = do
+            val <- stringfield
+            if (val `elem` cls) then
+              return $ Just (toDyn val)
+            else
+              throw InvalidFieldTypeException
 
 stringfield :: Parser ByteString
 stringfield = field name
 
 doublefield :: Parser Double
 doublefield = field double
+
+missing :: Parser (Maybe Dynamic)
+missing = do
+  field (char '?') -- Consume the missing data value '?'
+  return Nothing
 
 datefield :: Parser Day
 datefield = field date
