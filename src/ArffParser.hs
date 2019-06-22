@@ -88,7 +88,7 @@ data InvalidRecordException =
 instance Exception InvalidRecordException
 
 -- | Type for each data record in the ARFF file
-type ArffRecord = [Dynamic]
+type ArffRecord = [Maybe Dynamic]
 
 -- | Parse the ARFF file, and return (Relation name, Attributes, ARFF Records)
 parseArff :: Parser (ByteString, [Attribute], [ArffRecord])
@@ -96,12 +96,12 @@ parseArff = do
     spaces >> skipMany comment >> spaces
     rel <- relation
     spaces >> skipMany comment
-    spaces >> skipMany comment
     atts <- many' attribute
+    debugM $ "atts: " ++ show atts
     spaces >> skipMany comment
     stringCI "@data" >> spaces
     spaces >> skipMany comment
-    dat <- manyTill (recordlines atts) endOfInput   
+    dat <- manyTill (record atts) endOfInput   
     spaces >> skipMany comment
     return (rel, atts, dat)
 
@@ -196,35 +196,45 @@ attribute = do
   the record. This function takes care of situations where
   the ARFF files end with empty comment lines. 
 -}
-recordlines :: [Attribute] -> Parser [Dynamic]
-recordlines atts = do
-  val <- record atts
+record :: [Attribute] -> Parser [Maybe Dynamic]
+record atts = do
+  vals <- datavals atts
   skipMany comment >> spaces
-  return val
+  return vals
 
--- | Return a data record as a list of Dynamics  
-record :: [Attribute] -> Parser [Dynamic]
-record [] = return []
-record (a:as) = (:) <$> fieldval a <*> record as
+-- | Return a data values as a list of Dynamics  
+datavals :: [Attribute] -> Parser [Maybe Dynamic]
+datavals [] = return []
+datavals (a:as) = (:) <$> fieldval a <*> datavals as
 
 {- |
- Reads a field from the data record, and returns its value as
- a Dynamic. If the value of the field is not of an expected
- type (as defined by the attributes in the file), throws
+ Reads a field from the data record, and returns its value as 
+ a (Just Dynamic). If the value of the field is not of an 
+ expected type (as defined by the attributes in the file), throws
  an InvalidFieldTypeException.
+
+ As per ARFF, a field value can be missing (indicated as '?').
+ In case the field is missing, its value is retuned as Nothing. 
 -}
-fieldval :: Attribute -> Parser Dynamic
-fieldval (Attr _ t) = case t of
-  Numeric    -> toDyn <$> doublefield 
-  Integer    -> toDyn <$> doublefield
-  Real       -> toDyn <$> doublefield
-  String     -> toDyn <$> stringfield
-  Date       -> toDyn <$> datefield
-  Relational -> throw RelationalAttributeException
+fieldval :: Attribute -> Parser (Maybe Dynamic)
+fieldval (Attr _ t) = do
+  c <- peekChar'
+  if (c == '?') then 
+    return Nothing
+  else dynVal   
+    where dynVal :: Parser (Maybe Dynamic)
+          dynVal = case t of
+            Numeric    -> (Just . toDyn) <$> doublefield 
+            Integer    -> (Just . toDyn) <$> doublefield
+            Real       -> (Just . toDyn) <$> doublefield
+            String     -> (Just . toDyn) <$> stringfield
+            Date       -> (Just . toDyn) <$> datefield
+            Relational -> throw RelationalAttributeException
+  
 fieldval (AttCls _ cls) = do
   val <- stringfield
   if (val `elem` cls) then
-    return $ toDyn val
+    return $ Just (toDyn val)
   else
     throw InvalidFieldTypeException
 
@@ -234,14 +244,14 @@ stringfield = field name
 doublefield :: Parser Double
 doublefield = field double
 
-datefield :: Parser (Maybe Day)
+datefield :: Parser Day
 datefield = field date
   where
-    date :: Parser (Maybe Day)
+    date :: Parser Day
     date = do
       d <- word 
       f <- option defformat word
-      return $ parseTimeM False defaultTimeLocale (BC8.unpack f) (BC8.unpack d)
+      parseTimeM False defaultTimeLocale (BC8.unpack f) (BC8.unpack d)
     
     defformat :: ByteString
     defformat = BC8.pack $ iso8601DateFormat Nothing
