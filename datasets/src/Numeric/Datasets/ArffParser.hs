@@ -2,17 +2,17 @@
 {-# OPTIONS_GHC -funbox-strict-fields #-}
 
 {- |
-Module      :  ArffParser
+Module      :  Numeric.Datasets.ArffParser
 Description :  Parser for datasets in the Atrribute-Relation File Format (ARFF)
 Copyright   :  (c) Arvind Devarajan
-License     :  MIT
+License     :  BSD-3-Clause
 
 Maintainer  :  arvindd
-Stability   :  unstable
+Stability   :  experimental
 Portability :  portable
 -}
 
-module ArffParser
+module Numeric.Datasets.ArffParser
        ( parseArff
        ) where
 
@@ -28,7 +28,6 @@ import Data.Attoparsec.ByteString.Char8
 import Data.Time.Calendar (Day)
 import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)
 import Control.Exception (Exception, TypeError, throw)
-import DebugTrace
 
 -- | Data types of attributes 
 data DataType = Numeric 
