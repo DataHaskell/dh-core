@@ -127,7 +127,12 @@ name = do
 quotedName :: Parser ByteString
 quotedName = do
     quote <- char '"' <|> char '\''
-    n <- pack <$> manyTill anyWord8 (char quote)
+
+    -- ARFF format says make sure that the quote is not preceded by
+    -- a '\' character. Presence of such a character "escapes" the
+    -- quote - this allows for a string to contain a ' by just
+    -- preceding it with a quote.
+    n <- pack <$> manyTill anyWord8 (notChar '\\' >> char quote)
     return n
 
 unquotedName :: Parser ByteString
