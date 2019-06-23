@@ -260,14 +260,6 @@ unsafeBounds k (Matrix _ cs v) r c = k v $! r * cs + c
 {-# INLINE unsafeBounds #-}
 
 transpose :: Matrix -> Matrix
-transpose (Matrix r0 c0 v0) 
-  = Matrix c0 r0 $ runST $ do
-    vec <- UM.unsafeNew (r0*c0)
-    for 0 r0 $ \i -> do
-      UM.unsafeWrite vec (i + i * c0) $ v0 `U.unsafeIndex` (i + i * c0)
-      for (i+1) c0 $ \j -> do
-        let tmp = v0 `U.unsafeIndex` (j + i * c0)
-            tmp2 = v0 `U.unsafeIndex` (i + j * c0)
-        UM.unsafeWrite vec (j + i * c0) tmp2
-        UM.unsafeWrite vec (i + j * c0) tmp
-    U.unsafeFreeze vec
+transpose m@(Matrix r0 c0 _) = Matrix c0 r0 . U.generate (r0*c0) $ \i ->
+  let (r,c) = i `quotRem` r0
+  in unsafeIndex m c r
