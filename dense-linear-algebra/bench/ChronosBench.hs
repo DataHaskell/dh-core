@@ -39,7 +39,8 @@ runtimelight v a = do
                    C.bench "multiplyV" (M.multiplyV a) (v2),
                    C.bench "Fast.multiplyV" (F.multiplyV a) (v2),
             
-                   C.bench "transpose" M.transpose a ,
+                   C.bench "transpose" M.transpose a,
+                   C.bench "Fast.transpose" F.transpose a ,
                    C.bench "ident" M.ident n,
                    C.bench "diag" M.diag v2
                    ]
