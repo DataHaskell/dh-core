@@ -12,12 +12,9 @@ Stability   :  unstable
 Portability :  portable
 -}
 
-module ArffParser where
-    -- ( parseArff
-    -- , DataType
-    -- , Attribute
-    -- , Content
-    -- ) where
+module ArffParser
+       ( parseArff
+       ) where
 
 import Prelude hiding (take, takeWhile)        
 import Control.Applicative ((<$>), (<|>)) 
@@ -69,12 +66,12 @@ data Attribute where
 -}
 data NotImplementedException = 
   RelationalAttributeException 
-  -- ^ Relational attribute waa parsed, and this is reserved for the future
+  -- ^ Relational attribute was parsed, and this is reserved for the future
   | ReservedException
   -- ^ Some reserved keyword was parsed
 
   | UnknownAttributeTypeException
-  -- ^ Attribute type error - could not parse
+  -- ^ Attribute type error - could not parse / invalid attribute type
   deriving (Show)
 instance Exception NotImplementedException
 
@@ -206,7 +203,11 @@ record atts = do
   skipMany comment >> spaces
   return vals
 
--- | Return a data values as a list of Dynamics  
+{- | 
+ Return data values as a list of Maybe Dynamics. Each data-value
+ is a "Just <value>" (if there is a value) or Nothing (if the
+ value is missing - i.e., has a '?' in the data record). 
+-}
 datavals :: [Attribute] -> Parser [Maybe Dynamic]
 datavals [] = return []
 datavals (a:as) = (:) <$> fieldval a <*> datavals as
@@ -221,6 +222,7 @@ datavals (a:as) = (:) <$> fieldval a <*> datavals as
  In case the field is missing, its value is retuned as Nothing. 
 -}
 fieldval :: Attribute -> Parser (Maybe Dynamic)
+-- ^ When attribute has a datatype
 fieldval (Attr _ t) = do
   c <- peekChar'
   if (c == '?') then missing
@@ -235,6 +237,7 @@ fieldval (Attr _ t) = do
             Relational -> throw RelationalAttributeException
   
 fieldval (AttCls _ cls) = do
+-- ^ When attribute is a nominal attribute with class-names
   c <- peekChar'
   if (c == '?') then missing
   else dynVal   

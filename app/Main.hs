@@ -12,4 +12,6 @@ main = do
     args <- getArgs
     let arffFile = "E:/Workspace/datahaskell/arffparser/data/" ++ head args ++ ".arff"
     fileContents <- B.readFile arffFile
-    print $ Atto.parseOnly parseArff fileContents
+    case Atto.parseOnly parseArff fileContents of
+        Left s -> print $ "Error: " ++ s
+        Right (name, attributes, records) -> print (name, attributes, records) 
