@@ -1,0 +1,3 @@
+This folder contains many weka ARFF files used for testing the ARFF parser.
+
+The files were obtained from: https://storm.cis.fordham.edu/~gweiss/data-mining/datasets.html
