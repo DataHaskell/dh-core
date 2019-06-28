@@ -14,6 +14,8 @@ Portability :  portable
 
 module Numeric.Datasets.ArffParser
        ( parseArff
+       , Attribute
+       , ArffRecord
        ) where
 
 import Prelude hiding (take, takeWhile)        
@@ -99,6 +101,8 @@ parseArff = do
     dat <- manyTill (record atts) endOfInput   
     spaces >> skipMany comment
     return (rel, atts, dat)
+
+decodeArff :: Parser     
 
 ----------------------- All parsers --------------------------
 spaces :: Parser ()

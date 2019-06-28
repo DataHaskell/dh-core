@@ -76,6 +76,7 @@ import qualified Data.Vector.Generic as V
 import qualified Data.Attoparsec.ByteString as Atto'
 import qualified Data.Attoparsec.ByteString.Lazy as Atto
 
+import Numeric.Datasets.ArffParser as Arff
 -- * Using datasets
 
 -- | Load a dataset into memory
@@ -145,6 +146,7 @@ safeReadDataset ra bss = either throwString pure $
     (JSON, bs:|[]) ->  V.fromList <$> JSON.eitherDecode' bs
     (CSVRecord hhdr opts, bs:|[]) -> V.convert <$> decodeWith opts hhdr bs
     (CSVNamedRecord opts, bs:|[]) -> V.convert . snd <$> decodeByNameWith opts bs
+    (ARFFRecord name atts dat, bs:|[]) -> undefined
     (Parsable psr, bs:|[]) -> V.fromList <$> Atto.eitherResult (Atto.parse (Atto.many' psr) bs)
 
     (ImageFolder labels, _) -> do
@@ -198,7 +200,12 @@ data ReadAs a where
   JSON :: FromJSON a => ReadAs a
   CSVRecord :: FromRecord a => HasHeader -> DecodeOptions -> ReadAs a
   CSVNamedRecord :: FromNamedRecord a => DecodeOptions -> ReadAs a
-  Parsable :: Atto.Parser a -> ReadAs a
+  ARFFRecord 
+    :: B8.ByteString       -- Name of the ARFF relation
+    -> [Arff.Attribute]    -- List of ARFF attributes
+    -> [ArffRecord]        -- List of ARFF data records
+    -> ReadAs a
+  Parsable :: Atto.Parser a -> ReadAs a  
   ImageFolder
     :: NonEmpty String           -- labels used as folders
     -> ReadAs (String, FilePath) -- FilePaths representing images on disk, Strings are labels
@@ -206,6 +213,9 @@ data ReadAs a where
 -- | A CSV record with default decoding options (i.e. columns are separated by commas)
 csvRecord :: FromRecord a => ReadAs a
 csvRecord = CSVRecord NoHeader defaultDecodeOptions
+
+-- | An ARFF record
+arffRecord = ARFFRecord 
 
 -- * Defining datasets
 
