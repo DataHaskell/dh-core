@@ -10,7 +10,7 @@ module Statistics.Matrix.Fast (
 import Prelude hiding (exponent, map)
 import Control.Monad.ST
 import qualified Data.Vector.Unboxed as U
-
+import qualified Data.Vector.Unboxed.Mutable as UM
 
 import Statistics.Matrix (row)
 import Statistics.Matrix.Function
