@@ -30,8 +30,8 @@ multiply m1@(Matrix r1 _ _) m2@(Matrix _ c2 _) = runST $ do
   unsafeFreeze m3
 
 accum :: Int -> Matrix -> Int -> Matrix -> Double
-accum ithrow (Matrix r1 c1 v1) jthcol (Matrix _ c2 v2) = sub 0 0
-  where sub !acc !ij | ij == r1 = acc
+accum ithrow (Matrix _ c1 v1) jthcol (Matrix _ c2 v2) = sub 0 0
+  where sub !acc !ij | ij == c1 = acc
                      | otherwise = sub ( valRow*valCol + acc ) (ij+1)
                                    where 
                                     valRow = U.unsafeIndex v1 (ithrow*c1 + ij)
