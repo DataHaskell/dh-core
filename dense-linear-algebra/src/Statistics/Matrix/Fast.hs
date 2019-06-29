@@ -3,13 +3,14 @@
 module Statistics.Matrix.Fast (
     multiply,
     norm,
-    multiplyV
+    multiplyV,
+    transpose
     ) where
 
 import Prelude hiding (exponent, map)
 import Control.Monad.ST
 import qualified Data.Vector.Unboxed as U
-
+import qualified Data.Vector.Unboxed.Mutable as UM
 
 import Statistics.Matrix (row)
 import Statistics.Matrix.Function
@@ -48,3 +49,15 @@ multiplyV m v
 norm :: Vector -> Double
 norm = sqrt . U.sum . U.map square
 
+transpose :: Matrix -> Matrix
+transpose (Matrix r0 c0 v0) 
+  = Matrix c0 r0 $ runST $ do
+    vec <- UM.unsafeNew (r0*c0)
+    for 0 r0 $ \i -> do
+      UM.unsafeWrite vec (i + i * c0) $ v0 `U.unsafeIndex` (i + i * c0)
+      for (i+1) c0 $ \j -> do
+        let tmp = v0 `U.unsafeIndex` (j + i * c0)
+            tmp2 = v0 `U.unsafeIndex` (i + j * c0)
+        UM.unsafeWrite vec (j + i * c0) tmp2
+        UM.unsafeWrite vec (i + j * c0) tmp
+    U.unsafeFreeze vec
