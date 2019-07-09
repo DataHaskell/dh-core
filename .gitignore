@@ -3,3 +3,4 @@
 /cabal.sandbox.config
 .stack-work/
 .ionide/
+.vscode/

@@ -14,6 +14,7 @@ Portability :  portable
 
 module Numeric.Datasets.ArffParser
        ( parseArff
+       , arffRecords
        , Attribute
        , ArffRecord
        ) where
@@ -21,15 +22,17 @@ module Numeric.Datasets.ArffParser
 import Prelude hiding (take, takeWhile)        
 import Control.Applicative ((<$>), (<|>)) 
 import Data.Dynamic
-import Data.ByteString (ByteString, pack, unpack)
-import qualified Data.ByteString.Char8 as BC8 (pack, unpack)
+import qualified Data.ByteString as B (ByteString, pack, unpack)
+import qualified Data.ByteString.Char8 as B8 (pack, unpack)
+import qualified Data.ByteString.Lazy as BL (ByteString, toStrict)
 import Data.Word8 (Word8, toLower)
 import Data.Attoparsec.ByteString.Lazy hiding (satisfy)
 import Data.Attoparsec.ByteString.Char8
-          hiding (skipWhile, takeWhile, inClass, notInClass)
+          hiding (skipWhile, takeWhile, inClass, notInClass, eitherResult, parse)
 import Data.Time.Calendar (Day)
 import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)
 import Control.Exception (Exception, TypeError, throw)
+import Data.Vector (fromList)
 
 -- | Data types of attributes 
 data DataType = Numeric 
@@ -49,15 +52,15 @@ data DataType = Numeric
 data Attribute where
     -- | Attr <name> <datatype>   
     Attr :: {
-      attname :: ByteString -- ^ Name of the attribute
+      attname :: B.ByteString -- ^ Name of the attribute
     , atttype :: DataType   -- ^ DataType of the attribute
     } -> Attribute
 
     -- | AttCls <class name> <class-element names>
     AttCls :: {
-      attname :: ByteString -- ^ Name of the attribute class
-      , attclasses :: [ByteString] 
-      -- ^ The names of the elements of this class
+      attname :: B.ByteString -- ^ Name of the attribute class
+    , attclasses :: [B.ByteString] 
+    -- ^ The names of the elements of this class
     } -> Attribute 
     deriving (Show)
 
@@ -88,8 +91,16 @@ instance Exception InvalidRecordException
 -- | Type for each data record in the ARFF file
 type ArffRecord = [Maybe Dynamic]
 
+-- | Decode and extract only the records returned by the ARFF parser
+-- | If all metadata is also required (i.e., relation name, and attributes,
+-- | use the parseArff below)
+arffRecords :: Parser [ArffRecord]
+arffRecords = do
+  (rel, atts, dats) <- parseArff
+  return dats
+
 -- | Parse the ARFF file, and return (Relation name, Attributes, ARFF Records)
-parseArff :: Parser (ByteString, [Attribute], [ArffRecord])
+parseArff :: Parser (B.ByteString, [Attribute], [ArffRecord])
 parseArff = do  
     spaces >> skipMany comment >> spaces
     rel <- relation
@@ -101,8 +112,6 @@ parseArff = do
     dat <- manyTill (record atts) endOfInput   
     spaces >> skipMany comment
     return (rel, atts, dat)
-
-decodeArff :: Parser     
 
 ----------------------- All parsers --------------------------
 spaces :: Parser ()
@@ -117,14 +126,14 @@ comment = char '%' >>
   (endOfLine <|> endOfInput)
 
 -- | Parses names (of classes, attributes, etc.) 
-name :: Parser ByteString
+name :: Parser B.ByteString
 name = do
   spaces
   n <- (quotedName <|> unquotedName)
   return n
 
 -- | Name of a relation or an attribute
-quotedName :: Parser ByteString
+quotedName :: Parser B.ByteString
 quotedName = do
     quote <- char '"' <|> char '\''
 
@@ -132,17 +141,16 @@ quotedName = do
     -- a '\' character. Presence of such a character "escapes" the
     -- quote - this allows for a string to contain a ' by just
     -- preceding it with a quote.
-    n <- pack <$> manyTill anyWord8 (notChar '\\' >> char quote)
+    n <- B.pack <$> manyTill anyWord8 (notChar '\\' >> char quote)
     return n
 
-unquotedName :: Parser ByteString
+unquotedName :: Parser B.ByteString
 -- We use isHorizontalSpace instead of isSpace_w8 below because
 -- we want to only capture the character " " or "\t" and not newlines
--- unquotedName = takeWhile (\x -> not (isHorizontalSpace x))
-unquotedName = takeWhile (\x -> notInClass ",}\'\"" x 
-    && not (isHorizontalSpace x) && not (isEndOfLine x))
+unquotedName = takeWhile (\x -> (notInClass ",}\'\"" x) 
+   && not (isHorizontalSpace x) && not (isEndOfLine x))
 
-relation :: Parser ByteString
+relation :: Parser B.ByteString
 relation = stringCI "@relation" >> spaces >> name
 
 {- |
@@ -163,20 +171,20 @@ attribute = do
     spaces
     c <- peekChar'
     case c of
-        '{' -> attclass n
-        _   -> atttype n
+        '{' -> createAttCls n
+        _   -> createAttType n
   where
-    attclass :: ByteString -> Parser Attribute
+    createAttCls :: B.ByteString -> Parser Attribute
     -- ^ Create an attribute with AttCls, given the attribute's name
-    attclass n = do
+    createAttCls n = do
         char '{' >> spaces  
         vals <- name `sepBy` (char ',')
         char '}' >> spaces
         return $ AttCls n vals
 
-    atttype :: ByteString -> Parser Attribute
+    createAttType :: B.ByteString -> Parser Attribute
     -- ^ Create an attribute with Attr, given the attribute's name
-    atttype n = do
+    createAttType n = do
         t <- spaces >> manyTill anyWord8 eol
         return $ Attr n (dattype t)
       where
@@ -190,8 +198,8 @@ attribute = do
             "relational" -> Relational
             _            -> throw UnknownAttributeTypeException
           where
-            strToLower :: [Word8] -> ByteString
-            strToLower s = pack [toLower x | x <- s]
+            strToLower :: [Word8] -> B.ByteString
+            strToLower sz = B.pack [toLower x | x <- sz]
 
 ----------------------- Parsers for parsing CSV data records ----------
 
@@ -238,7 +246,8 @@ fieldval (Attr _ t) = do
             String     -> (Just . toDyn) <$> stringfield
             Date       -> (Just . toDyn) <$> datefield
             Relational -> throw RelationalAttributeException
-  
+            _          -> throw UnknownAttributeTypeException
+
 fieldval (AttCls _ cls) = do
 -- ^ When attribute is a nominal attribute with class-names
   c <- peekChar'
@@ -252,7 +261,7 @@ fieldval (AttCls _ cls) = do
             else
               throw InvalidFieldTypeException
 
-stringfield :: Parser ByteString
+stringfield :: Parser B.ByteString
 stringfield = field name
 
 doublefield :: Parser Double
@@ -260,7 +269,7 @@ doublefield = field double
 
 missing :: Parser (Maybe Dynamic)
 missing = do
-  field (char '?') -- Consume the missing data value '?'
+  _ <- field (char '?') -- Consume the missing data value '?'
   return Nothing
 
 datefield :: Parser Day
@@ -270,24 +279,24 @@ datefield = field date
     date = do
       d <- word 
       f <- option defformat word
-      parseTimeM False defaultTimeLocale (BC8.unpack f) (BC8.unpack d)
+      parseTimeM False defaultTimeLocale (B8.unpack f) (B8.unpack d)
     
-    defformat :: ByteString
-    defformat = BC8.pack $ iso8601DateFormat Nothing
+    defformat :: B.ByteString
+    defformat = B8.pack $ iso8601DateFormat Nothing
 
 ------------- CSV Helper functions -------------------------
 
 -- Read a word (delimited by a fieldseparator)
-word :: Parser ByteString
+word :: Parser B.ByteString
 word = takeWhile (\x->(not $ isSpace_w8 x) && (notInClass "," x))
 
 -- Consume the field separator
-fieldSeparator :: Parser ByteString
+fieldSeparator :: Parser B.ByteString
 fieldSeparator = takeWhile (\x->(isSpace_w8 x) || (inClass "," x))
 
 -- Return the value parsed by p, after consuming the field separator
 field :: (Show a) => Parser a -> Parser a
 field p = do
   val <- p
-  fieldSeparator
+  _ <- fieldSeparator -- Consume the field separator
   return val
