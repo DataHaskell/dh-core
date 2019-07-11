@@ -200,10 +200,10 @@ data ReadAs a where
   JSON :: FromJSON a => ReadAs a
   CSVRecord :: FromRecord a => HasHeader -> DecodeOptions -> ReadAs a
   CSVNamedRecord :: FromNamedRecord a => DecodeOptions -> ReadAs a
+  -- Parsable that returns multiple records at one go
   MultiRecordParsable  :: Atto.Parser [a] -> ReadAs a 
-  -- ^ Parsable that returns multiple records at one go
+  -- Parsable that returns a single record each time it is called
   Parsable :: Atto.Parser a -> ReadAs a  
-  -- ^ Parsable that returns a single record each time it is called
   ImageFolder
     :: NonEmpty String           -- labels used as folders
     -> ReadAs (String, FilePath) -- FilePaths representing images on disk, Strings are labels

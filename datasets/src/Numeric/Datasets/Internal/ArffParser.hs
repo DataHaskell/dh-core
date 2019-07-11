@@ -297,8 +297,8 @@ fieldval (Attr _ t) = do
             Relational -> throw RelationalAttributeException
             _          -> throw UnknownAttributeTypeException
 
+-- When attribute is a nominal attribute with class-names           
 fieldval (AttCls _ cls) = do
--- ^ When attribute is a nominal attribute with class-names
   c <- peekChar'
   if (c == '?') then missing
   else dynVal   
