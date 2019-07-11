@@ -118,7 +118,7 @@ parseArff = do
 -- | use the parseArff above)
 arffRecords :: Parser [ArffRecord]
 arffRecords = do
-  (rel, atts, dats) <- parseArff
+  (_, _, dats) <- parseArff
   return dats
 
 ---------------- Convenience functions to get field values ---------
