@@ -15,6 +15,10 @@ Portability :  portable
 module Numeric.Datasets.Internal.ArffParser
        ( parseArff
        , arffRecords
+       , value
+       , dblval
+       , strval
+       , dtval
        , Attribute
        , ArffRecord
        ) where
@@ -22,6 +26,7 @@ module Numeric.Datasets.Internal.ArffParser
 import Prelude hiding (take, takeWhile)        
 import Control.Applicative ((<$>), (<|>)) 
 import Data.Dynamic
+import Data.Maybe
 import qualified Data.ByteString as B (ByteString, pack, unpack)
 import qualified Data.ByteString.Char8 as B8 (pack, unpack)
 import qualified Data.ByteString.Lazy as BL (ByteString, toStrict)
@@ -29,7 +34,7 @@ import Data.Word8 (Word8, toLower)
 import Data.Attoparsec.ByteString.Lazy hiding (satisfy)
 import Data.Attoparsec.ByteString.Char8
           hiding (skipWhile, takeWhile, inClass, notInClass, eitherResult, parse)
-import Data.Time.Calendar (Day)
+import Data.Time.Calendar (Day, fromGregorian)
 import Data.Time.Format (parseTimeM, iso8601DateFormat, defaultTimeLocale)
 import Control.Exception (Exception, TypeError, throw)
 import Data.Vector (fromList)
@@ -91,27 +96,53 @@ instance Exception InvalidRecordException
 -- | Type for each data record in the ARFF file
 type ArffRecord = [Maybe Dynamic]
 
+-- | Parse the ARFF file, and return (Relation name, Attributes, ARFF Records)
+-- | If you just want the ARFF data records, use the arffRecords function
+parseArff :: Parser (B.ByteString, [Attribute], [ArffRecord])
+parseArff = do  
+  spaces >> skipMany comment >> spaces
+  rel <- relation
+  spaces >> skipMany comment
+  atts <- many' attribute
+  spaces >> skipMany comment
+  stringCI "@data" >> spaces
+  spaces >> skipMany comment
+  dat <- manyTill (record atts) endOfInput   
+  spaces >> skipMany comment
+  return (rel, atts, dat)
+
 -- | Decode and extract only the records returned by the ARFF parser
 -- | If all metadata is also required (i.e., relation name, and attributes,
--- | use the parseArff below)
+-- | use the parseArff above)
 arffRecords :: Parser [ArffRecord]
 arffRecords = do
   (rel, atts, dats) <- parseArff
   return dats
 
--- | Parse the ARFF file, and return (Relation name, Attributes, ARFF Records)
-parseArff :: Parser (B.ByteString, [Attribute], [ArffRecord])
-parseArff = do  
-    spaces >> skipMany comment >> spaces
-    rel <- relation
-    spaces >> skipMany comment
-    atts <- many' attribute
-    spaces >> skipMany comment
-    stringCI "@data" >> spaces
-    spaces >> skipMany comment
-    dat <- manyTill (record atts) endOfInput   
-    spaces >> skipMany comment
-    return (rel, atts, dat)
+-- | Get the value of a field from the ARFF record
+value :: Typeable a
+      => Int                -- ^ Index of the field whose value is needed
+      -> (ArffRecord -> a)  -- ^ Function implementing missing-value-strategy
+                            -- This function will be called when the field
+                            -- has a missing value
+      -> ArffRecord         -- ^ ARFF record
+      -> a                  -- Value of the field
+value idx f r = let missingval = f r
+                    maybeval = r !! idx
+                    dynval = fromMaybe (toDyn missingval) maybeval
+                    defval = missingval
+                in fromDyn dynval defval
+
+----------------------- Convenience functions to get field values ---------
+
+dblval :: Int -> ArffRecord -> Double
+dblval idx r = value idx (\_->0) r
+
+strval :: Int -> ArffRecord -> BL.ByteString
+strval idx r = value idx (\_->"") r
+
+dtval :: Int -> ArffRecord -> Day
+dtval idx r = value idx (\_->fromGregorian 0 0 0) r
 
 ----------------------- All parsers --------------------------
 spaces :: Parser ()

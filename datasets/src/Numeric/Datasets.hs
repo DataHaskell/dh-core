@@ -31,7 +31,7 @@ module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, defaul
                          readDataset, safeReadDataset, ReadAs(..), csvRecord,
                         -- * Defining datasets
                         csvDataset, csvHdrDataset, csvHdrDatasetSep, csvDatasetSkipHdr,
-                        jsonDataset,
+                        jsonDataset, readArff,
                         -- ** Dataset options
                         withPreprocess, withTempDir,
                         -- ** Preprocessing functions
@@ -75,7 +75,7 @@ import qualified Data.Vector         as VB
 import qualified Data.Vector.Generic as V
 import qualified Data.Attoparsec.ByteString as Atto'
 import qualified Data.Attoparsec.ByteString.Lazy as Atto
-import Data.Dynamic
+import Numeric.Datasets.Internal.ArffParser
 
 -- * Using datasets
 
@@ -207,6 +207,12 @@ data ReadAs a where
   ImageFolder
     :: NonEmpty String           -- labels used as folders
     -> ReadAs (String, FilePath) -- FilePaths representing images on disk, Strings are labels
+
+-- | Reads ARFF records from the given ARFF-format string
+readArff :: BL.ByteString -> [ArffRecord]
+readArff s = readDataset readAs s where
+    readAs :: ReadAs ArffRecord
+    readAs = MultiRecordParsable arffRecords
 
 -- | A CSV record with default decoding options (i.e. columns are separated by commas)
 csvRecord :: FromRecord a => ReadAs a
