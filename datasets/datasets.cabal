@@ -83,8 +83,7 @@ Library
    Exposed-modules:
                    Numeric.Dataloader
                  , Numeric.Datasets
-                 , Numeric.Datasets.Anscombe
-                 , Numeric.Datasets.ArffParser                 
+                 , Numeric.Datasets.Anscombe               
                  , Numeric.Datasets.BostonHousing
                  , Numeric.Datasets.CIFAR10
                  , Numeric.Datasets.OldFaithful
@@ -94,9 +93,11 @@ Library
                  , Numeric.Datasets.Car
                  , Numeric.Datasets.Coal
                  , Numeric.Datasets.CO2
+                 , Numeric.Datasets.Diabetes
                  , Numeric.Datasets.Gapminder
                  , Numeric.Datasets.Iris
                  , Numeric.Datasets.Internal.Streaming
+                 , Numeric.Datasets.Internal.ArffParser
                  , Numeric.Datasets.Michelson
                  , Numeric.Datasets.Mushroom
                  , Numeric.Datasets.Nightingale

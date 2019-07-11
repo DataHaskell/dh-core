@@ -2,7 +2,7 @@
 {-# OPTIONS_GHC -funbox-strict-fields #-}
 
 {- |
-Module      :  Numeric.Datasets.ArffParser
+Module      :  Numeric.Datasets.Internal.ArffParser
 Description :  Parser for datasets in the Atrribute-Relation File Format (ARFF)
 Copyright   :  (c) Arvind Devarajan
 License     :  BSD-3-Clause
@@ -12,7 +12,7 @@ Stability   :  experimental
 Portability :  portable
 -}
 
-module Numeric.Datasets.ArffParser
+module Numeric.Datasets.Internal.ArffParser
        ( parseArff
        , arffRecords
        , Attribute
