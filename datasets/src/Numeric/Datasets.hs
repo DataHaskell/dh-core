@@ -210,9 +210,9 @@ data ReadAs a where
 
 -- | Reads ARFF records from the given ARFF-format string
 readArff :: BL.ByteString -> [ArffRecord]
-readArff s = readDataset readAs s where
-    readAs :: ReadAs ArffRecord
-    readAs = MultiRecordParsable arffRecords
+readArff s = readDataset rasa s where
+    rasa :: ReadAs ArffRecord
+    rasa = MultiRecordParsable arffRecords
 
 -- | A CSV record with default decoding options (i.e. columns are separated by commas)
 csvRecord :: FromRecord a => ReadAs a
