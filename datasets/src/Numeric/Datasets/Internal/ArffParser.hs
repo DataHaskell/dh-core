@@ -96,6 +96,8 @@ instance Exception InvalidRecordException
 -- | Type for each data record in the ARFF file
 type ArffRecord = [Maybe Dynamic]
 
+-------------------- Parsing functions ----------------------
+
 -- | Parse the ARFF file, and return (Relation name, Attributes, ARFF Records)
 -- | If you just want the ARFF data records, use the arffRecords function
 parseArff :: Parser (B.ByteString, [Attribute], [ArffRecord])
@@ -119,30 +121,46 @@ arffRecords = do
   (rel, atts, dats) <- parseArff
   return dats
 
--- | Get the value of a field from the ARFF record
+---------------- Convenience functions to get field values ---------
+
+{- | 
+  Retrieves double-values from the ARFF record, supplying 0 for missing values
+-}
+dblval :: Int -> ArffRecord -> Double
+dblval idx r = value (\_->0) idx r
+
+{- | 
+  Retrieves string-values from the ARFF record, supplying "" for missing values
+-}
+strval :: Int -> ArffRecord -> BL.ByteString
+strval idx r = value (\_->"") idx r
+
+{- | 
+  Retrieves date-values from the ARFF record, supplying the default
+  gregorian date for '0' for missing values. According to the
+  official documentation, this date corresponds to: 1858-11-17.
+-}
+dtval :: Int -> ArffRecord -> Day
+dtval idx r = value (\_->fromGregorian 0 0 0) idx r
+
+{- | 
+  Get value of any type field from the ARFF record
+
+  This is function allows for the user to also implement a dataset-specific strategy for supplying the missing values. The first parameter of this function is a function that implements this missing-value-strategy.
+-}
 value :: Typeable a
-      => Int                -- ^ Index of the field whose value is needed
-      -> (ArffRecord -> a)  -- ^ Function implementing missing-value-strategy
-                            -- This function will be called when the field
-                            -- has a missing value
+      => (ArffRecord -> a)  -- ^ Function implementing missing-value-strategy
+                            -- The output of this function will be used when
+                            -- the parser encounters a missing value in the
+                            -- dataset.
+      -> Int                -- ^ Index of the field whose value is needed
       -> ArffRecord         -- ^ ARFF record
       -> a                  -- Value of the field
-value idx f r = let missingval = f r
+value f idx r = let missingval = f r
                     maybeval = r !! idx
                     dynval = fromMaybe (toDyn missingval) maybeval
                     defval = missingval
                 in fromDyn dynval defval
-
------------------------ Convenience functions to get field values ---------
-
-dblval :: Int -> ArffRecord -> Double
-dblval idx r = value idx (\_->0) r
-
-strval :: Int -> ArffRecord -> BL.ByteString
-strval idx r = value idx (\_->"") r
-
-dtval :: Int -> ArffRecord -> Day
-dtval idx r = value idx (\_->fromGregorian 0 0 0) r
 
 ----------------------- All parsers --------------------------
 spaces :: Parser ()
