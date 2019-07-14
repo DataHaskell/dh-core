@@ -221,8 +221,8 @@ csvRecord = CSVRecord NoHeader defaultDecodeOptions
 -- * Defining datasets
 
 -- Define a dataset from an ARFF file
--- arffDataset :: Source -> Dataset ArffRecord
--- arffDataset src = Dataset src Nothing Nothing (MultiRecordParsable arffRecords) 
+arffDataset :: Source -> Dataset ArffRecord
+arffDataset src = Dataset src Nothing Nothing (MultiRecordParsable arffRecords) 
 
 -- | Define a dataset from a source for a CSV file
 csvDataset :: FromRecord a =>  Source   -> Dataset a

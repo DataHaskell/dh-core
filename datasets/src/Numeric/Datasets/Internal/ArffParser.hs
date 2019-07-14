@@ -16,9 +16,6 @@ module Numeric.Datasets.Internal.ArffParser
        ( parseArff
        , arffRecords
        , value
-       , dblval
-       , strval
-       , dtval
        , Attribute
        , ArffRecord
        ) where
@@ -120,28 +117,6 @@ arffRecords :: Parser [ArffRecord]
 arffRecords = do
   (_, _, dats) <- parseArff
   return dats
-
----------------- Convenience functions to get field values ---------
-
-{- | 
-  Retrieves double-values from the ARFF record, supplying 0 for missing values
--}
-dblval :: Int -> ArffRecord -> Double
-dblval idx r = value (\_->0) idx r
-
-{- | 
-  Retrieves string-values from the ARFF record, supplying "" for missing values
--}
-strval :: Int -> ArffRecord -> BL.ByteString
-strval idx r = value (\_->"") idx r
-
-{- | 
-  Retrieves date-values from the ARFF record, supplying the default
-  gregorian date for '0' for missing values. According to the
-  official documentation, this date corresponds to: 1858-11-17.
--}
-dtval :: Int -> ArffRecord -> Day
-dtval idx r = value (\_->fromGregorian 0 0 0) idx r
 
 {- | 
   Get value of any type field from the ARFF record

@@ -55,6 +55,12 @@ toPimaDiabetes recs =
                                  <*> dblval 7
                                  <*> diabClass 8
 
+        dblval :: Int -> ArffRecord -> Double
+        dblval idx r = value (\_->0) idx r
+
+        strval :: Int -> ArffRecord -> BL.ByteString
+        strval idx r = value (\_->"") idx r
+
         diabClass :: Int -> ArffRecord -> DiabetesClass
         diabClass i r = 
             let s = strval i r

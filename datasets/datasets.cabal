@@ -83,7 +83,7 @@ Library
    Exposed-modules:
                    Numeric.Dataloader
                  , Numeric.Datasets
-                 , Numeric.Datasets.Anscombe               
+                 , Numeric.Datasets.Anscombe
                  , Numeric.Datasets.BostonHousing
                  , Numeric.Datasets.CIFAR10
                  , Numeric.Datasets.OldFaithful
