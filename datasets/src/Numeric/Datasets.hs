@@ -31,7 +31,7 @@ module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, defaul
                          readDataset, safeReadDataset, ReadAs(..), csvRecord,
                         -- * Defining datasets
                         csvDataset, csvHdrDataset, csvHdrDatasetSep, csvDatasetSkipHdr,
-                        jsonDataset, readArff,
+                        jsonDataset, readArff, arffDataset,
                         -- ** Dataset options
                         withPreprocess, withTempDir,
                         -- ** Preprocessing functions
