@@ -49,6 +49,26 @@ extra-source-files:
                    datafiles/netflix/training/mv_0000001.txt
                    datafiles/netflix/test/qualifying.txt
                    datafiles/netflix/movies/movie_titles.txt
+                   datafiles/arff/contact-lens.arff
+                   datafiles/arff/cpu.arff
+                   datafiles/arff/cpu.with.vendor.arff
+                   datafiles/arff/diabetes.arff
+                   datafiles/arff/glass.arff
+                   datafiles/arff/ionosphere.arff
+                   datafiles/arff/iris.arff
+                   datafiles/arff/labor.arff
+                   datafiles/arff/README
+                   datafiles/arff/ReutersCorn-test.arff
+                   datafiles/arff/ReutersCorn-train.arff
+                   datafiles/arff/ReutersGrain-test.arff
+                   datafiles/arff/ReutersGrain-train.arff
+                   datafiles/arff/segment-challenge.arff
+                   datafiles/arff/segment-test.arff
+                   datafiles/arff/soybean.arff
+                   datafiles/arff/supermarket.arff
+                   datafiles/arff/vote.arff
+                   datafiles/arff/weather.arff
+                   datafiles/arff/weather.nominal.arff
 
 source-repository head
   type:     git
@@ -73,9 +93,11 @@ Library
                  , Numeric.Datasets.Car
                  , Numeric.Datasets.Coal
                  , Numeric.Datasets.CO2
+                 , Numeric.Datasets.Diabetes
                  , Numeric.Datasets.Gapminder
                  , Numeric.Datasets.Iris
                  , Numeric.Datasets.Internal.Streaming
+                 , Numeric.Datasets.Internal.ArffParser
                  , Numeric.Datasets.Michelson
                  , Numeric.Datasets.Mushroom
                  , Numeric.Datasets.Nightingale
@@ -123,6 +145,7 @@ Library
                , transformers
                , vector
                , safe-exceptions
+               , word8
                , zlib
 
 

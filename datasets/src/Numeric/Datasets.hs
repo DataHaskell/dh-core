@@ -31,7 +31,7 @@ module Numeric.Datasets (getDataset, Dataset(..), Source(..), getDatavec, defaul
                          readDataset, safeReadDataset, ReadAs(..), csvRecord,
                         -- * Defining datasets
                         csvDataset, csvHdrDataset, csvHdrDatasetSep, csvDatasetSkipHdr,
-                        jsonDataset,
+                        jsonDataset, readArff, arffDataset,
                         -- ** Dataset options
                         withPreprocess, withTempDir,
                         -- ** Preprocessing functions
@@ -75,6 +75,7 @@ import qualified Data.Vector         as VB
 import qualified Data.Vector.Generic as V
 import qualified Data.Attoparsec.ByteString as Atto'
 import qualified Data.Attoparsec.ByteString.Lazy as Atto
+import Numeric.Datasets.Internal.ArffParser
 
 -- * Using datasets
 
@@ -145,6 +146,7 @@ safeReadDataset ra bss = either throwString pure $
     (JSON, bs:|[]) ->  V.fromList <$> JSON.eitherDecode' bs
     (CSVRecord hhdr opts, bs:|[]) -> V.convert <$> decodeWith opts hhdr bs
     (CSVNamedRecord opts, bs:|[]) -> V.convert . snd <$> decodeByNameWith opts bs
+    (MultiRecordParsable mpsr, bs:|[]) -> V.fromList <$> Atto.eitherResult (Atto.parse mpsr bs)
     (Parsable psr, bs:|[]) -> V.fromList <$> Atto.eitherResult (Atto.parse (Atto.many' psr) bs)
 
     (ImageFolder labels, _) -> do
@@ -198,16 +200,29 @@ data ReadAs a where
   JSON :: FromJSON a => ReadAs a
   CSVRecord :: FromRecord a => HasHeader -> DecodeOptions -> ReadAs a
   CSVNamedRecord :: FromNamedRecord a => DecodeOptions -> ReadAs a
-  Parsable :: Atto.Parser a -> ReadAs a
+  -- Parsable that returns multiple records at one go
+  MultiRecordParsable  :: Atto.Parser [a] -> ReadAs a 
+  -- Parsable that returns a single record each time it is called
+  Parsable :: Atto.Parser a -> ReadAs a  
   ImageFolder
     :: NonEmpty String           -- labels used as folders
     -> ReadAs (String, FilePath) -- FilePaths representing images on disk, Strings are labels
+
+-- | Reads ARFF records from the given ARFF-format string
+readArff :: BL.ByteString -> [ArffRecord]
+readArff s = readDataset rasa s where
+    rasa :: ReadAs ArffRecord
+    rasa = MultiRecordParsable arffRecords
 
 -- | A CSV record with default decoding options (i.e. columns are separated by commas)
 csvRecord :: FromRecord a => ReadAs a
 csvRecord = CSVRecord NoHeader defaultDecodeOptions
 
 -- * Defining datasets
+
+-- Define a dataset from an ARFF file
+arffDataset :: Source -> Dataset ArffRecord
+arffDataset src = Dataset src Nothing Nothing (MultiRecordParsable arffRecords) 
 
 -- | Define a dataset from a source for a CSV file
 csvDataset :: FromRecord a =>  Source   -> Dataset a

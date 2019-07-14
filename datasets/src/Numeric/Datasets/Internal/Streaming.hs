@@ -64,6 +64,7 @@ _streamDataset ra bs =
     JSON -> lift $ throwString "Not implemented: JSON streaming"
     CSVRecord hhdr opts -> S.hoist either2Throw $ S.decodeWith opts hhdr bs
     CSVNamedRecord opts -> S.hoist either2Throw $ S.decodeByNameWith opts bs
+    MultiRecordParsable _ -> lift $ throwString "Not implemented: MultiRecord streaming"
     Parsable psr -> parseStream psr (S.hoist either2Throw bs)
     ImageFolder _ -> lift $ throwString "Not implemented: Image Folder streaming, use Dataloader"
   where
