@@ -37,7 +37,7 @@ before_install:
 # around some quirks in Travis's terminal implementation.
 script:
 - cd dh-core
-- stack $ARGS --no-terminal --install-ghc test --haddock
+- stack $ARGS --no-terminal --install-ghc test --haddock --coverage
 - stack $ARGS --no-terminal bench analyze:bench
 - stack $ARGS --no-terminal build dense-linear-algebra:weigh-bench
 - stack $ARGS --no-terminal build dense-linear-algebra:chronos-bench
@@ -45,6 +45,9 @@ script:
 #- cat .stack-work/logs/analyze-${ANALYZE_V}-test.log
 #- cat .stack-work/logs/dense-linear-algebra-${DENSE_LINEAR_ALGEBRA_V}-test.log
 #- cat .stack-work/logs/datasets-${DATASETS_V}-test.log
+
+after_success:
+- bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
 
 # Caching so the next build will be fast too.
 cache:
