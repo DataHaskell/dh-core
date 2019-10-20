@@ -46,6 +46,10 @@ script:
 #- cat .stack-work/logs/dense-linear-algebra-${DENSE_LINEAR_ALGEBRA_V}-test.log
 #- cat .stack-work/logs/datasets-${DATASETS_V}-test.log
 
+after_script:
+- stack install codecov-haskell
+- codecov-haskell
+
 after_success:
 - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
 
