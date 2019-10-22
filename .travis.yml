@@ -47,8 +47,9 @@ script:
 #- cat .stack-work/logs/datasets-${DATASETS_V}-test.log
 
 after_script:
-- stack install codecov-haskell
-- codecov-haskell
+- stack hpc report --all
+- stack install stack-hpc-coveralls
+- shc --repo-token=$COVERALLS_REPO_TOKEN spec
 
 after_success:
 - bash <(curl -s https://codecov.io/bash) || echo 'Codecov failed to upload'
