@@ -16,6 +16,8 @@ packages:
 extra-deps:
 - statistics-0.14.0.2
 - chronos-bench-0.2.0.2
+- github: mjarosie/stack-hpc-coveralls
+  commit: 318262fe4c8b5ee2de30be54a9d6d36f1babefbf 
 
 nix:
   enable: false
