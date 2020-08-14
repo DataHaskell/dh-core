@@ -37,5 +37,5 @@ data Abalone = Abalone
 instance FromRecord Abalone
 
 abalone :: Dataset Abalone
-abalone = csvDataset $ URL $ umassMLDB /: "abalone" /: "abalone.data"
+abalone = csvDataset $ URL $ uciMLDB /: "abalone" /: "abalone.data"
 
