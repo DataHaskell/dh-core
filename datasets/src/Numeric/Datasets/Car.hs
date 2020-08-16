@@ -68,4 +68,4 @@ instance FromRecord Car
 
 car :: Dataset Car
 car = csvDataset
-          $ URL $ umassMLDB /: "car" /: "car.data"
+          $ URL $ uciMLDB /: "car" /: "car.data"
