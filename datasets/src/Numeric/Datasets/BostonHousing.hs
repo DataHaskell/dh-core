@@ -61,4 +61,4 @@ instance FromRecord BostonHousing where
 
 bostonHousing :: Dataset BostonHousing
 bostonHousing = withPreprocess fixedWidthToCSV $
-            csvDataset $ URL $ umassMLDB /: "housing" /: "housing.data"
+            csvDataset $ URL $ uciMLDB /: "housing" /: "housing.data"
