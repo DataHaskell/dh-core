@@ -178,6 +178,7 @@ executable cifar10-provision
                      , filepath
                      , JuicyPixels
                      , streaming
+                     , terminal-progress-bar
   ghc-options:         -Wall -O2 -rtsopts -threaded
   default-language:    Haskell2010
 
