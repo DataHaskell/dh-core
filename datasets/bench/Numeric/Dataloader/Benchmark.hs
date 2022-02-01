@@ -61,22 +61,7 @@ foldStream = S.fold (\memo a -> a:memo) [] id
 -------------------------------------------------------------------------------
 -- Image Folder loading
 
--- may be required if you don't already have CIFAR10 loaded
-provision :: IO ()
-provision = do
-  xdgCache <- getXdgDirectory XdgCache "datasets-hs"
-  let imfolder = xdgCache </> "cifar-10-imagefolder"
-  createDirectoryIfMissing True imfolder
 
-  -- build the image folder
-  S.mapM_ (go imfolder) $ streamDataset cifar10
- where
-  go :: FilePath -> CIFARImage -> IO ()
-  go cachefolder (CIFARImage (im, lbl)) = do
-    let labelfolder = cachefolder </> show lbl
-    createDirectoryIfMissing True labelfolder
-    ix <- length <$> listDirectory labelfolder
-    writePng (labelfolder </> (show lbl ++ "_" ++ show ix ++ ".png")) im
 
 
 -- | dataloading the image folder dataset

@@ -169,6 +169,18 @@ Benchmark bench
      , safe-exceptions
      , streaming
 
+executable cifar10-provision
+  hs-source-dirs:      bin/cifar10
+  main-is:             Main.hs
+  build-depends:       base >= 4.6 && < 5
+                     , datasets
+                     , directory
+                     , filepath
+                     , JuicyPixels
+                     , streaming
+  ghc-options:         -Wall -O2 -rtsopts -threaded
+  default-language:    Haskell2010
+
 
 test-suite spec
   type: exitcode-stdio-1.0
